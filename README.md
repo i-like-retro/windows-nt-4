@@ -33,14 +33,14 @@ is to install latest system and security updates. These updates are highly
 recommended to install. They improve user experience and increase
 compatibility with software.
 
-**I**. The first thing to consider is of course the latest Service Pack 6A for
+**I**) The first thing to consider is of course the latest Service Pack 6A for
 the system: [SP6AI386.EXE](CD/SOFTWARE/UPDATES/SP6AI386.EXE). Don't forget to
 restart after installing the Service Pack. **On Windows NT 4 it is very
 important to restart each time an update is installed (there are exceptions
 though, see below), because otherwise you may end up with a newer DLL being
 overriden by an older update.**
 
-**II**. After you install latest Service Pack, good idea will be to install Post-SP6A
+**II**) After you install latest Service Pack, good idea will be to install Post-SP6A
 Service Rollup release. This is the collection of patches, prepared by
 Microsoft after SP6 came out. This was intended to be SP7, but it never seen
 the light of the day. For more information you can check out the corresponding
@@ -48,7 +48,7 @@ the light of the day. For more information you can check out the corresponding
 You can find it here: [Q299444I.EXE](CD/SOFTWARE/UPDATES/Q299444I.EXE).
 Don't forget to restart after installation as well.
 
-**III**. After these two important big patches are installed, its time for smaller
+**III**) After these two important big patches are installed, its time for smaller
 ones. After Service Rollup came out, there were some smaller security updates
 that are nice to install as well. **NOTE**: Each of the updates requires
 reboot, but there is a helper tool from Microsoft you could use to avoid
@@ -71,13 +71,13 @@ For more information search for "QCHAIN.EXE" in the following articles:
 * [KB841356.EXE](CD/SOFTWARE/UPDATES/KB841356.EXE) [Vulnerability in Windows Shell Could Allow Remote Code Execution](https://docs.microsoft.com/en-us/security-updates/securitybulletins/2004/ms04-037)
 * [KB841872.EXE](CD/SOFTWARE/UPDATES/KB841872.EXE) [Vulnerability in POSIX Could Allow Code Execution](https://docs.microsoft.com/en-us/security-updates/securitybulletins/2004/ms04-020)
 
-**IV**. Now its time to install IE4. **Make sure to do this before you install IE6,
+**IV**) Now its time to install IE4. **Make sure to do this before you install IE6,
 otherwise you won't be able to install it later!** This version will update your shell
 with support for 256-colored icons, font smoothing and other improvements. Just make
 sure to enable this feature during installation. To install, run IE4SETUP.EXE from
 the [IE4](CD/SOFTWARE/UPDATES/IE4) directory.
 
-**V**. After IE4 has been installed, you can install IE6 SP1 to get the latest
+**V**) After IE4 has been installed, you can install IE6 SP1 to get the latest
 supported Internet Explorer on your system. This won't really help to browse
 Internet, but it will install newer versions of some important system
 components and improve overall compatibility with the software. Run IE6SETUP.EXE
@@ -89,25 +89,25 @@ Optional Updates
 These updates are not necessary to install, but may be needed by some software
 and are still recommended.
 
-**I**. To support MSI installers, it is also highly recommended to install
+**I**) To support MSI installers, it is also highly recommended to install
 MSI 2.0 update. It won't support newest MSI packages, but will definitely
 improve a range of software that can be installed on the Machine. Grab it here:
 [INSTMSIW.EXE](CD/SOFTWARE/UPDATES/INSTMSIW.EXE).
 
-**II**. Microsoft Data Access Components
+**II**) Microsoft Data Access Components
 ([MDAC_TYP.EXE](CD/SOFTWARE/UPDATES/MDAC_TYP.EXE)) and Microsoft Jet database
 engine ([JETSETUP.EXE](CD/SOFTWARE/UPDATES/JETSETUP.EXE)) are
 used by some software, most notably big Microsoft software packages like
 Microsoft Office and Visual Studio.
 
-**III**. .NET Framework. Yes, you can install it on Windows NT 4!
+**III**) .NET Framework. Yes, you can install it on Windows NT 4!
 Unfortunately, the latest version you can install is 1.1. But still, it
 improves compatibility considerably and is recomended for installation.
 Installers for .NET Framework 1.0
 ([DOTNETFX.EXE](CD/SOFTWARE/UPDATES/DOTNETFX.EXE)) and .NET Framework 1.1
 ([DOTNET11.EXE](CD/SOFTWARE/UPDATES/DOTNET11.EXE)) are available.
 
-**IV**. [MSIMG32.DLL](CD/SOFTWARE/UPDATES/DLLS/MSIMG32.DLL). Some software
+**IV**) [MSIMG32.DLL](CD/SOFTWARE/UPDATES/DLLS/MSIMG32.DLL). Some software
 requires this library. Multiple versions of the library can be found and most
 of them require Windows 2000 or newer, and will not work on Windows NT 4. On
 the other hand, version in this repository works perfectly. Just copy it to
