@@ -112,3 +112,12 @@ requires this library. Multiple versions of the library can be found and most
 of them require Windows 2000 or newer, and will not work on Windows NT 4. On
 the other hand, version in this repository works perfectly. Just copy it to
 your `\WINNT\SYSTEM32` directory.
+
+Software
+========
+
+Software Development
+--------------------
+
+* [Nullsoft Scriptable Install System 2.51](CD/SOFTWARE/DEVEL/NSIS251.EXE)
+free and open source system for creating installers for Windows applications.
