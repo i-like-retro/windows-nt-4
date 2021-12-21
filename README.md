@@ -122,12 +122,16 @@ Software
 Software Development
 --------------------
 
-* [CMake 3.52](CD/SOFTWARE/DEVEL/CMAKE352.EXE)`2018-12-03`: free and open
+* [CMake 3.52](CD/SOFTWARE/DEVEL/CMAKE352.EXE) `2018-12-03`: free and open
 source tool for generating project files for C and C++ projects. This is not
 the latest version, but its the latest one to support Visual C++ 6.0 and
 Visual Studio 7 (aka .NET 2002). So there is little benefit in using newer
-versions. CMake [sources](Src/cmake-3.5.2) have been patched to build and
+versions. CMake [source code](Src/cmake-3.5.2) have been modified to build and
 work under Windows NT 4.
+
+* [HxD 1.7.7.0](CD/SOFTWARE/DEVEL/HXD1770.EXE) `2009-04-03`: freeware hex
+editor and disk editor (for more information see https://mh-nexus.de/en/hxd).
+This is the latest version to work on Windows NT 4.
 
 * [Nullsoft Scriptable Install System 2.51](CD/SOFTWARE/DEVEL/NSIS251.EXE)
 `2016-04-20`: free and open source system for creating installers for Windows
