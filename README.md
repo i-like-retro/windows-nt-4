@@ -22,11 +22,16 @@ installation at once.
 
 TBD: instructions
 
+Updates
+=======
+
 Important Updates
-=================
+-----------------
 
 The first thing you would like to do after you install fresh Windows NT 4
-is to install latest system and security updates.
+is to install latest system and security updates. These updates are highly
+recommended to install. They improve user experience and increase
+compatibility with software.
 
 **I**. The first thing to consider is of course the latest Service Pack 6A for
 the system: [SP6AI386.EXE](CD/SOFTWARE/UPDATES/SP6AI386.EXE). Don't forget to
@@ -78,7 +83,18 @@ Internet, but it will install newer versions of some important system
 components and improve overall compatibility with the software. Run IE6SETUP.EXE
 from the [IE6SP1NT](CD/SOFTWARE/UPDATES/IE6SP1NT) directory.
 
-To support MSI installers, it is also highly recommended to install MSI 2.0
+Optional Updates
+----------------
+
+These updates are not necessary to install, but may be needed by some software and are still
+recommended.
+
+**I**. To support MSI installers, it is also highly recommended to install MSI 2.0
 update. It won't support newest MSI packages, but will definitely improve
 a range of software that can be installed on the Machine. Grab it here:
 [INSTMSIW.EXE](CD/SOFTWARE/UPDATES/INSTMSIW.EXE).
+
+**II**. Microsoft Data Access Components ([MDAC_TYP.EXE](CD/SOFTWARE/UPDATES/MDAC_TYP.EXE))
+and Microsoft Jet database engine ([JETSETUP.EXE](CD/SOFTWARE/UPDATES/JETSETUP.EXE)) are
+used by some software, most notably big Microsoft software packages like Microsoft Office
+and Visual Studio.
