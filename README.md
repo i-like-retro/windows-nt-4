@@ -4,12 +4,12 @@ What is this?
 
 This repository contains some hints, tips, links and software to
 help you setup at least somehow comfortable environment in
-Windows NT 4.0 Workstation in year 2022.
+Windows NT 4 Workstation in year 2022.
 
 I am trying to collect in one place all the latest information on
 required updates, problems, available software, etc. I also try to
 compiled and backport some modern open source software to run on
-Windows NT 4.0.
+Windows NT 4.
 
 Why? Because I like this retro OS :)
 
@@ -25,17 +25,17 @@ TBD: instructions
 Important Updates
 =================
 
-The first thing you would like to do after you install fresh Windows NT 4.0
+The first thing you would like to do after you install fresh Windows NT 4
 is to install latest system and security updates.
 
-The first thing to consider is of course the latest Service Pack 6A for
+**I**. The first thing to consider is of course the latest Service Pack 6A for
 the system: [SP6AI386.EXE](CD/SOFTWARE/UPDATES/SP6AI386.EXE). Don't forget to
 restart after installing the Service Pack. **On Windows NT 4 it is very
 important to restart each time an update is installed (there are exceptions
 though, see below), because otherwise you may end up with a newer DLL being
 overriden by an older update.**
 
-After you install latest Service Pack, good idea will be to install Post-SP6A
+**II**. After you install latest Service Pack, good idea will be to install Post-SP6A
 Service Rollup release. This is the collection of patches, prepared by
 Microsoft after SP6 came out. This was intended to be SP7, but it never seen
 the light of the day. For more information you can check out the corresponding
@@ -43,7 +43,7 @@ the light of the day. For more information you can check out the corresponding
 You can find it here: [Q299444I.EXE](CD/SOFTWARE/UPDATES/Q299444I.EXE).
 Don't forget to restart after installation as well.
 
-After these two important big patches are installed, its time for smaller
+**III**. After these two important big patches are installed, its time for smaller
 ones. After Service Rollup came out, there were some smaller security updates
 that are nice to install as well. **NOTE**: Each of the updates requires
 reboot, but there is a helper tool from Microsoft you could use to avoid
@@ -65,6 +65,12 @@ For more information search for "QCHAIN.EXE" in the following articles:
 * [KB839645.EXE](CD/SOFTWARE/UPDATES/KB839645.EXE) [Vulnerability in Windows Shell Could Allow Remote Code Execution](https://docs.microsoft.com/en-us/security-updates/securitybulletins/2004/ms04-024)
 * [KB841356.EXE](CD/SOFTWARE/UPDATES/KB841356.EXE) [Vulnerability in Windows Shell Could Allow Remote Code Execution](https://docs.microsoft.com/en-us/security-updates/securitybulletins/2004/ms04-037)
 * [KB841872.EXE](CD/SOFTWARE/UPDATES/KB841872.EXE) [Vulnerability in POSIX Could Allow Code Execution](https://docs.microsoft.com/en-us/security-updates/securitybulletins/2004/ms04-020)
+
+**IV**. Now its time to install IE4. **Make sure to do this before you install IE6,
+otherwise you won't be able to install it later!** This version will update your shell
+with support for 256-colored icons, font smoothing and other improvements. Just make
+sure to enable this feature during installation. To install, run IE4SETUP.EXE from
+the [IE4](CD/SOFTWARE/UPDATES/IE4) directory.
 
 To support MSI installers, it is also highly recommended to install MSI 2.0
 update. It won't support newest MSI packages, but will definitely improve

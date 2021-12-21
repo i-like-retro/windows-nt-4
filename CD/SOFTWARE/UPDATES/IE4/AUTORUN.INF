@@ -1,0 +1,307 @@
+[Add.CacheContainer]
+AOL Preview Channel=AOL
+AudioNet=AUDIONET
+CBS SportsLine Channel=SPTLINE
+CMPnet=CMPNET
+The CNET Channel=CNET
+CNN Interactive=CNN
+CNNSI=CNNSI
+Comics Channel=COMICS
+Companies Online=CONLINE
+Disney=DISNEY
+Discovery Channel Online=DISCOVER
+ESPN Sportszone=ESPN
+Epicurious Food and Travel=EPICUR
+Microsoft Expedia=EXPEDIA
+Forbes=FORBES
+Fortune=FORTUNE
+Hollywood Online=HWOOD
+iVillage=IVILL
+Microsoft Investor=INVESTOR
+The Microsoft Network=MSN
+MSNBC=MSNBC
+MTV Online=MTV
+National Geographic Connection=NGC
+NBC=NBC
+New York Times=NYT
+People=PEOPLE
+Snap! Online=SNAP
+Time=TIME
+Quicken.com=QUICKEN
+The PointCast Business Network=PCN
+The Wall Street Journal=WSJ
+Wired=WIRED
+ZDNet=ZDNET
+Warner Bros.=WBROS
+
+[AOL]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://channel.web.aol.com/cached
+CacheRoot=%EXE_ROOT%\AOL\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[AUDIONET]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://ie40.audionet.com/intro
+CacheRoot=%EXE_ROOT%\AUDIONET\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[CMPNET]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://msie.cmpnet.com/addchan/intro
+CacheRoot=%EXE_ROOT%\CMPNET\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[CNET]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://channel.cnet.com/Channel/Intro
+CacheRoot=%EXE_ROOT%\CNET\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[CNN]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://channel.cnn.com/intro
+CacheRoot=%EXE_ROOT%\CNN\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[CNNSI]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://cnnsi.com/ie/intro
+CacheRoot=%EXE_ROOT%\CNNSI\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[COMICS]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.comicschannel.net/comics_channel/intro
+CacheRoot=%EXE_ROOT%\COMICS\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[CONLINE]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://channel.companiesonline.com/dnb/preview
+CacheRoot=%EXE_ROOT%\CONLINE\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[DISCOVER]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.discovery.com/ie/intro/page1
+CacheRoot=%EXE_ROOT%\DISCOVER\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[DISNEY]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.disneyblast.com/ActiveDesktop/intro/page1/
+CacheRoot=%EXE_ROOT%\DISNEY\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[EPICUR]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.epicurious.com/channel/intro/page
+CacheRoot=%EXE_ROOT%\EPICUR\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[ESPN]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://channel-espn.sportszone.com/ad/subscribe
+CacheRoot=%EXE_ROOT%\ESPN\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[EXPEDIA]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://expedia.com/IEChannel/Intro/page1
+CacheRoot=%EXE_ROOT%\EXPEDIA\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[FORBES]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.forbes.com/channel
+CacheRoot=%EXE_ROOT%\FORBES\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[FORTUNE]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.pathfinder.com/fortune/channel/preview
+CacheRoot=%EXE_ROOT%\FORTUNE\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[HWOOD]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.hollywood.com/ie40/intro
+CacheRoot=%EXE_ROOT%\HWOOD\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[INVESTOR]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://investor.msn.com/channel/intro
+CacheRoot=%EXE_ROOT%\INVESTOR\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[IVILL]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://channel.parentsoup.com/pre
+CacheRoot=%EXE_ROOT%\IVILL\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[MSN]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://ie.msn.com/us/channel/intro
+CacheRoot=%EXE_ROOT%\MSN\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[MSNBC]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.msnbc.com/tools/channel/guide
+CacheRoot=%EXE_ROOT%\MSNBC\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[MTV]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.mtv.com/push/intro
+CacheRoot=%EXE_ROOT%\MTV\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[NBC]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.nbc.com/ie4channel/intro
+CacheRoot=%EXE_ROOT%\NBC\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[NGC]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.nationalgeographic.com/connection/cdrom
+CacheRoot=%EXE_ROOT%\NGC\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[NYT]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://channel.nytimes.com/intro
+CacheRoot=%EXE_ROOT%\NYT\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[PCN]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://ie.pointcast.net/ie40/intro
+CacheRoot=%EXE_ROOT%\PCN\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[PEOPLE]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.pathfinder.com/people/channel/preview
+CacheRoot=%EXE_ROOT%\PEOPLE\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[QUICKEN]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://iechannel.quicken.com/iechannel/intro
+CacheRoot=%EXE_ROOT%\QUICKEN\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[SNAP]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://home.snap.com:8005/channel/intro
+CacheRoot=%EXE_ROOT%\SNAP\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[SPTLINE]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://cbs.sportsline.com/u/iechannel/preview
+CacheRoot=%EXE_ROOT%\SPTLINE\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[TIME]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.pathfinder.com/time/channel/intro
+CacheRoot=%EXE_ROOT%\TIME\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[WSJ]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://wsj.com/ie4intro
+CacheRoot=%EXE_ROOT%\WSJ\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[WBROS]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://warnerbros.entertaindom.com/subscribe
+CacheRoot=%EXE_ROOT%\WBROS\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[WIRED]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www.hotwired.com/livewired/intro
+CacheRoot=%EXE_ROOT%\WIRED\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
+
+[ZDNET]
+VolumeTitle="Microsoft Internet Explorer CD-ROM"
+CachePrefix=http://www1.zdnet.com/datafeed/ie4/channels/zdnet/cached
+CacheRoot=%EXE_ROOT%\ZDNET\
+KBCacheLimit=1000
+AutoDelete=Yes
+IncludeSubDirs=Yes
