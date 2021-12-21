@@ -72,6 +72,12 @@ with support for 256-colored icons, font smoothing and other improvements. Just 
 sure to enable this feature during installation. To install, run IE4SETUP.EXE from
 the [IE4](CD/SOFTWARE/UPDATES/IE4) directory.
 
+**V**. After IE4 has been installed, you can install IE6 SP1 to get the latest
+supported Internet Explorer on your system. This won't really help to browse
+Internet, but it will install newer versions of some important system
+components and improve overall compatibility with the software. Run IE6SETUP.EXE
+from the [IE6SP1NT](CD/SOFTWARE/UPDATES/IE6SP1NT) directory.
+
 To support MSI installers, it is also highly recommended to install MSI 2.0
 update. It won't support newest MSI packages, but will definitely improve
 a range of software that can be installed on the Machine. Grab it here:
