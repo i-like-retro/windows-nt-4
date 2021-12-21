@@ -86,15 +86,23 @@ from the [IE6SP1NT](CD/SOFTWARE/UPDATES/IE6SP1NT) directory.
 Optional Updates
 ----------------
 
-These updates are not necessary to install, but may be needed by some software and are still
-recommended.
+These updates are not necessary to install, but may be needed by some software
+and are still recommended.
 
-**I**. To support MSI installers, it is also highly recommended to install MSI 2.0
-update. It won't support newest MSI packages, but will definitely improve
-a range of software that can be installed on the Machine. Grab it here:
+**I**. To support MSI installers, it is also highly recommended to install
+MSI 2.0 update. It won't support newest MSI packages, but will definitely
+improve a range of software that can be installed on the Machine. Grab it here:
 [INSTMSIW.EXE](CD/SOFTWARE/UPDATES/INSTMSIW.EXE).
 
-**II**. Microsoft Data Access Components ([MDAC_TYP.EXE](CD/SOFTWARE/UPDATES/MDAC_TYP.EXE))
-and Microsoft Jet database engine ([JETSETUP.EXE](CD/SOFTWARE/UPDATES/JETSETUP.EXE)) are
-used by some software, most notably big Microsoft software packages like Microsoft Office
-and Visual Studio.
+**II**. Microsoft Data Access Components
+([MDAC_TYP.EXE](CD/SOFTWARE/UPDATES/MDAC_TYP.EXE)) and Microsoft Jet database
+engine ([JETSETUP.EXE](CD/SOFTWARE/UPDATES/JETSETUP.EXE)) are
+used by some software, most notably big Microsoft software packages like
+Microsoft Office and Visual Studio.
+
+**III**. .NET Framework. Yes, you can install it on Windows NT 4!
+Unfortunately, the latest version you can install is 1.1. But still, it
+improves compatibility considerably and is recomended for installation.
+Installers for .NET Framework 1.0
+([DOTNETFX.EXE](CD/SOFTWARE/UPDATES/DOTNETFX.EXE)) and .NET Framework 1.1
+([DOTNET11.EXE](CD/SOFTWARE/UPDATES/DOTNET11.EXE)) are available.
