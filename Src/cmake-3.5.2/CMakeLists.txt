@@ -18,6 +18,10 @@ if(POLICY CMP0053)
 endif()
 project(CMake)
 
+if(MINGW)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition")
+endif()
+
 if(CMAKE_BOOTSTRAP)
   # Running from bootstrap script.  Set local variable and remove from cache.
   set(CMAKE_BOOTSTRAP 1)

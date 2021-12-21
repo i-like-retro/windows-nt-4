@@ -22,6 +22,18 @@ cmGlobalMinGWMakefileGenerator::cmGlobalMinGWMakefileGenerator(cmake* cm)
   this->UseLinkScript = true;
   cm->GetState()->SetWindowsShell(true);
   cm->GetState()->SetMinGWMake(true);
+
+  // mingw32-make has trouble running code like
+  //
+  //  @echo message with spaces
+  //
+  // If quotes are added
+  //
+  //  @echo "message with spaces"
+  //
+  // it runs but the quotes are displayed.  Instead just use cmake to
+  // echo.
+  cm->GetState()->SetNativeEchoCommand("@$(CMAKE_COMMAND) -E echo ", false);
 }
 
 void cmGlobalMinGWMakefileGenerator

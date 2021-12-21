@@ -94,6 +94,8 @@ cmState::cmState()
     MSYSShell(false)
 {
   this->CacheManager = new cmCacheManager;
+  this->NativeEchoCommand = "@echo ";
+  this->NativeEchoWindows = true;
 }
 
 cmState::~cmState()

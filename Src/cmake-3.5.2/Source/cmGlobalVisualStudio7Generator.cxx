@@ -339,6 +339,7 @@ void cmGlobalVisualStudio7Generator::Generate()
   if (!this->CMakeInstance->GetIsInTryCompile() &&
       this->GetName() == "Visual Studio 7")
     {
+    /*
     const char* cmakeWarnVS70 =
       this->CMakeInstance->GetState()->GetCacheEntryValue("CMAKE_WARN_VS70");
     if (!cmakeWarnVS70 || !cmSystemTools::IsOff(cmakeWarnVS70))
@@ -351,6 +352,7 @@ void cmGlobalVisualStudio7Generator::Generate()
         "Add CMAKE_WARN_VS70=OFF to the cache to disable this warning."
         );
       }
+    */
     }
 }
 

@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.7.20090708)
 project(LinkLanguage C CXX)
 
+if(MINGW)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition")
+endif()
+
 add_library(foo STATIC foo.cxx)
 add_executable(LinkLanguage LinkLanguage.c)
 

@@ -13,6 +13,9 @@ Windows NT 4.
 
 Why? Because I like this retro OS :)
 
+If you would like to have some other open source software backported and
+compiled for Windows NT 4, create a GitHub issue. And I will take a look!
+
 CD Image
 ========
 
@@ -119,5 +122,16 @@ Software
 Software Development
 --------------------
 
-* [Nullsoft Scriptable Install System 2.51](CD/SOFTWARE/DEVEL/NSIS251.EXE)
+* [CMake 3.52](CD/SOFTWARE/DEVEL/CMAKE352.EXE): free and open source tool
+for generating project files for C and C++ projects. This is not the latest
+version, but its the latest one to support Visual C++ 6.0 and
+Visual Studio 7 (aka .NET 2002). So there is little benefit in using newer
+versions. CMake [sources](Src/cmake-3.5.2) have been patched to build and
+work under Windows NT 4.
+
+* [Nullsoft Scriptable Install System 2.51](CD/SOFTWARE/DEVEL/NSIS251.EXE):
 free and open source system for creating installers for Windows applications.
+This is the latest version of NSIS 2.x. Actually NSIS 3.x also installs and
+works perfectly on Windows NT 4, but it seems to be unable to parse scripts
+used by CMake. For this reason it is recommended to install NSIS 2.x if you
+plan to use it together with CMake.

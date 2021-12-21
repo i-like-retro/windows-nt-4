@@ -2001,6 +2001,7 @@ int cmSystemTools::WaitForLine(cmsysProcess* process, std::string& line,
 void cmSystemTools::DoNotInheritStdPipes()
 {
 #ifdef _WIN32
+  /*
   // Check to see if we are attached to a console
   // if so, then do not stop the inherited pipes
   // or stdout and stderr will not show up in dos
@@ -2025,6 +2026,7 @@ void cmSystemTools::DoNotInheritStdPipes()
                   DUPLICATE_SAME_ACCESS | DUPLICATE_CLOSE_SOURCE);
   SetStdHandle(STD_ERROR_HANDLE, out);
   }
+  */
 #endif
 }
 

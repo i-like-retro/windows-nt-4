@@ -166,10 +166,10 @@ archive_read_open2(struct archive *a, void *client_data,
 	return archive_read_open1(a);
 }
 
-static ssize_t
+static la_ssize_t
 client_read_proxy(struct archive_read_filter *self, const void **buff)
 {
-	ssize_t r;
+	la_ssize_t r;
 	r = (self->archive->client.reader)(&self->archive->archive,
 	    self->data, buff);
 	return (r);
@@ -553,7 +553,7 @@ choose_filters(struct archive_read *a)
 	int number_bidders, i, bid, best_bid, n;
 	struct archive_read_filter_bidder *bidder, *best_bidder;
 	struct archive_read_filter *filter;
-	ssize_t avail;
+	la_ssize_t avail;
 	int r;
 
 	for (n = 0; n < 25; ++n) {
@@ -817,7 +817,7 @@ archive_read_format_capabilities(struct archive *_a)
  * DO NOT intermingle calls to this function and archive_read_data_block
  * to read a single entry body.
  */
-ssize_t
+la_ssize_t
 archive_read_data(struct archive *_a, void *buff, size_t s)
 {
 	struct archive *a = (struct archive *)_a;
@@ -1303,7 +1303,7 @@ const void *
 __archive_read_filter_ahead(struct archive_read_filter *filter,
     size_t min, ssize_t *avail)
 {
-	ssize_t bytes_read;
+	la_ssize_t bytes_read;
 	size_t tocopy;
 
 	if (filter->fatal) {
@@ -1513,7 +1513,7 @@ static int64_t
 advance_file_pointer(struct archive_read_filter *filter, int64_t request)
 {
 	int64_t bytes_skipped, total_bytes_skipped = 0;
-	ssize_t bytes_read;
+	la_ssize_t bytes_read;
 	size_t min;
 
 	if (filter->fatal)

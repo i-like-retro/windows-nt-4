@@ -3,6 +3,10 @@ project(AliasTarget)
 
 set(CMAKE_CXX_STANDARD 98)
 
+if(MINGW)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition")
+endif()
+
 # Those versions of the HP compiler that need a flag to get proper C++98
 # template support also need a flag to use the newer C++ library.
 if (CMAKE_CXX_COMPILER_ID STREQUAL HP AND

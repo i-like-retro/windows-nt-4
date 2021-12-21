@@ -1310,8 +1310,9 @@ cmLocalUnixMakefileGenerator3::AppendEcho(std::vector<std::string>& commands,
         if(color_name.empty() && !progress)
           {
           // Use the native echo command.
-          cmd = "@echo ";
-          cmd += this->EscapeForShell(line, false, true);
+          cmd = this->GetState()->NativeEchoCommand;
+          cmd += this->EscapeForShell(line, false,
+                                      this->GetState()->NativeEchoWindows);
           }
         else
           {

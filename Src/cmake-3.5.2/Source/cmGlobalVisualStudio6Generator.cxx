@@ -189,6 +189,7 @@ void cmGlobalVisualStudio6Generator::Generate()
 
   if (!this->CMakeInstance->GetIsInTryCompile())
     {
+    /*
     const char* cmakeWarnVS6 =
       this->CMakeInstance->GetState()->GetCacheEntryValue("CMAKE_WARN_VS6");
     if (!cmakeWarnVS6 || !cmSystemTools::IsOff(cmakeWarnVS6))
@@ -201,6 +202,7 @@ void cmGlobalVisualStudio6Generator::Generate()
         "Add CMAKE_WARN_VS6=OFF to the cache to disable this warning."
         );
       }
+    */
     }
 }
 

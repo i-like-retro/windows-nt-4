@@ -3427,17 +3427,17 @@ SystemInformation::LongLong
 SystemInformationImplementation::GetHostMemoryTotal()
 {
 #if defined(_WIN32)
-# if defined(_MSC_VER) && _MSC_VER < 1300
+//# if defined(_MSC_VER) && _MSC_VER < 1300
   MEMORYSTATUS stat;
   stat.dwLength = sizeof(stat);
   GlobalMemoryStatus(&stat);
   return stat.dwTotalPhys/1024;
-# else
+/*# else
   MEMORYSTATUSEX statex;
   statex.dwLength=sizeof(statex);
   GlobalMemoryStatusEx(&statex);
   return statex.ullTotalPhys/1024;
-# endif
+# endif*/
 #elif defined(__linux)
   SystemInformation::LongLong memTotal=0;
   int ierr=GetFieldFromFile("/proc/meminfo","MemTotal:",memTotal);
@@ -3558,17 +3558,17 @@ SystemInformation::LongLong
 SystemInformationImplementation::GetHostMemoryUsed()
 {
 #if defined(_WIN32)
-# if defined(_MSC_VER) && _MSC_VER < 1300
+//# if defined(_MSC_VER) && _MSC_VER < 1300
   MEMORYSTATUS stat;
   stat.dwLength = sizeof(stat);
   GlobalMemoryStatus(&stat);
   return (stat.dwTotalPhys - stat.dwAvailPhys)/1024;
-# else
+/*# else
   MEMORYSTATUSEX statex;
   statex.dwLength=sizeof(statex);
   GlobalMemoryStatusEx(&statex);
   return (statex.ullTotalPhys - statex.ullAvailPhys)/1024;
-# endif
+# endif*/
 #elif defined(__linux)
   const char *names[3]={"MemTotal:","MemFree:",NULL};
   SystemInformation::LongLong values[2]={SystemInformation::LongLong(0)};
@@ -3838,13 +3838,13 @@ void SystemInformationImplementation::SetStackTraceOnError(int enable)
 bool SystemInformationImplementation::QueryWindowsMemory()
 {
 #if defined(_WIN32)
-# if defined(_MSC_VER) && _MSC_VER < 1300
+//# if defined(_MSC_VER) && _MSC_VER < 1300
   MEMORYSTATUS ms;
   unsigned long tv, tp, av, ap;
   ms.dwLength = sizeof(ms);
   GlobalMemoryStatus(&ms);
 #  define MEM_VAL(value) dw##value
-# else
+/*# else
   MEMORYSTATUSEX ms;
   DWORDLONG tv, tp, av, ap;
   ms.dwLength = sizeof(ms);
@@ -3853,7 +3853,7 @@ bool SystemInformationImplementation::QueryWindowsMemory()
     return 0;
   }
 #  define MEM_VAL(value) ull##value
-# endif
+# endif*/
   tv = ms.MEM_VAL(TotalPageFile);
   tp = ms.MEM_VAL(TotalPhys);
   av = ms.MEM_VAL(AvailPageFile);

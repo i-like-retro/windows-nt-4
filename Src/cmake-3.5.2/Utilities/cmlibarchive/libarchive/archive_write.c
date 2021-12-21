@@ -70,7 +70,7 @@ static int	_archive_write_close(struct archive *);
 static int	_archive_write_free(struct archive *);
 static int	_archive_write_header(struct archive *, struct archive_entry *);
 static int	_archive_write_finish_entry(struct archive *);
-static ssize_t	_archive_write_data(struct archive *, const void *, size_t);
+static la_ssize_t	_archive_write_data(struct archive *, const void *, size_t);
 
 struct archive_none {
 	size_t buffer_size;
@@ -328,8 +328,8 @@ archive_write_client_write(struct archive_write_filter *f,
 	struct archive_write *a = (struct archive_write *)f->archive;
         struct archive_none *state = (struct archive_none *)f->data;
 	const char *buff = (const char *)_buff;
-	ssize_t remaining, to_copy;
-	ssize_t bytes_written;
+	la_ssize_t remaining, to_copy;
+	la_ssize_t bytes_written;
 
 	remaining = length;
 
@@ -408,9 +408,9 @@ archive_write_client_close(struct archive_write_filter *f)
 {
 	struct archive_write *a = (struct archive_write *)f->archive;
 	struct archive_none *state = (struct archive_none *)f->data;
-	ssize_t block_length;
-	ssize_t target_block_length;
-	ssize_t bytes_written;
+	la_ssize_t block_length;
+	la_ssize_t target_block_length;
+	la_ssize_t bytes_written;
 	int ret = ARCHIVE_OK;
 
 	/* If there's pending data, pad and write the last block */
@@ -683,7 +683,7 @@ _archive_write_finish_entry(struct archive *_a)
 /*
  * Note that the compressor is responsible for blocking.
  */
-static ssize_t
+static la_ssize_t
 _archive_write_data(struct archive *_a, const void *buff, size_t s)
 {
 	struct archive_write *a = (struct archive_write *)_a;

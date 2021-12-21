@@ -4,6 +4,10 @@
 cmake_minimum_required(VERSION 2.4)
 project (Complex)
 
+if(MINGW)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition")
+endif()
+
 # Test that renaming a built-in works when configured multiple times.
 message("message")
 function(message)

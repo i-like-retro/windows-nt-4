@@ -1360,12 +1360,13 @@ setup_current_filesystem(struct archive_read_disk *a)
 
 	t->current_filesystem->synthetic = -1;/* Not supported */
 	path = safe_path_for_statfs(t);
-	if (!GetVolumePathNameW(path, vol, sizeof(vol)/sizeof(vol[0]))) {
+    if (!path[0] || path[1] != ':') {
+	/*if (!GetVolumePathNameW(path, vol, sizeof(vol)/sizeof(vol[0]))) {*/
 		free(path);
 		t->current_filesystem->remote = -1;
 		t->current_filesystem->bytesPerSector = 0;
 		archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
-                        "GetVolumePathName failed: %d", (int)GetLastError());
+                        /*"GetVolumePathName failed: %d", (int)GetLastError()*/"GetVolumePathName is not supported.");
 		return (ARCHIVE_FAILED);
 	}
 	free(path);

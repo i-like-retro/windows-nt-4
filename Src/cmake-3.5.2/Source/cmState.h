@@ -323,8 +323,19 @@ public:
   void SetMSYSShell(bool mSYSShell);
   bool UseMSYSShell() const;
 
+  /**
+   * Set the command to use for native make shell echo.  The value
+   * should include all parts of the command up to the beginning of
+   * the message (including a whitespace separator).
+   */
+  void SetNativeEchoCommand(const char* cmd, bool isWindows)
+    { this->NativeEchoCommand = cmd; this->NativeEchoWindows = isWindows; }
+
   unsigned int GetCacheMajorVersion() const;
   unsigned int GetCacheMinorVersion() const;
+
+  std::string NativeEchoCommand;
+  bool NativeEchoWindows;
 
 private:
   friend class cmake;

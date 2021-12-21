@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.8.5 FATAL_ERROR)
 
 project(GenerateExportHeader)
 
+if(MINGW)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition")
+endif()
+
 # Prevent timeout on Watcom by not running the tests.
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES Watcom)
   file(WRITE
