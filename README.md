@@ -33,3 +33,11 @@ the system: [SP6AI386.EXE](CD/SOFTWARE/UPDATES/SP6AI386.EXE). Don't forget to
 restart after installing the Service Pack. **On Windows NT 4 it is very important to
 restart each time an update is installed (there are exceptions though, see below),
 because otherwise you may end up with a newer DLL being overriden by an older update.**
+
+After you install latest Service Pack, good idea will be to install Post-SP6A
+Service Rollup release. This is the collection of patches, prepared by Microsoft
+after SP6 came out. This was intended to be SP7, but it never seen the light of the day.
+For more information you can check out the corresponding
+[KB article](https://github.com/jeffpar/kbarchive/tree/master/kb/299/Q299444).
+You can find it here: [Q299444I.EXE](CD/SOFTWARE/UPDATES/Q299444I.EXE). Don't forget
+to restart after installation as well.
