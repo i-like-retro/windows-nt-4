@@ -3,8 +3,8 @@ What is this?
 =============
 
 This repository contains some hints, tips, links and software to
-help you setup at least somehow comfortable environment on
-Windows NT 4.0 in year 2022.
+help you setup at least somehow comfortable environment in
+Windows NT 4.0 Workstation in year 2022.
 
 I am trying to collect in one place all the latest information on
 required updates, problems, available software, etc. I also try to
@@ -18,7 +18,7 @@ CD Image
 
 For your convenience, you can build an ISO image with all useful
 stuff in this repository to burn on CD and apply to your Windows NT4
-installation.
+installation at once.
 
 TBD: instructions
 
@@ -65,3 +65,8 @@ For more information search for "QCHAIN.EXE" in the following articles:
 * [KB839645.EXE](CD/SOFTWARE/UPDATES/KB839645.EXE) [Vulnerability in Windows Shell Could Allow Remote Code Execution](https://docs.microsoft.com/en-us/security-updates/securitybulletins/2004/ms04-024)
 * [KB841356.EXE](CD/SOFTWARE/UPDATES/KB841356.EXE) [Vulnerability in Windows Shell Could Allow Remote Code Execution](https://docs.microsoft.com/en-us/security-updates/securitybulletins/2004/ms04-037)
 * [KB841872.EXE](CD/SOFTWARE/UPDATES/KB841872.EXE) [Vulnerability in POSIX Could Allow Code Execution](https://docs.microsoft.com/en-us/security-updates/securitybulletins/2004/ms04-020)
+
+To support MSI installers, it is also highly recommended to install MSI 2.0
+update. It won't support newest MSI packages, but will definitely improve
+a range of software that can be installed on the Machine. Grab it here:
+[INSTMSIW.EXE](CD/SOFTWARE/UPDATES/INSTMSIW.EXE).
