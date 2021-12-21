@@ -8,7 +8,7 @@ Windows NT 4 Workstation in year 2022.
 
 I am trying to collect in one place all the latest information on
 required updates, problems, available software, etc. I also try to
-compiled and backport some modern open source software to run on
+compile and backport some modern open source software to run on
 Windows NT 4.
 
 Why? Because I like this retro OS :)
@@ -106,3 +106,9 @@ improves compatibility considerably and is recomended for installation.
 Installers for .NET Framework 1.0
 ([DOTNETFX.EXE](CD/SOFTWARE/UPDATES/DOTNETFX.EXE)) and .NET Framework 1.1
 ([DOTNET11.EXE](CD/SOFTWARE/UPDATES/DOTNET11.EXE)) are available.
+
+**IV**. [MSIMG32.DLL](CD/SOFTWARE/UPDATES/DLLS/MSIMG32.DLL). Some software
+requires this library. Multiple versions of the library can be found and most
+of them require Windows 2000 or newer, and will not work on Windows NT 4. On
+the other hand, version in this repository works perfectly. Just copy it to
+your `\WINNT\SYSTEM32` directory.
