@@ -114,7 +114,7 @@ Installers for .NET Framework 1.0
 requires this library. Multiple versions of the library can be found and most
 of them require Windows 2000 or newer, and will not work on Windows NT 4. On
 the other hand, version in this repository works perfectly. Just copy it to
-your `\WINNT\SYSTEM32` directory.
+your \WINNT\SYSTEM32 directory.
 
 Software
 ========
@@ -127,10 +127,24 @@ source compression tool. Supports 7z, zip, rar and many other file formats.
 7zip [source code](Src/7z2106) has been modified to build with Visual C++ 6.0
 and work under Windows NT 4.
 
-* [WinRAR 3.93](CD/SOFTWARE/COMPRESS/WRAR393.EXE) `[OLD]` `2009`: trial
+* [WinRAR 3.93](CD/SOFTWARE/COMPRESS/WRAR393.EXE) `2010-03-15`: trial
 version of the popular commercial compression tool. This is the latest version
 that works under Windows NT 4. NOTE: due to its age it doesn't support RAR4
 archives.
+
+Multimedia
+----------
+
+* [WinAMP 2.95](CD/SOFTWARE/MULTIMED/WAMP295.EXE) `2003-06-24`,
+[WinAMP 3](CD/SOFTWARE/MULTIMED/WAMP3.EXE) `2003-02-25`,
+[WinAMP 5.094](CD/SOFTWARE/MULTIMED/WAMP5094.EXE) `2005-07-18`: very popular
+freeware audio player from late 90s - early 2000s. Included here are latest
+versions from three generations (player was heavily modified between major
+versions). Version 2.95 is the most lightweight, while later versions
+have more features and are more visually appealing. Version 5.0.94 is not the
+latest one that starts on Windows NT 4 (in my tests the latest version to be
+able to start was 5.35), but later versions display various errors and seem
+to only provide partial functionality.
 
 Software Development
 --------------------
@@ -148,8 +162,8 @@ This is the latest version to work on Windows NT 4.
 
 * [Nullsoft Scriptable Install System 2.51](CD/SOFTWARE/DEVEL/NSIS251.EXE)
 `2016-04-20`: free and open source system for creating installers for Windows
-applications. This is the latest version of NSIS 2.x. Actually NSIS 3.08
-([NSIS308.EXE](CD/SOFTWARE/DEVEL/NSIS308.EXE) ` 2021-09-25`) also installs
+applications. This is the latest version of NSIS 2.x. Actually
+[NSIS 3.08](CD/SOFTWARE/DEVEL/NSIS308.EXE) `2021-09-25` also installs
 and works perfectly on Windows NT 4, but it seems to be unable to parse
 scripts used by CMake. For this reason it is recommended to install NSIS 2.x
 if you plan to use it together with CMake.
