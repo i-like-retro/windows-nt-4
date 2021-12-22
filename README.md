@@ -127,6 +127,10 @@ source compression tool. Supports 7z, zip, rar and many other file formats.
 7zip [source code](Src/7z2106) has been modified to build with Visual C++ 6.0
 and work under Windows NT 4.
 
+* [WinRAR 3.93](CD/SOFTWARE/COMPRESS/WRAR393.EXE) `[OLD]` `2009`: shareware
+compression tool. This is the latest version that works under Windows NT 4.
+Note: due to its age it doesn't support RAR4 archives.
+
 Software Development
 --------------------
 
