@@ -1,6 +1,9 @@
 // Windows/Net.cpp
 
 #include "StdAfx.h"
+#undef WINVER
+#define WINVER 0x400
+#include "WinNetWk.h"
 
 #include "../Common/MyBuffer.h"
 

@@ -1009,7 +1009,7 @@ void CArcCmdLineParser::Parse1(const UStringVector &commandStrings,
         #endif
         {
           PrintHex(Parse1Log, v);
-          if (!SetProcessAffinityMask(GetCurrentProcess(), (DWORD_PTR)v))
+          if (!SetProcessAffinityMask(GetCurrentProcess(), (DWORD)v))
           {
             DWORD lastError = GetLastError();
             Parse1Log += " : ERROR : ";

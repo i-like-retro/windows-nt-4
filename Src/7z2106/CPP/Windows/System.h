@@ -16,14 +16,14 @@ namespace NSystem {
 
 #ifdef _WIN32
 
-UInt32 CountAffinity(DWORD_PTR mask);
+UInt32 CountAffinity(DWORD mask);
 
 struct CProcessAffinity
 {
   // UInt32 numProcessThreads;
   // UInt32 numSysThreads;
-  DWORD_PTR processAffinityMask;
-  DWORD_PTR systemAffinityMask;
+  DWORD processAffinityMask;
+  DWORD systemAffinityMask;
 
   void InitST()
   {
@@ -40,7 +40,7 @@ struct CProcessAffinity
 
   void CpuSet(unsigned cpuIndex)
   {
-    processAffinityMask |= ((DWORD_PTR)1 << cpuIndex);
+    processAffinityMask |= ((DWORD)1 << cpuIndex);
   }
 
   UInt32 GetNumProcessThreads() const { return CountAffinity(processAffinityMask); }

@@ -205,7 +205,7 @@ struct CCopyStateIO
 
   CCopyStateIO(): TotalSize(0), StartPos(0), DeleteSrcFile(false) {}
 
-  HRESULT MyCopyFile(CFSTR inPath, CFSTR outPath, DWORD attrib = INVALID_FILE_ATTRIBUTES);
+  HRESULT MyCopyFile(CFSTR inPath, CFSTR outPath, DWORD attrib = /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF);
 };
 
 HRESULT SendLastErrorMessage(IFolderOperationsExtractCallback *callback, const FString &fileName);

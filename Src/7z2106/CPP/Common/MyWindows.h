@@ -37,8 +37,8 @@ typedef unsigned short USHORT;
 typedef unsigned short WORD;
 typedef short VARIANT_BOOL;
 
-#define LOWORD(l) ((WORD)((DWORD_PTR)(l) & 0xffff))
-#define HIWORD(l) ((WORD)((DWORD_PTR)(l) >> 16))
+#define LOWORD(l) ((WORD)((DWORD)(l) & 0xffff))
+#define HIWORD(l) ((WORD)((DWORD)(l) >> 16))
 
 // MS uses long for BOOL, but long is 32-bit in MS. So we use int.
 // typedef long BOOL;
@@ -50,7 +50,7 @@ typedef int BOOL;
 #endif
 
 // typedef size_t ULONG_PTR;
-// typedef size_t DWORD_PTR;
+// typedef size_t DWORD;
 // typedef uintptr_t UINT_PTR;
 // typedef ptrdiff_t UINT_PTR;
 

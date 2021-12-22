@@ -87,7 +87,7 @@ HRESULT CCopyStateIO::MyCopyFile(CFSTR inPath, CFSTR outPath, DWORD attrib)
     }
   }
 
-  if (attrib != INVALID_FILE_ATTRIBUTES)
+  if (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF)
     SetFileAttrib(outPath, attrib);
 
   if (DeleteSrcFile)

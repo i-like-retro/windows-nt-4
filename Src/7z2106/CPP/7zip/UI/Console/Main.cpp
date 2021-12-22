@@ -5,7 +5,7 @@
 #include "../../../Common/MyWindows.h"
 
 #ifdef _WIN32
-#include <Psapi.h>
+#include "Psapi.h"
 #else
 #include <unistd.h>
 #include <sys/ioctl.h>

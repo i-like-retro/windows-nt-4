@@ -257,7 +257,7 @@ public:
 
   bool Is_Attrib_ReadOnly() const
   {
-    return _attrib != INVALID_FILE_ATTRIBUTES && (_attrib & FILE_ATTRIBUTE_READONLY);
+    return _attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF && (_attrib & FILE_ATTRIBUTE_READONLY);
   }
 
   bool IsThere_ReadOnlyArc() const

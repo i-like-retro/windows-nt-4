@@ -16,7 +16,7 @@ extern bool g_IsNT;
 namespace NWindows {
 namespace NControl {
 
-static INT_PTR APIENTRY DialogProcedure(HWND dialogHWND, UINT message, WPARAM wParam, LPARAM lParam)
+static INT APIENTRY DialogProcedure(HWND dialogHWND, UINT message, WPARAM wParam, LPARAM lParam)
 {
   CWindow tempDialog(dialogHWND);
   if (message == WM_INITDIALOG)

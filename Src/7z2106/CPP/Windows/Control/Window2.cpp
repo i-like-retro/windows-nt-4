@@ -30,7 +30,7 @@ static LRESULT CALLBACK WindowProcedure(HWND aHWND, UINT message, WPARAM wParam,
 {
   CWindow tempWindow(aHWND);
   if (message == MY_START_WM_CREATE)
-    tempWindow.SetUserDataLongPtr((LONG_PTR)(((LPCREATESTRUCT)lParam)->lpCreateParams));
+    tempWindow.SetUserDataLongPtr((LONG)(((LPCREATESTRUCT)lParam)->lpCreateParams));
   CWindow2 *window = (CWindow2 *)(tempWindow.GetUserDataLongPtr());
   if (window != NULL && message == MY_START_WM_CREATE)
     window->Attach(aHWND);

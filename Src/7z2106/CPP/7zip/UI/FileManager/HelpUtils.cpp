@@ -4,6 +4,8 @@
 
 #include "HelpUtils.h"
 
+#pragma comment(lib, "C:/work/7z2106-src/CPP/7zip/UI/FileManager/htmlhelp.lib")
+
 #if defined(UNDER_CE) || !defined(_WIN32) /* || !defined(_MSC_VER) */
 
 void ShowHelpWindow(LPCSTR)
@@ -12,7 +14,7 @@ void ShowHelpWindow(LPCSTR)
 
 #else
 
-#include <HtmlHelp.h>
+#include "HtmlHelp.h"
 
 #include "../../../Common/StringConvert.h"
 

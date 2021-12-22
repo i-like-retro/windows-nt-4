@@ -232,7 +232,7 @@ static void GetString(const Byte *p, unsigned len, UString &res)
 
 bool CReparseAttr::Parse(const Byte *p, size_t size)
 {
-  ErrorCode = (DWORD)ERROR_INVALID_REPARSE_DATA;
+  ErrorCode = (DWORD)/*ERROR_INVALID_REPARSE_DATA*/4392;
   HeaderError = true;
   TagIsUnknown = true;
   MinorError = false;
@@ -260,7 +260,7 @@ bool CReparseAttr::Parse(const Byte *p, size_t size)
       && Tag != _my_IO_REPARSE_TAG_LX_SYMLINK)
   {
     // for unsupported reparse points
-    ErrorCode = (DWORD)ERROR_REPARSE_TAG_INVALID; // ERROR_REPARSE_TAG_MISMATCH
+    ErrorCode = (DWORD)/*ERROR_REPARSE_TAG_INVALID*/4393; // ERROR_REPARSE_TAG_MISMATCH
     // errorCode = ERROR_REPARSE_TAG_MISMATCH; // ERROR_REPARSE_TAG_INVALID
     return false;
   }
@@ -529,7 +529,7 @@ bool DeleteReparseData(CFSTR path)
   #define my_REPARSE_DATA_BUFFER_HEADER_SIZE 8
   if (reparseData.Size() < my_REPARSE_DATA_BUFFER_HEADER_SIZE)
   {
-    SetLastError(ERROR_INVALID_REPARSE_DATA);
+    SetLastError(/*ERROR_INVALID_REPARSE_DATA*/4392);
     return false;
   }
   BYTE buf[my_REPARSE_DATA_BUFFER_HEADER_SIZE];

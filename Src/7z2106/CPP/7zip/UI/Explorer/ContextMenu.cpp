@@ -1260,7 +1260,7 @@ static void MyCopyString(void *dest, const UString &src, bool writeInUnicode, UI
 }
 
 
-STDMETHODIMP CZipContextMenu::GetCommandString(UINT_PTR commandOffset, UINT uType,
+STDMETHODIMP CZipContextMenu::GetCommandString(UINT commandOffset, UINT uType,
     UINT * /* pwReserved */ , LPSTR pszName, UINT cchMax)
 {
   COM_TRY_BEGIN

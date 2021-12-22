@@ -389,8 +389,8 @@ static void SysInfo_To_String(AString &s, const SYSTEM_INFO &si)
   }
   s += " ";
 
-  DWORD_PTR minAdd = (DWORD_PTR)si.lpMinimumApplicationAddress;
-  UInt64 maxSize = (UInt64)(DWORD_PTR)si.lpMaximumApplicationAddress + 1;
+  DWORD minAdd = (DWORD)si.lpMinimumApplicationAddress;
+  UInt64 maxSize = (UInt64)(DWORD)si.lpMaximumApplicationAddress + 1;
   const UInt32 kReserveSize = ((UInt32)1 << 16);
   if (minAdd != kReserveSize)
   {

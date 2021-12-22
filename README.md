@@ -119,6 +119,14 @@ your `\WINNT\SYSTEM32` directory.
 Software
 ========
 
+Compression
+-----------
+
+* [7zip 21.06](CD/SOFTWARE/COMPRESS/7Z2106.EXE) `2021-11-29`: free and open
+source compression tool. Supports 7z, zip, rar and many other file formats.
+7zip [source code](Src/7z2106) has been modified to build with Visual C++ 6.0
+and work under Windows NT 4.
+
 Software Development
 --------------------
 

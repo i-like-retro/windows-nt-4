@@ -22,7 +22,7 @@ int GetIconIndexForCSIDL(int csidl)
   SHGetSpecialFolderLocation(NULL, csidl, &pidl);
   if (pidl)
   {
-    SHFILEINFO shellInfo;
+    SHFILEINFO shellInfo = {0};
     SHGetFileInfo((LPCTSTR)(const void *)(pidl), FILE_ATTRIBUTE_NORMAL,
       &shellInfo, sizeof(shellInfo),
       SHGFI_PIDL | SHGFI_SYSICONINDEX);
@@ -52,7 +52,7 @@ static struct CSHGetFileInfoInit
 } g_SHGetFileInfoInit;
 #endif
 
-static DWORD_PTR MySHGetFileInfoW(LPCWSTR pszPath, DWORD attrib, SHFILEINFOW *psfi, UINT cbFileInfo, UINT uFlags)
+static DWORD MySHGetFileInfoW(LPCWSTR pszPath, DWORD attrib, SHFILEINFOW *psfi, UINT cbFileInfo, UINT uFlags)
 {
   #ifdef _UNICODE
   return SHGetFileInfo
@@ -64,13 +64,13 @@ static DWORD_PTR MySHGetFileInfoW(LPCWSTR pszPath, DWORD attrib, SHFILEINFOW *ps
   (pszPath, attrib, psfi, cbFileInfo, uFlags);
 }
 
-DWORD_PTR GetRealIconIndex(CFSTR path, DWORD attrib, int &iconIndex)
+DWORD GetRealIconIndex(CFSTR path, DWORD attrib, int &iconIndex)
 {
   #ifndef _UNICODE
   if (!g_IsNT)
   {
-    SHFILEINFO shellInfo;
-    DWORD_PTR res = ::SHGetFileInfo(fs2fas(path), FILE_ATTRIBUTE_NORMAL | attrib, &shellInfo,
+    SHFILEINFO shellInfo = {0};
+    DWORD res = ::SHGetFileInfo(fs2fas(path), FILE_ATTRIBUTE_NORMAL | attrib, &shellInfo,
       sizeof(shellInfo), SHGFI_USEFILEATTRIBUTES | SHGFI_SYSICONINDEX);
     iconIndex = shellInfo.iIcon;
     return res;
@@ -78,8 +78,8 @@ DWORD_PTR GetRealIconIndex(CFSTR path, DWORD attrib, int &iconIndex)
   else
   #endif
   {
-    SHFILEINFOW shellInfo;
-    DWORD_PTR res = ::MySHGetFileInfoW(fs2us(path), FILE_ATTRIBUTE_NORMAL | attrib, &shellInfo,
+    SHFILEINFOW shellInfo = {0};
+    DWORD res = ::MySHGetFileInfoW(fs2us(path), FILE_ATTRIBUTE_NORMAL | attrib, &shellInfo,
       sizeof(shellInfo), SHGFI_USEFILEATTRIBUTES | SHGFI_SYSICONINDEX);
     iconIndex = shellInfo.iIcon;
     return res;
@@ -87,14 +87,14 @@ DWORD_PTR GetRealIconIndex(CFSTR path, DWORD attrib, int &iconIndex)
 }
 
 /*
-DWORD_PTR GetRealIconIndex(const UString &fileName, DWORD attrib, int &iconIndex, UString *typeName)
+DWORD GetRealIconIndex(const UString &fileName, DWORD attrib, int &iconIndex, UString *typeName)
 {
   #ifndef _UNICODE
   if (!g_IsNT)
   {
     SHFILEINFO shellInfo;
     shellInfo.szTypeName[0] = 0;
-    DWORD_PTR res = ::SHGetFileInfoA(GetSystemString(fileName), FILE_ATTRIBUTE_NORMAL | attrib, &shellInfo,
+    DWORD res = ::SHGetFileInfoA(GetSystemString(fileName), FILE_ATTRIBUTE_NORMAL | attrib, &shellInfo,
         sizeof(shellInfo), SHGFI_USEFILEATTRIBUTES | SHGFI_SYSICONINDEX | SHGFI_TYPENAME);
     if (typeName)
       *typeName = GetUnicodeString(shellInfo.szTypeName);
@@ -106,7 +106,7 @@ DWORD_PTR GetRealIconIndex(const UString &fileName, DWORD attrib, int &iconIndex
   {
     SHFILEINFOW shellInfo;
     shellInfo.szTypeName[0] = 0;
-    DWORD_PTR res = ::MySHGetFileInfoW(fileName, FILE_ATTRIBUTE_NORMAL | attrib, &shellInfo,
+    DWORD res = ::MySHGetFileInfoW(fileName, FILE_ATTRIBUTE_NORMAL | attrib, &shellInfo,
         sizeof(shellInfo), SHGFI_USEFILEATTRIBUTES | SHGFI_SYSICONINDEX | SHGFI_TYPENAME);
     if (typeName)
       *typeName = shellInfo.szTypeName;

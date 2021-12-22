@@ -12,6 +12,9 @@
 namespace NWindows {
 namespace NControl {
 
+#define ListView_SetCheckState(hwndLV, i, fCheck) \
+  ListView_SetItemState(hwndLV, i, INDEXTOSTATEIMAGEMASK((fCheck)?2:1), LVIS_STATEIMAGEMASK)
+
 class CListView: public NWindows::CWindow
 {
 public:

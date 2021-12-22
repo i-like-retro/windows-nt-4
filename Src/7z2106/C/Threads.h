@@ -46,11 +46,11 @@ typedef
     #endif
     THREAD_FUNC_RET_TYPE;
 
-typedef DWORD_PTR CAffinityMask;
-typedef DWORD_PTR CCpuSet;
+typedef DWORD CAffinityMask;
+typedef DWORD CCpuSet;
 
 #define CpuSet_Zero(p) { *(p) = 0; }
-#define CpuSet_Set(p, cpu) { *(p) |= ((DWORD_PTR)1 << (cpu)); }
+#define CpuSet_Set(p, cpu) { *(p) |= ((DWORD)1 << (cpu)); }
 
 #else //  _WIN32
 

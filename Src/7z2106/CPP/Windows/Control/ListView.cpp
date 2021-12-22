@@ -118,13 +118,13 @@ LRESULT CListView2::OnMessage(UINT message, WPARAM wParam, LPARAM lParam)
 
 void CListView2::SetWindowProc()
 {
-  SetUserDataLongPtr((LONG_PTR)this);
+  SetUserDataLongPtr((LONG)this);
   #ifndef _UNICODE
   if (g_IsNT)
-    _origWindowProc = (WNDPROC)SetLongPtrW(GWLP_WNDPROC, (LONG_PTR)ListViewSubclassProc);
+    _origWindowProc = (WNDPROC)SetLongPtrW(GWL_WNDPROC, (LONG)ListViewSubclassProc);
   else
   #endif
-    _origWindowProc = (WNDPROC)SetLongPtr(GWLP_WNDPROC, (LONG_PTR)ListViewSubclassProc);
+    _origWindowProc = (WNDPROC)SetLongPtr(GWL_WNDPROC, (LONG)ListViewSubclassProc);
 }
 
 /*

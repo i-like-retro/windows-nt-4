@@ -398,7 +398,7 @@ DWORD GetFileAttrib(CFSTR path)
     IF_USE_MAIN_PATH
     {
       DWORD dw = ::GetFileAttributesW(fs2us(path));
-      if (dw != INVALID_FILE_ATTRIBUTES)
+      if (dw != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF)
         return dw;
     }
     #ifdef WIN_LONG_PATH
@@ -409,7 +409,7 @@ DWORD GetFileAttrib(CFSTR path)
         return ::GetFileAttributesW(superPath);
     }
     #endif
-    return INVALID_FILE_ATTRIBUTES;
+    return /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF;
   }
 }
 
@@ -551,7 +551,7 @@ bool CFileInfo::Find(CFSTR path, bool followLink)
     if (NName::IsDrivePath(path + rootSize) && path[rootSize + 3] == 0)
     {
       DWORD attrib = GetFileAttrib(path);
-      if (attrib != INVALID_FILE_ATTRIBUTES && (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0)
+      if (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF && (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0)
       {
         ClearBase();
         Attrib = attrib;
@@ -568,7 +568,7 @@ bool CFileInfo::Find(CFSTR path, bool followLink)
       if (path[1] == 0)
       {
         DWORD attrib = GetFileAttrib(path);
-        if (attrib != INVALID_FILE_ATTRIBUTES && (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0)
+        if (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF && (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0)
         {
           ClearBase();
           Name.Empty();
@@ -606,10 +606,10 @@ bool CFileInfo::Find(CFSTR path, bool followLink)
             }
             {
               DWORD attrib = GetFileAttrib(path);
-              if (isOK || (attrib != INVALID_FILE_ATTRIBUTES && (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0))
+              if (isOK || (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF && (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0))
               {
                 ClearBase();
-                if (attrib != INVALID_FILE_ATTRIBUTES)
+                if (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF)
                   Attrib = attrib;
                 else
                   SetAsDir();

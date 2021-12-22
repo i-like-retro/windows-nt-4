@@ -73,22 +73,25 @@ public:
 
   bool Close()
   {
+    /*
     if (_handle == INVALID_HANDLE_VALUE)
       return true;
     if (!::CloseHandle(_handle))
       return false;
     _handle = INVALID_HANDLE_VALUE;
+    */
     return true;
   }
 
   bool Create()
   {
-    _handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    return (_handle != INVALID_HANDLE_VALUE);
+    //_handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    //return (_handle != INVALID_HANDLE_VALUE);
+    return false;
   }
 
-  bool GetFirstProcess(PROCESSENTRY32 *pe) { return BOOLToBool(Process32First(_handle, pe)); }
-  bool GetNextProcess(PROCESSENTRY32 *pe) { return BOOLToBool(Process32Next(_handle, pe)); }
+  bool GetFirstProcess(PROCESSENTRY32 *pe) { return false; } //BOOLToBool(Process32First(_handle, pe)); }
+  bool GetNextProcess(PROCESSENTRY32 *pe) { return false; } //BOOLToBool(Process32Next(_handle, pe)); }
 };
 
 #endif
@@ -1362,7 +1365,7 @@ static THREAD_FUNC_DECL MyThreadFunction(void *param)
           if (::MessageBoxW(g_HWND, message, L"7-Zip", MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
           {
             // DEBUG_PRINT_NUM("SendMessage", GetCurrentThreadId());
-            if (SendMessage(tpi->Window, kOpenItemChanged, 0, (LONG_PTR)tpi) != 1)
+            if (SendMessage(tpi->Window, kOpenItemChanged, 0, (LONG)tpi) != 1)
             {
               ::MessageBoxW(g_HWND, m, L"7-Zip", MB_OK | MB_ICONSTOP);
               return 0;

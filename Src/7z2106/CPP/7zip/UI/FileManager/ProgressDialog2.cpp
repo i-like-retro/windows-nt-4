@@ -236,6 +236,8 @@ void CProgressSync::AddError_Code_Name(DWORD systemError, const wchar_t *name)
   AddError_Message_Name(s, name);
 }
 
+EXTERN_C const CLSID CLSID_TaskbarList;
+
 CProgressDialog::CProgressDialog():
    _timer(0),
    CompressingMode(true),

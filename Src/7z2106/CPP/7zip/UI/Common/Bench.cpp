@@ -863,7 +863,7 @@ struct CAffinityMode
   UInt32 Sizes[NUM_CPU_LEVELS_MAX];
 
   void SetLevels(unsigned numCores, unsigned numCoreThreads);
-  DWORD_PTR GetAffinityMask(UInt32 bundleIndex, CCpuSet *cpuSet) const;
+  DWORD GetAffinityMask(UInt32 bundleIndex, CCpuSet *cpuSet) const;
   bool NeedAffinity() const { return NumBundleThreads != 0; }
 
   WRes CreateThread_WithAffinity(NWindows::CThread &thread, THREAD_FUNC_RET_TYPE (THREAD_FUNC_CALL_TYPE *startAddress)(void *), LPVOID parameter, UInt32 bundleIndex) const
@@ -919,7 +919,7 @@ void CAffinityMode::SetLevels(unsigned numCores, unsigned numCoreThreads)
 }
 
 
-DWORD_PTR CAffinityMode::GetAffinityMask(UInt32 bundleIndex, CCpuSet *cpuSet) const
+DWORD CAffinityMode::GetAffinityMask(UInt32 bundleIndex, CCpuSet *cpuSet) const
 {
   CpuSet_Zero(cpuSet);
 
@@ -958,7 +958,7 @@ DWORD_PTR CAffinityMode::GetAffinityMask(UInt32 bundleIndex, CCpuSet *cpuSet) co
   // UInt32 nb = NumBundleThreads / DivideNum;
   UInt32 nb = NumBundleThreads;
 
-  DWORD_PTR mask = ((DWORD_PTR)1 << nb) - 1;
+  DWORD mask = ((DWORD)1 << nb) - 1;
   // v += low;
   mask <<= v;
 
@@ -3512,10 +3512,10 @@ HRESULT Bench(
   // numCPUs = 24;
   /*
   {
-    DWORD_PTR mask = (1 << 0);
-    DWORD_PTR old = SetThreadAffinityMask(GetCurrentThread(), mask);
+    DWORD mask = (1 << 0);
+    DWORD old = SetThreadAffinityMask(GetCurrentThread(), mask);
     old = old;
-    DWORD_PTR old2 = SetThreadAffinityMask(GetCurrentThread(), mask);
+    DWORD old2 = SetThreadAffinityMask(GetCurrentThread(), mask);
     old2 = old2;
     return 0;
   }

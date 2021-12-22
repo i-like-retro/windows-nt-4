@@ -6,12 +6,14 @@
 #ifdef _MSC_VER
 #pragma warning(disable : 4201) // nonstandard extension used : nameless struct/union
 #pragma warning(disable : 4011) // vs2010: identifier truncated to _CRT_SECURE_CPP_OVERLOAD_SECURE
+#pragma comment(lib, "shfolder.lib")
 #endif
 
 // #define SZ_ERROR_ABORT 100
 
 #include <windows.h>
 #include <ShlObj.h>
+#include "ShFolder.h"
 
 #include "../../7zVersion.h"
 
@@ -348,7 +350,7 @@ static void SetShellProgramsGroup(HWND hwndOwner)
     
     if (SHGetFolderPathW(hwndOwner,
         i == 1 ? CSIDL_COMMON_PROGRAMS : CSIDL_PROGRAMS,
-        NULL, SHGFP_TYPE_CURRENT, link) != S_OK)
+        NULL, /*SHGFP_TYPE_CURRENT*/0, link) != S_OK)
       continue;
 
     NormalizePrefix(link);
@@ -556,7 +558,7 @@ static void RemoveQuotes(wchar_t *s)
 
 static BoolInt DoesFileOrDirExist()
 {
-  return (GetFileAttributesW(path) != INVALID_FILE_ATTRIBUTES);
+  return (GetFileAttributesW(path) != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF);
 }
 
 static BOOL RemoveFileAfterReboot2(const WCHAR *s)
@@ -617,7 +619,7 @@ static BoolInt GetErrorMessage(DWORD errorCode, WCHAR *message)
 static BOOL RemoveDir()
 {
   DWORD attrib = GetFileAttributesW(path);
-  if (attrib == INVALID_FILE_ATTRIBUTES)
+  if (attrib == /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF)
     return TRUE;
   if (RemoveDirectoryW(path))
     return TRUE;
@@ -740,7 +742,7 @@ static int Install()
 
       {
         DWORD attrib = GetFileAttributesW(path);
-        if (attrib == INVALID_FILE_ATTRIBUTES)
+        if (attrib == /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF)
           continue;
         if (attrib & FILE_ATTRIBUTE_READONLY)
           SetFileAttributesW(path, 0);
@@ -813,7 +815,7 @@ static void OnClose()
   g_HWND = NULL;
 }
 
-static INT_PTR CALLBACK MyDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+static INT CALLBACK MyDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   UNUSED_VAR(lParam)
 
@@ -899,6 +901,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   #ifndef UNDER_CE
   CoInitialize(NULL);
   #endif
+
+  InitCommonControls();
 
   #ifndef UNDER_CE
   func_RegDeleteKeyExW = (Func_RegDeleteKeyExW)

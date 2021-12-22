@@ -173,44 +173,44 @@ public:
     { return BOOLToBool(::InvalidateRect(_window, rect, BoolToBOOL(backgroundErase))); }
   void SetRedraw(bool redraw = true) { SendMsg(WM_SETREDRAW, (WPARAM)BoolToBOOL(redraw), 0); }
 
-  LONG_PTR SetStyle(LONG_PTR style) { return SetLongPtr(GWL_STYLE, style); }
-  LONG_PTR GetStyle() const { return GetLongPtr(GWL_STYLE); }
+  LONG SetStyle(LONG style) { return SetLongPtr(GWL_STYLE, style); }
+  LONG GetStyle() const { return GetLongPtr(GWL_STYLE); }
   // bool MyIsMaximized() const { return ((GetStyle() & WS_MAXIMIZE) != 0); }
 
-  LONG_PTR SetLong(int index, LONG newLongPtr) { return ::SetWindowLong(_window, index, newLongPtr); }
-  LONG_PTR GetLong(int index) const { return ::GetWindowLong(_window, index); }
-  LONG_PTR SetUserDataLong(LONG newLongPtr) { return SetLong(GWLP_USERDATA, newLongPtr); }
-  LONG_PTR GetUserDataLong() const { return GetLong(GWLP_USERDATA); }
+  LONG SetLong(int index, LONG newLongPtr) { return ::SetWindowLong(_window, index, newLongPtr); }
+  LONG GetLong(int index) const { return ::GetWindowLong(_window, index); }
+  LONG SetUserDataLong(LONG newLongPtr) { return SetLong(GWL_USERDATA, newLongPtr); }
+  LONG GetUserDataLong() const { return GetLong(GWL_USERDATA); }
 
 
   #ifdef UNDER_CE
 
-  LONG_PTR SetLongPtr(int index, LONG_PTR newLongPtr) { return SetLong(index, newLongPtr); }
-  LONG_PTR GetLongPtr(int index) const { return GetLong(index); }
+  LONG SetLongPtr(int index, LONG newLongPtr) { return SetLong(index, newLongPtr); }
+  LONG GetLongPtr(int index) const { return GetLong(index); }
 
-  LONG_PTR SetUserDataLongPtr(LONG_PTR newLongPtr) { return SetUserDataLong(newLongPtr); }
-  LONG_PTR GetUserDataLongPtr() const { return GetUserDataLong(); }
+  LONG SetUserDataLongPtr(LONG newLongPtr) { return SetUserDataLong(newLongPtr); }
+  LONG GetUserDataLongPtr() const { return GetUserDataLong(); }
   
   #else
   
-  LONG_PTR SetLongPtr(int index, LONG_PTR newLongPtr)
-    { return ::SetWindowLongPtr(_window, index,
+  LONG SetLongPtr(int index, LONG newLongPtr)
+    { return ::SetWindowLong(_window, index,
           #ifndef _WIN64
           (LONG)
           #endif
           newLongPtr); }
   #ifndef _UNICODE
-  LONG_PTR SetLongPtrW(int index, LONG_PTR newLongPtr)
-    { return ::SetWindowLongPtrW(_window, index,
+  LONG SetLongPtrW(int index, LONG newLongPtr)
+    { return ::SetWindowLongW(_window, index,
           #ifndef _WIN64
           (LONG)
           #endif
           newLongPtr); }
   #endif
 
-  LONG_PTR GetLongPtr(int index) const { return ::GetWindowLongPtr(_window, index); }
-  LONG_PTR SetUserDataLongPtr(LONG_PTR newLongPtr) { return SetLongPtr(GWLP_USERDATA, newLongPtr); }
-  LONG_PTR GetUserDataLongPtr() const { return GetLongPtr(GWLP_USERDATA); }
+  LONG GetLongPtr(int index) const { return ::GetWindowLong(_window, index); }
+  LONG SetUserDataLongPtr(LONG newLongPtr) { return SetLongPtr(GWL_USERDATA, newLongPtr); }
+  LONG GetUserDataLongPtr() const { return GetLongPtr(GWL_USERDATA); }
   
   #endif
   

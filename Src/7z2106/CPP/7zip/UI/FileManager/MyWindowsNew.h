@@ -3,9 +3,42 @@
 #ifndef __MY_WINDOWS_NEW_H
 #define __MY_WINDOWS_NEW_H
 
+#include <commctrl.h>
+
 #ifdef _MSC_VER
 
-#include <ShObjIdl.h>
+    MIDL_INTERFACE("56FDF342-FD6D-11d0-958A-006097C9A090")
+    ITaskbarList : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE HrInit( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AddTab( 
+            /* [in] */ HWND hwnd) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE DeleteTab( 
+            /* [in] */ HWND hwnd) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ActivateTab( 
+            /* [in] */ HWND hwnd) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetActiveAlt( 
+            /* [in] */ HWND hwnd) = 0;
+        
+    };
+
+EXTERN_C const IID IID_ITaskbarList2;
+
+   
+    MIDL_INTERFACE("602D4995-B13A-429b-A66E-1935E44F4317")
+    ITaskbarList2 : public ITaskbarList
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE MarkFullscreenWindow( 
+            /* [in] */ HWND hwnd,
+            /* [in] */ BOOL fFullscreen) = 0;
+        
+    };
 
 #ifndef __ITaskbarList3_INTERFACE_DEFINED__
 #define __ITaskbarList3_INTERFACE_DEFINED__

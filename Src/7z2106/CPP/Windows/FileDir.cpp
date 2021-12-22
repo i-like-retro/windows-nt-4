@@ -368,7 +368,7 @@ bool CreateComplexDir(CFSTR _path)
   
   {
     DWORD attrib = NFind::GetFileAttrib(_path);
-    if (attrib != INVALID_FILE_ATTRIBUTES && (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0)
+    if (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF && (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0)
       return true;
   }
 
@@ -450,7 +450,7 @@ bool DeleteFileAlways(CFSTR path)
      SetFileAttrib("name:stream", ) changes attributes of main file. */
   {
     DWORD attrib = NFind::GetFileAttrib(path);
-    if (attrib != INVALID_FILE_ATTRIBUTES
+    if (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF
         && (attrib & FILE_ATTRIBUTE_DIRECTORY) == 0
         && (attrib & FILE_ATTRIBUTE_READONLY) != 0)
     {

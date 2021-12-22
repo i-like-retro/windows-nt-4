@@ -68,7 +68,7 @@ public:
   // IContextMenu
   STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
   STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
-  STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType, UINT *pwReserved, LPSTR pszName, UINT cchMax);
+  STDMETHOD(GetCommandString)(UINT idCmd, UINT uType, UINT *pwReserved, LPSTR pszName, UINT cchMax);
 
   HRESULT InitContextMenu(const wchar_t *folder, const wchar_t * const *names, unsigned numFiles);
 

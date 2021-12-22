@@ -19,7 +19,7 @@ struct CMenuItem
   HMENU hSubMenu;
   HBITMAP hbmpChecked;
   HBITMAP hbmpUnchecked;
-  ULONG_PTR dwItemData;
+  ULONG dwItemData;
   // LPTSTR dwTypeData;
   // UINT cch;
   // HBITMAP hbmpItem;

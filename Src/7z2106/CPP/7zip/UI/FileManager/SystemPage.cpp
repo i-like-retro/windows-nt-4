@@ -448,8 +448,8 @@ bool CSystemPage::OnListKeyDown(LPNMLVKEYDOWN keyDownInfo)
     case VK_DIVIDE:
 
     #ifndef UNDER_CE
-    case VK_OEM_PLUS:
-    case VK_OEM_MINUS:
+    case /*VK_OEM_PLUS*/0xBB:
+    case /*VK_OEM_MINUS*/0xBD:
     #endif
 
       if (!ctrl)

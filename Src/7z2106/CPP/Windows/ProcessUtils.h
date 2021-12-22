@@ -3,7 +3,7 @@
 #ifndef __WINDOWS_PROCESS_UTILS_H
 #define __WINDOWS_PROCESS_UTILS_H
 
-#include <Psapi.h>
+#include "../7zip/UI/Console/Psapi.h"
 
 #include "../Common/MyString.h"
 
@@ -43,7 +43,7 @@ public:
     { return BOOLToBool(::ReadProcessMemory(_handle, baseAddress, buffer, size, numberOfBytesRead));  }
 
   bool WriteMemory(LPVOID baseAddress, LPCVOID buffer, SIZE_T size, SIZE_T* numberOfBytesWritten)
-    { return BOOLToBool(::WriteProcessMemory(_handle, baseAddress, buffer, size, numberOfBytesWritten)); }
+    { return BOOLToBool(::WriteProcessMemory(_handle, baseAddress, (void*)buffer, size, numberOfBytesWritten)); }
 
   bool FlushInstructionCache(LPCVOID baseAddress = 0, SIZE_T size = 0)
     { return BOOLToBool(::FlushInstructionCache(_handle, baseAddress, size)); }

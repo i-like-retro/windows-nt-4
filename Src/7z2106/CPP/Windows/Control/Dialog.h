@@ -129,10 +129,10 @@ public:
   virtual bool OnNotify(UINT /* controlID */, LPNMHDR /* lParam */) { return false; }
   virtual bool OnTimer(WPARAM /* timerID */, LPARAM /* callback */) { return false; }
 
-  LONG_PTR SetMsgResult(LONG_PTR newLongPtr )
-    { return SetLongPtr(DWLP_MSGRESULT, newLongPtr); }
-  LONG_PTR GetMsgResult() const
-    { return GetLongPtr(DWLP_MSGRESULT); }
+  LONG SetMsgResult(LONG newLongPtr )
+    { return SetLongPtr(DWL_MSGRESULT, newLongPtr); }
+  LONG GetMsgResult() const
+    { return GetLongPtr(DWL_MSGRESULT); }
 
   bool GetMargins(int margin, int &x, int &y);
   int Units_To_Pixels_X(int units);

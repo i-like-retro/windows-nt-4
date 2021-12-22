@@ -7,10 +7,12 @@
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4201) // nonstandard extension used : nameless struct/union
+#pragma comment(lib, "shfolder.lib")
 #endif
 
 #include <windows.h>
 #include <ShlObj.h>
+#include "ShFolder.h"
 
 #include "../../7z.h"
 #include "../../7zAlloc.h"
@@ -272,7 +274,7 @@ static WRes CreateComplexDir()
 
   {
     DWORD attrib = GetFileAttributesW(s);
-    if (attrib != INVALID_FILE_ATTRIBUTES)
+    if (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF)
       return (attrib & FILE_ATTRIBUTE_DIRECTORY) != 0 ? 0 : ERROR_ALREADY_EXISTS;
   }
 
@@ -306,7 +308,7 @@ static WRes CreateComplexDir()
       if (wres == ERROR_ALREADY_EXISTS)
       {
         DWORD attrib = GetFileAttributesW(s);
-        if (attrib != INVALID_FILE_ATTRIBUTES)
+        if (attrib != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF)
           if ((attrib & FILE_ATTRIBUTE_DIRECTORY) == 0)
             return ERROR_ALREADY_EXISTS;
         break;
@@ -620,7 +622,7 @@ static void OnClose()
   g_HWND = NULL;
 }
 
-static INT_PTR CALLBACK MyDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+static INT CALLBACK MyDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   // UNUSED_VAR(hwnd)
   UNUSED_VAR(lParam)
@@ -679,7 +681,7 @@ static INT_PTR CALLBACK MyDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
           GetDlgItemTextW(hwnd, IDE_EXTRACT_PATH, s, MAX_PATH);
           if (MyBrowseForFolder(hwnd, L"Select the folder for installation:" ,
               0
-              | BIF_NEWDIALOGSTYLE // 5.0 of ?.dll ?
+              //| BIF_NEWDIALOGSTYLE // 5.0 of ?.dll ?
               | BIF_RETURNONLYFSDIRS
               // | BIF_STATUSTEXT // doesn't work for BIF_NEWDIALOGSTYLE
               , s, s2))
@@ -780,7 +782,7 @@ static void SetShellProgramsGroup(HWND hwndOwner)
     
     if (SHGetFolderPathW(hwndOwner,
         i == 1 ? CSIDL_COMMON_PROGRAMS : CSIDL_PROGRAMS,
-        NULL, SHGFP_TYPE_CURRENT, link) != S_OK)
+        NULL, /*SHGFP_TYPE_CURRENT*/0, link) != S_OK)
       continue;
 
     NormalizePrefix(link);
@@ -1438,7 +1440,7 @@ if (res == SZ_OK)
               CatAscii(path, ".tmp");
               if (tempIndex > 1)
                 HexToString(tempIndex, path + wcslen(path));
-              if (GetFileAttributesW(path) != INVALID_FILE_ATTRIBUTES)
+              if (GetFileAttributesW(path) != /*INVALID_FILE_ATTRIBUTES*/0xFFFFFFFF)
               {
                 tempIndex++;
                 continue;

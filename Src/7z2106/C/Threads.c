@@ -100,7 +100,7 @@ WRes Thread_Create_With_Affinity(CThread *p, THREAD_FUNC_TYPE func, LPVOID param
   {
     {
       // DWORD_PTR prevMask =
-      SetThreadAffinityMask(h, (DWORD_PTR)affinity);
+      SetThreadAffinityMask(h, (DWORD)affinity);
       /*
       if (prevMask == 0)
       {

@@ -250,7 +250,7 @@ bool BrowseForFolder(HWND owner, LPCTSTR title,
 {
   return BrowseForFolder(owner, title,
       #ifndef UNDER_CE
-      BIF_NEWDIALOGSTYLE |
+      //BIF_NEWDIALOGSTYLE |
       #endif
       BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT, initialFolder, resultPath);
   // BIF_STATUSTEXT; BIF_USENEWUI   (Version 5.0)
@@ -338,13 +338,13 @@ bool BrowseForFolder(HWND owner, LPCWSTR title, LPCWSTR initialFolder, UString &
 {
   if (g_IsNT)
     return BrowseForFolder(owner, title,
-      BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS
+      /*BIF_NEWDIALOGSTYLE |*/ BIF_RETURNONLYFSDIRS
       //  | BIF_STATUSTEXT // This flag is not supported when BIF_NEWDIALOGSTYLE is specified.
       , initialFolder, resultPath);
   // BIF_STATUSTEXT; BIF_USENEWUI   (Version 5.0)
   CSysString s;
   bool res = BrowseForFolder(owner, GetSystemString(title),
-      BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS
+      /*BIF_NEWDIALOGSTYLE |*/ BIF_RETURNONLYFSDIRS
       // | BIF_STATUSTEXT  // This flag is not supported when BIF_NEWDIALOGSTYLE is specified.
       , GetSystemString(initialFolder), s);
   resultPath = GetUnicodeString(s);

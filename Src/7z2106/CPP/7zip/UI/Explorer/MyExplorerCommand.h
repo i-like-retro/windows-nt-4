@@ -3,6 +3,8 @@
 #ifndef __MY_EXPLORER_COMMAND_H
 #define __MY_EXPLORER_COMMAND_H
 
+typedef ULONG SFGAOF;
+
 #if _MSC_VER >= 1910
 #define USE_SYS_shobjidl_core
 #endif
@@ -12,6 +14,161 @@
 // #include <shobjidl_core.h>
 
 #else
+
+#ifndef __IShellItem_INTERFACE_DEFINED__
+#define __IShellItem_INTERFACE_DEFINED__
+
+/* interface IShellItem */
+/* [unique][object][uuid] */ 
+
+typedef /* [v1_enum] */ 
+enum _SIGDN
+    {
+        SIGDN_NORMALDISPLAY	= 0,
+        SIGDN_PARENTRELATIVEPARSING	= ( int  )0x80018001,
+        SIGDN_DESKTOPABSOLUTEPARSING	= ( int  )0x80028000,
+        SIGDN_PARENTRELATIVEEDITING	= ( int  )0x80031001,
+        SIGDN_DESKTOPABSOLUTEEDITING	= ( int  )0x8004c000,
+        SIGDN_FILESYSPATH	= ( int  )0x80058000,
+        SIGDN_URL	= ( int  )0x80068000,
+        SIGDN_PARENTRELATIVEFORADDRESSBAR	= ( int  )0x8007c001,
+        SIGDN_PARENTRELATIVE	= ( int  )0x80080001,
+        SIGDN_PARENTRELATIVEFORUI	= ( int  )0x80094001
+    } 	SIGDN;
+
+/* [v1_enum] */ 
+enum _SICHINTF
+    {
+        SICHINT_DISPLAY	= 0,
+        SICHINT_ALLFIELDS	= ( int  )0x80000000,
+        SICHINT_CANONICAL	= 0x10000000,
+        SICHINT_TEST_FILESYSPATH_IF_NOT_EQUAL	= 0x20000000
+    } ;
+typedef DWORD SICHINTF;
+
+EXTERN_C const IID IID_IShellItem;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("43826d1e-e718-42ee-bc55-a1e261c37bfe")
+    IShellItem : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE BindToHandler( 
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [in] */ REFGUID bhid,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppv) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetParent( 
+            /* [out] */ IShellItem **ppsi) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
+            /* [in] */ SIGDN sigdnName,
+            /* [annotation][string][out] */ 
+            LPWSTR *ppszName) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetAttributes( 
+            /* [in] */ SFGAOF sfgaoMask,
+            /* [out] */ SFGAOF *psfgaoAttribs) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Compare( 
+            /* [in] */ IShellItem *psi,
+            /* [in] */ SICHINTF hint,
+            /* [out] */ int *piOrder) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IShellItemVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            __RPC__in IShellItem * This,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            __RPC__in IShellItem * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            __RPC__in IShellItem * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *BindToHandler )( 
+            __RPC__in IShellItem * This,
+            /* [unique][in] */ __RPC__in_opt IBindCtx *pbc,
+            /* [in] */ __RPC__in REFGUID bhid,
+            /* [in] */ __RPC__in REFIID riid,
+            /* [iid_is][out] */ __RPC__deref_out_opt void **ppv);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetParent )( 
+            __RPC__in IShellItem * This,
+            /* [out] */ __RPC__deref_out_opt IShellItem **ppsi);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
+            __RPC__in IShellItem * This,
+            /* [in] */ SIGDN sigdnName,
+            /* [annotation][string][out] */ 
+            _Outptr_result_nullonfailure_  LPWSTR *ppszName);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetAttributes )( 
+            __RPC__in IShellItem * This,
+            /* [in] */ SFGAOF sfgaoMask,
+            /* [out] */ __RPC__out SFGAOF *psfgaoAttribs);
+        
+        HRESULT ( STDMETHODCALLTYPE *Compare )( 
+            __RPC__in IShellItem * This,
+            /* [in] */ __RPC__in_opt IShellItem *psi,
+            /* [in] */ SICHINTF hint,
+            /* [out] */ __RPC__out int *piOrder);
+        
+        END_INTERFACE
+    } IShellItemVtbl;
+
+    interface IShellItem
+    {
+        CONST_VTBL struct IShellItemVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IShellItem_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IShellItem_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IShellItem_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IShellItem_BindToHandler(This,pbc,bhid,riid,ppv)	\
+    ( (This)->lpVtbl -> BindToHandler(This,pbc,bhid,riid,ppv) ) 
+
+#define IShellItem_GetParent(This,ppsi)	\
+    ( (This)->lpVtbl -> GetParent(This,ppsi) ) 
+
+#define IShellItem_GetDisplayName(This,sigdnName,ppszName)	\
+    ( (This)->lpVtbl -> GetDisplayName(This,sigdnName,ppszName) ) 
+
+#define IShellItem_GetAttributes(This,sfgaoMask,psfgaoAttribs)	\
+    ( (This)->lpVtbl -> GetAttributes(This,sfgaoMask,psfgaoAttribs) ) 
+
+#define IShellItem_Compare(This,psi,hint,piOrder)	\
+    ( (This)->lpVtbl -> Compare(This,psi,hint,piOrder) ) 
+
+#endif /* COBJMACROS */
+
+#endif 	/* C style interface */
+
+#endif 	/* __IShellItem_INTERFACE_DEFINED__ */
 
 #ifndef __IShellItemArray_INTERFACE_DEFINED__
 #define __IShellItemArray_INTERFACE_DEFINED__

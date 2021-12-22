@@ -23,7 +23,7 @@ namespace NSystem {
 
 #ifdef _WIN32
 
-UInt32 CountAffinity(DWORD_PTR mask)
+UInt32 CountAffinity(DWORD mask)
 {
   UInt32 num = 0;
   for (unsigned i = 0; i < sizeof(mask) * 8; i++)
@@ -110,7 +110,7 @@ UInt32 GetNumberOfProcessors()
 
 #ifndef UNDER_CE
 
-#if !defined(_WIN64) && defined(__GNUC__)
+#if 1//!defined(_WIN64) && defined(__GNUC__)
 
 typedef struct _MY_MEMORYSTATUSEX {
   DWORD dwLength;

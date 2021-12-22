@@ -42,8 +42,8 @@ public:
   virtual void OnCancel() {};
   */
 
-  LONG_PTR SetMsgResult(LONG_PTR newLongPtr) { return SetLongPtr(DWLP_MSGRESULT, newLongPtr); }
-  LONG_PTR GetMsgResult() const { return GetLongPtr(DWLP_MSGRESULT); }
+  LONG SetMsgResult(LONG newLongPtr) { return SetLongPtr(DWL_MSGRESULT, newLongPtr); }
+  LONG GetMsgResult() const { return GetLongPtr(DWL_MSGRESULT); }
 };
 
 }}

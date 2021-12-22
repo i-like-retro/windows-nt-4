@@ -60,9 +60,9 @@ struct PluginPanelItem
   char *Owner;
   char **CustomColumnData;
   int CustomColumnNumber;
-  DWORD_PTR UserData;
+  DWORD UserData;
   DWORD CRC32;
-  DWORD_PTR Reserved[2];
+  DWORD Reserved[2];
 };
 
 #define PPIF_PROCESSDESCR 0x80000000

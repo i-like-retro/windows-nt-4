@@ -40,8 +40,8 @@ bool CListViewDialog::OnInit()
 
   if (NumColumns > 1)
   {
-    LONG_PTR style = _listView.GetStyle();
-    style &= ~(LONG_PTR)LVS_NOCOLUMNHEADER;
+    LONG style = _listView.GetStyle();
+    style &= ~(LONG)LVS_NOCOLUMNHEADER;
     _listView.SetStyle(style);
   }
 

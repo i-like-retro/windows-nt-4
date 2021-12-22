@@ -399,7 +399,7 @@ bool CPanel::OnCreate(CREATESTRUCT * /* createStruct */)
   TBBUTTON tbb [ ] =
   {
     // {0, 0, TBSTATE_ENABLED, BTNS_SEP, 0L, 0},
-    {VIEW_PARENTFOLDER, kParentFolderID, TBSTATE_ENABLED, BTNS_BUTTON, { 0, 0 }, 0, 0 },
+    {VIEW_PARENTFOLDER, kParentFolderID, TBSTATE_ENABLED, /*BTNS_BUTTON*/TBSTYLE_BUTTON, { 0, 0 }, 0, 0 },
     // {0, 0, TBSTATE_ENABLED, BTNS_SEP, 0L, 0},
     // {VIEW_NEWFOLDER, kCreateFolderID, TBSTATE_ENABLED, BTNS_BUTTON, 0L, 0},
   };
@@ -484,16 +484,16 @@ bool CPanel::OnCreate(CREATESTRUCT * /* createStruct */)
 
   // _comboBoxEdit.SendMessage(CCM_SETUNICODEFORMAT, (WPARAM)(BOOL)TRUE, 0);
 
-  _comboBoxEdit.SetUserDataLongPtr(LONG_PTR(&_comboBoxEdit));
+  _comboBoxEdit.SetUserDataLongPtr(LONG(&_comboBoxEdit));
   _comboBoxEdit._panel = this;
    #ifndef _UNICODE
    if (g_IsNT)
      _comboBoxEdit._origWindowProc =
-      (WNDPROC)_comboBoxEdit.SetLongPtrW(GWLP_WNDPROC, LONG_PTR(ComboBoxEditSubclassProc));
+      (WNDPROC)_comboBoxEdit.SetLongPtrW(GWL_WNDPROC, LONG(ComboBoxEditSubclassProc));
    else
    #endif
      _comboBoxEdit._origWindowProc =
-      (WNDPROC)_comboBoxEdit.SetLongPtr(GWLP_WNDPROC, LONG_PTR(ComboBoxEditSubclassProc));
+      (WNDPROC)_comboBoxEdit.SetLongPtr(GWL_WNDPROC, LONG(ComboBoxEditSubclassProc));
 
   #endif
 
