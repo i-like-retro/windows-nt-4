@@ -13,8 +13,8 @@ Windows NT 4.
 
 Why? Because I like this retro OS :)
 
-If you would like to have some other open source software backported and
-compiled for Windows NT 4, create a GitHub issue. And I will take a look!
+If you would like to find your favorite software in this repository,
+working on Windows NT 4, just create a GitHub issue. I will take a look!
 
 CD Image
 ========
