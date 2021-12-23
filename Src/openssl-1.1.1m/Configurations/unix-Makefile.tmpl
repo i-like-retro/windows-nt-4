@@ -243,9 +243,17 @@ OPENSSLDIR_dir={- my $x = File::Spec::Win32->canonpath($openssldir_dir);
 LIBDIR={- our $libdir = $config{libdir} || "lib";
           File::Spec::Win32->file_name_is_absolute($libdir) ? "" : $libdir -}
 ENGINESDIR_dev={- use File::Spec::Win32;
+                  use File::Spec::Win32;
+                  our $openssldir =
+                      $config{openssldir} ?
+                          (File::Spec::Win32->file_name_is_absolute($config{openssldir}) ?
+                               File::Spec::Win32->canonpath($config{openssldir})
+                               : File::Spec::Win32->catdir($prefix, $config{openssldir}))
+                          : File::Spec::Win32->canonpath("$mingw_commonroot/SSL");
+                  our ($openssldir_dev, $openssldir_dir, $openssldir_file) =
+                      File::Spec::Win32->splitpath($openssldir, 1);
                   our $enginesdir =
-                      File::Spec::Win32->catdir($prefix,$libdir,
-                                                "engines-$sover_dirname");
+                      File::Spec::Win32->catdir($openssldir,"share/openssl.1_1/engines");
                   our ($enginesdir_dev, $enginesdir_dir, $enginesdir_file) =
                       File::Spec::Win32->splitpath($enginesdir, 1);
                   $enginesdir =~ s|\\|/|g;

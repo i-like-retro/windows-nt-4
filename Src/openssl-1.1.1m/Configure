@@ -822,10 +822,12 @@ while (@argvcopy)
                 elsif (/^--with-zlib-lib=(.*)$/)
                         {
                         $withargs{zlib_lib}=$1;
+                        $withargs{zlib_lib} =~ s|\\|/|g;
                         }
                 elsif (/^--with-zlib-include=(.*)$/)
                         {
                         $withargs{zlib_include}=$1;
+                        $withargs{zlib_include} =~ s|\\|/|g;
                         }
                 elsif (/^--with-fuzzer-lib=(.*)$/)
                         {

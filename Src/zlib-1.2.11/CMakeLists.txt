@@ -3,6 +3,9 @@ set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS ON)
 
 project(zlib C)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s")
+
 set(VERSION "1.2.11")
 
 option(ASM686 "Enable building i686 assembly implementation")
@@ -207,9 +210,9 @@ if(UNIX)
    endif()
 elseif(BUILD_SHARED_LIBS AND WIN32)
     # Creates zlib1.dll when building shared library version
-    set_target_properties(zlib PROPERTIES SUFFIX "1.dll")
+    #set_target_properties(zlib PROPERTIES SUFFIX "1.dll")
 endif()
-set_target_properties(zlib PROPERTIES PREFIX "" SUFFIX "1.dll")
+set_target_properties(zlib PROPERTIES PREFIX "" SUFFIX ".dll")
 
 if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
     install(TARGETS zlib zlibstatic
