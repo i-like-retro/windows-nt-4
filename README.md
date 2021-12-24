@@ -167,3 +167,8 @@ applications. This is the latest version of NSIS 2.x. Actually
 and works perfectly on Windows NT 4, but it seems to be unable to parse
 scripts used by CMake. For this reason it is recommended to install NSIS 2.x
 if you plan to use it together with CMake.
+
+Useful links
+============
+
+* [Windows NT 4.0 Service Pack and Hotfixes Reference](https://nt4ref.zcm.com.au/patch.htm)
