@@ -40,6 +40,8 @@
 #  include <sys/un.h>
 #endif
 
+#include "wspiapi.h"
+
 #ifdef __VMS
 #  include <in.h>
 #  include <inet.h>

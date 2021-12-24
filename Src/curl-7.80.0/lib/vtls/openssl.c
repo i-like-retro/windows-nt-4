@@ -2962,6 +2962,7 @@ static CURLcode ossl_connect_step1(struct Curl_easy *data,
            CompareFileTime(&now, &pContext->pCertInfo->NotAfter) > 0)
           continue;
 
+#if 0
         /* If key usage exists check for signing attribute */
         if(CertGetIntendedKeyUsage(pContext->dwCertEncodingType,
                                    pContext->pCertInfo,
@@ -3022,6 +3023,7 @@ static CURLcode ossl_connect_step1(struct Curl_easy *data,
         }
         else
           continue;
+#endif
 
         x509 = d2i_X509(NULL, &encoded_cert, pContext->cbCertEncoded);
         if(!x509)
