@@ -424,21 +424,26 @@ int __wspiapi_getaddrinfo_internal
      * service port number...
      */
     struct servent *pi; char *brk;
-    ai_data.sa.sin_port = strtoul( servname, &brk, 0 );
-    if( *brk == '\0' ) pi = getservbyport( htons( ai_data.sa.sin_port ), NULL );
+    ai_data.sa.sin_port = htons( strtoul( servname, &brk, 0 ) );
+    if( *brk == '\0' ) pi = getservbyport( ai_data.sa.sin_port, NULL );
 
     /* ...or, failing that, a well known service name, which may be
      * mapped to such a port number, or else bail out.
      */
     else pi = getservbyname( servname, NULL );
-    if( pi == NULL ) return EAI_SERVICE;
+
+    if( pi == NULL )
+    {
+      if ( *brk != 0 )
+        return EAI_SERVICE;
+    }
+    else ai_data.sa.sin_port = pi->s_port;
 
     /* When the servname argument has been successfully interpreted,
      * store the port number within the addrinfo template, and reset
      * the return status, to indicate that the minimal requirement
      * for at least one of servname and nodename is non-NULL.
      */
-    ai_data.sa.sin_port = pi->s_port;
     status = 0;
   }
 

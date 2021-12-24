@@ -2238,4 +2238,3 @@ del openssl-1.1.1m\libeay11.dll
 del openssl-1.1.1m\ssleay11.dll
 del openssl-1.1.1m\test\libeay11.dll
 del openssl-1.1.1m\test\ssleay11.dll
-del openssl-1.1.1m\engines/e_padlock-x86.s

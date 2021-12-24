@@ -99,6 +99,8 @@ if errorlevel 1 goto error
 
 if not exist %OUT%\include\openssl mkdir %OUT%\include\openssl
 if errorlevel 1 goto error
+if not exist %OUT%\share\openssl.1_1\engines mkdir %OUT%\share\openssl.1_1\engines
+if errorlevel 1 goto error
 
 cmake -E copy_if_different libcrypto.a %OUT%\lib\libcryptostatic.a
 if errorlevel 1 goto error
@@ -113,6 +115,18 @@ if errorlevel 1 goto error
 cmake -E copy_if_different ssleay11.dll %OUT%\bin
 if errorlevel 1 goto error
 for %%f in (include\openssl\*.h) do cmake -E copy_if_different %%f %OUT%\include\openssl
+if errorlevel 1 goto error
+cmake -E copy_if_different engines\capi.dll %OUT%\share\openssl.1_1\engines
+if errorlevel 1 goto error
+cmake -E copy_if_different engines\dasync.dll %OUT%\share\openssl.1_1\engines
+if errorlevel 1 goto error
+cmake -E copy_if_different engines\padlock.dll %OUT%\share\openssl.1_1\engines
+if errorlevel 1 goto error
+cmake -E copy_if_different apps\openssl.exe %OUT%\bin
+if errorlevel 1 goto error
+cmake -E copy_if_different apps\openssl.cnf %OUT%\share\openssl.1_1
+if errorlevel 1 goto error
+cmake -E copy_if_different apps\ct_log_list.cnf %OUT%\share\openssl.1_1
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

@@ -659,6 +659,7 @@ struct curl_slist *GetLoadedModulePaths(void)
   MODULEENTRY32 mod = {0};
   struct curl_slist *slist = NULL;
 
+  /*
   mod.dwSize = sizeof(MODULEENTRY32);
 
   do {
@@ -667,7 +668,9 @@ struct curl_slist *GetLoadedModulePaths(void)
 
   if(hnd == INVALID_HANDLE_VALUE)
     goto error;
+  */
 
+#if 0
   if(!Module32First(hnd, &mod))
     goto error;
 
@@ -700,6 +703,7 @@ error:
 cleanup:
   if(hnd != INVALID_HANDLE_VALUE)
     CloseHandle(hnd);
+#endif
   return slist;
 }
 
