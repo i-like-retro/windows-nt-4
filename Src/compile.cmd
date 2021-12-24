@@ -215,6 +215,8 @@ cmake -E copy_if_different lib\libcurl.dll %OUT%\bin
 if errorlevel 1 goto error
 cmake -E copy_if_different lib\libcurl.dll.a %OUT%\lib\libcurl.a
 if errorlevel 1 goto error
+cmake -E copy_if_different %~dp0cacert/cacert.pem %OUT%\bin\curl-ca.crt
+if errorlevel 1 goto error
 for %%f in (%CURL%\include\curl\*.h) do cmake -E copy_if_different %%f %OUT%\include\curl
 if errorlevel 1 goto error
 
