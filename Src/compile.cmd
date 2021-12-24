@@ -3,6 +3,7 @@ setlocal
 
 set ZLIB=%~dp0zlib-1.2.11
 set OPENSSL=%~dp0openssl-1.1.1m
+set LIBSSH2=%~dp0libssh2-1.10.0
 
 rem ==========================================================================
 
@@ -47,9 +48,11 @@ if errorlevel 1 goto error
 cd %BUILD%\zlib
 if errorlevel 1 goto error
 
-cmake -G "MinGW Makefiles" -DCMAKE_MAKE_PROGRAM=mingw32-make -DCMAKE_BUILD_TYPE=Release %ZLIB%
+cmake -G "MinGW Makefiles" ^
+    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    %ZLIB%
 if errorlevel 1 goto error
-
 mingw32-make -j 4
 if errorlevel 1 goto error
 
@@ -80,7 +83,7 @@ perl Configure mingw ^
     no-external-tests ^
     no-tests ^
     zlib ^
-    --openssldir=C:\MinGW ^
+    "--openssldir=C:\Program Files\GNU" ^
     --with-zlib-include=%OUT%\include ^
     --with-zlib-lib=%OUT%\lib ^
     -fno-ident ^
@@ -98,17 +101,60 @@ if errorlevel 1 goto error
 
 cmake -E copy_if_different libcrypto.a %OUT%\lib
 if errorlevel 1 goto error
-cmake -E copy_if_different libcrypto.dll.a %OUT%\lib
+cmake -E copy_if_different libcrypto.dll.a %OUT%\lib\libeay11.dll.a
 if errorlevel 1 goto error
 cmake -E copy_if_different libeay11.dll %OUT%\bin
 if errorlevel 1 goto error
 cmake -E copy_if_different libssl.a %OUT%\lib
 if errorlevel 1 goto error
-cmake -E copy_if_different libssl.dll.a %OUT%\lib
+cmake -E copy_if_different libssl.dll.a %OUT%\lib\ssleay11.dll.a
 if errorlevel 1 goto error
 cmake -E copy_if_different ssleay11.dll %OUT%\bin
 if errorlevel 1 goto error
 for %%f in (include\openssl\*.h) do cmake -E copy_if_different %%f %OUT%\include\openssl
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem =========
+rem  LIBSSH2
+rem =========
+:libssh2
+
+if not exist %BUILD%\libssh2 mkdir %BUILD%\libssh2
+if errorlevel 1 goto error
+cd %BUILD%\libssh2
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+    -Wno-dev ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    -DBUILD_SHARED_LIBS:BOOL=YES ^
+    -DENABLE_ZLIB_COMPRESSION:BOOL=YES ^
+    -DBUILD_EXAMPLES=OFF ^
+    -DBUILD_TESTING=OFF ^
+    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DZLIB_INCLUDE_DIR:PATH=%OUT%\include ^
+    -DZLIB_LIBRARY:PATH=%OUT%\lib\libzlib.dll.a ^
+    -DZLIB_FOUND:BOOL=TRUE ^
+    -DOPENSSL_INCLUDE_DIR:PATH=%OUT%\include ^
+    -DOPENSSL_CRYPTO_LIBRARY:PATH=%OUT%\libeay11.dll.a ^
+    -DOPENSSL_SSL_LIBRARY:PATH=F:\__WINNT__\BUILD\_COMPILED_\lib\ssleay11.dll.a ^
+    -DOPENSSL_ROOT_DIR:PATH=%OUT% ^
+    -DOPENSSL_FOUND:BOOL=TRUE ^
+    %LIBSSH2%
+if errorlevel 1 goto error
+mingw32-make -j 4
+if errorlevel 1 goto error
+
+if not exist %OUT%\include\openssl mkdir %OUT%\include\openssl
+if errorlevel 1 goto error
+
+cmake -E copy_if_different src\libssh2.dll %OUT%\bin
+if errorlevel 1 goto error
+cmake -E copy_if_different src\liblibssh2.dll.a %OUT%\lib\libssh2.dll.a
+if errorlevel 1 goto error
+for %%f in (%LIBSSH2%\include\*.h) do cmake -E copy_if_different %%f %OUT%\include
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next
