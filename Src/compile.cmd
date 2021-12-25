@@ -1,15 +1,19 @@
 @echo off
 setlocal
 
-set ZLIB=%~dp0zlib-1.2.11
-set OPENSSL=%~dp0openssl-1.1.1m
-set LIBSSH2=%~dp0libssh2-1.10.0
-set CURL=%~dp0curl-7.80.0
+set BASEDIR=%~dp0
+
+set ZLIB=%BASEDIR%zlib-1.2.11
+set OPENSSL=%BASEDIR%openssl-1.1.1m
+set LIBSSH2=%BASEDIR%libssh2-1.10.0
+set CURL=%BASEDIR%curl-7.80.0
+set EXPAT=%BASEDIR%expat-2.4.2
+set GIT=%BASEDIR%git-2.34.1
 
 rem ==========================================================================
 
-set TOOLCHAIN=%~dp0..\Toolchain
-set BUILD=%~dp0_build
+set TOOLCHAIN=%BASEDIR%..\Toolchain
+set BUILD=%BASEDIR%_build
 
 set PATH=%TOOLCHAIN%\TDM-GCC\bin;%TOOLCHAIN%\MSYS64\usr\bin;%TOOLCHAIN%\NSIS;%PATH%
 
@@ -27,7 +31,7 @@ rem  Common
 rem ========
 
 if exist %BUILD%\libgcc_s_dw2-1.dll goto haslibgcc
-copy /b %~dp0..\Toolchain\TDM-GCC\bin\libgcc_s_dw2-1.dll %BUILD%
+copy /b %BASEDIR%..\Toolchain\TDM-GCC\bin\libgcc_s_dw2-1.dll %BUILD%
 if errorlevel 1 goto error
 strip %BUILD%\libgcc_s_dw2-1.dll
 if errorlevel 1 goto error
@@ -152,7 +156,29 @@ if errorlevel 1 goto error
 mingw32-make -j 4
 if errorlevel 1 goto error
 
-if not exist %OUT%\include\curl mkdir %OUT%\include\curl
+if not "%1" == "" goto next
+
+rem =======
+rem  EXPAT
+rem =======
+:expat
+
+if not exist %BUILD%\expat mkdir %BUILD%\expat
+if errorlevel 1 goto error
+cd %BUILD%\expat
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+    -Wno-dev ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DEXPAT_BUILD_TOOLS=FALSE ^
+    -DEXPAT_BUILD_EXAMPLES=FALSE ^
+    -DEXPAT_BUILD_TESTS=FALSE ^
+    -DEXPAT_BUILD_PKGCONFIG=FALSE ^
+    %EXPAT%
+if errorlevel 1 goto error
+mingw32-make -j 4
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next
@@ -160,10 +186,10 @@ if not "%1" == "" goto next
 rem ==========================================================================
 :installer
 
-cd %~dp0_setup
+cd %BASEDIR%_setup
 if errorlevel 1 goto error
 
-if exist %~dp0..\..\CD\SOFTWARE\GNU-NT4.EXE del %~dp0..\..\CD\SOFTWARE\GNU-NT4.EXE
+if exist %BASEDIR%..\..\CD\SOFTWARE\GNU-NT4.EXE del %BASEDIR%..\..\CD\SOFTWARE\GNU-NT4.EXE
 if errorlevel 1 goto error
 
 makensis setup.nsi

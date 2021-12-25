@@ -1590,3 +1590,4 @@ del openssl-1.1.1m\fuzz\libeay11.dll
 del openssl-1.1.1m\fuzz\ssleay11.dll
 del openssl-1.1.1m\libeay11.dll
 del openssl-1.1.1m\ssleay11.dll
+del git-2.34.1\GIT-VERSION-FILE

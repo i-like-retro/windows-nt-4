@@ -162,6 +162,20 @@ SectionGroup /e "!Core"
         SetOutPath "$INSTDIR\include\curl"
         File "..\curl-7.80.0\include\curl\*.h"
     SectionEnd
+    Section "libexpat-2.4.2" EXPAT
+        SectionIn 1 2
+        SetOutPath "$INSTDIR\bin"
+        File "..\_build\expat\libexpat.dll"
+    SectionEnd
+    Section "libexpat-2.4.2-devel" EXPAT_DEVEL
+        SectionIn 2
+        SetOutPath "$INSTDIR\lib"
+        File /oname=libexpat.a "..\_build\expat\libexpat.dll.a"
+        SetOutPath "$INSTDIR\include"
+        File "..\_build\expat\expat_config.h"
+        File "..\expat-2.4.2\lib\expat.h"
+        File "..\expat-2.4.2\lib\expat_external.h"
+    SectionEnd
     Section "libssh2-1.10.0" LIBSSH2
         SectionIn 1 2
         SetOutPath "$INSTDIR\bin"
@@ -225,6 +239,8 @@ SectionGroupEnd
 
 Var CURL
 Var CURL_DEVEL
+Var EXPAT
+Var EXPAT_DEVEL
 Var LIBSSH2
 Var LIBSSH2_DEVEL
 Var OPENSSL
@@ -260,6 +276,8 @@ Var ZLIB_DEVEL
 Function .onSelChange
     StrCpy $CURL                "NO"
     StrCpy $CURL_DEVEL          "NO"
+    StrCpy $EXPAT               "NO"
+    StrCpy $EXPAT_DEVEL         "NO"
     StrCpy $LIBSSH2             "NO"
     StrCpy $LIBSSH2_DEVEL       "NO"
     StrCpy $OPENSSL             "NO"
@@ -268,6 +286,7 @@ Function .onSelChange
     StrCpy $ZLIB_DEVEL          "NO"
 
     !insertmacro Depends        ${CURL_DEVEL}       $CURL_DEVEL         $CURL
+    !insertmacro Depends        ${EXPAT_DEVEL}      $EXPAT_DEVEL        $EXPAT
     !insertmacro Depends        ${LIBSSH2_DEVEL}    $LIBSSH2_DEVEL      $LIBSSH2
     !insertmacro Depends        ${OPENSSL_DEVEL}    $OPENSSL_DEVEL      $OPENSSL
     !insertmacro Depends        ${ZLIB_DEVEL}       $ZLIB_DEVEL         $ZLIB
@@ -280,6 +299,8 @@ Function .onSelChange
 
     !insertmacro MaybeNeeded    ${CURL}             $CURL
     !insertmacro MaybeNeeded    ${CURL_DEVEL}       $CURL_DEVEL
+    !insertmacro MaybeNeeded    ${EXPAT}            $EXPAT
+    !insertmacro MaybeNeeded    ${EXPAT_DEVEL}      $EXPAT_DEVEL
     !insertmacro MaybeNeeded    ${LIBSSH2}          $LIBSSH2
     !insertmacro MaybeNeeded    ${LIBSSH2_DEVEL}    $LIBSSH2_DEVEL
     !insertmacro MaybeNeeded    ${OPENSSL}          $OPENSSL
