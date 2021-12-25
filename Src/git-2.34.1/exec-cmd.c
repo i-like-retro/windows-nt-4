@@ -65,6 +65,11 @@ static int git_get_exec_path_from_argv0(struct strbuf *buf, const char *argv0)
 {
 	const char *slash;
 
+	char exebuf[MAX_PATH] = {0}; // FIXME: UTF-8
+	GetModuleFileNameA(NULL, exebuf, sizeof(exebuf));
+	if (exebuf[0])
+		argv0 = exebuf;
+
 	if (!argv0 || !*argv0)
 		return -1;
 
@@ -77,6 +82,8 @@ static int git_get_exec_path_from_argv0(struct strbuf *buf, const char *argv0)
 	}
 	return -1;
 }
+
+#if 0
 
 #ifdef PROCFS_EXECUTABLE_PATH
 /*
@@ -162,6 +169,8 @@ static int git_get_exec_path_wpgmptr(struct strbuf *buf)
 }
 #endif /* HAVE_WPGMPTR */
 
+#endif
+
 /*
  * Resolves the absolute path of the current executable.
  *
@@ -184,6 +193,7 @@ static int git_get_exec_path(struct strbuf *buf, const char *argv0)
 	 * after the first successful method.
 	 */
 	if (
+#if 0
 #ifdef HAVE_BSD_KERN_PROC_SYSCTL
 		git_get_exec_path_bsd_sysctl(buf) &&
 #endif /* HAVE_BSD_KERN_PROC_SYSCTL */
@@ -199,6 +209,7 @@ static int git_get_exec_path(struct strbuf *buf, const char *argv0)
 #ifdef HAVE_WPGMPTR
 		git_get_exec_path_wpgmptr(buf) &&
 #endif /* HAVE_WPGMPTR */
+#endif
 
 		git_get_exec_path_from_argv0(buf, argv0)) {
 		return -1;

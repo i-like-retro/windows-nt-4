@@ -63,7 +63,7 @@ static const char *curl_no_proxy;
 #ifdef GIT_CURL_HAVE_CURLOPT_PINNEDPUBLICKEY
 static const char *ssl_pinnedkey;
 #endif
-static const char *ssl_cainfo;
+static const char *ssl_cainfo = "C://Program Files//GNU//bin//curl-ca.crt";
 static long curl_low_speed_limit = -1;
 static long curl_low_speed_time = -1;
 static int curl_ftp_no_epsv;

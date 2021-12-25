@@ -42,7 +42,7 @@ set(PROJECT_URL "https://www.libssh2.org/")
 set(PROJECT_DESCRIPTION "The SSH library")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -Wl,--output-def,libssh2.def")
 
 if (CMAKE_VERSION VERSION_LESS "3.1")
   if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
