@@ -183,6 +183,39 @@ if errorlevel 1 goto error
 
 if not "%1" == "" goto next
 
+rem =====
+rem  GIT
+rem =====
+:git
+
+if not exist %BUILD%\git mkdir %BUILD%\git
+if errorlevel 1 goto error
+cd %BUILD%\git
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+    -Wno-dev ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DUSE_VCPKG=FALSE ^
+    -DZLIB_INCLUDE_DIR:PATH=%ZLIB%;%BUILD%\zlib ^
+    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
+    -DZLIB_FOUND:BOOL=TRUE ^
+    -DCURL_INCLUDE_DIR:PATH=%CURL%\include ^
+    -DCURL_LIBRARY:PATH=%BUILD%\curl\libcurl.dll.a ^
+    -DCURL_FOUND:BOOL=TRUE ^
+    -DEXPAT_INCLUDE_DIR:PATH=%EXPAT%\lib ^
+    -DEXPAT_LIBRARY:PATH=%BUILD%\expat\libexpat.dll.a ^
+    -DEXPAT_FOUND:BOOL=TRUE ^
+    -DNO_GETTEXT=YES ^
+    -DBUILD_TESTING=NO ^
+    %GIT%\contrib\buildsystems
+if errorlevel 1 goto error
+mingw32-make
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
 rem ==========================================================================
 :installer
 

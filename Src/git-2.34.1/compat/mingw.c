@@ -2836,6 +2836,9 @@ static void maybe_redirect_std_handles(void)
 #endif
 #endif
 
+#define _fmode  (*_imp___fmode)
+extern int *_imp___fmode;
+
 /*
  * We implement wmain() and compile with -municode, which would
  * normally ignore main(), but we call the latter from the former

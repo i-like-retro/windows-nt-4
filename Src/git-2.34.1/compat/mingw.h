@@ -1,3 +1,6 @@
+#include <stdint.h>
+#include <sys/types.h>
+#include <inttypes.h>
 #ifdef __MINGW64_VERSION_MAJOR
 #include <stdint.h>
 #include <wchar.h>
@@ -351,14 +354,15 @@ static inline int getrlimit(int resource, struct rlimit *rlp)
  * file times.
  */
 #ifndef __MINGW64_VERSION_MAJOR
+#define off64_t __off64_t
 #define off_t off64_t
 #define lseek _lseeki64
-#ifndef _MSC_VER
+/*#ifndef _MSC_VER
 struct timespec {
 	time_t tv_sec;
 	long tv_nsec;
 };
-#endif
+#endif*/
 #endif
 
 struct mingw_stat {

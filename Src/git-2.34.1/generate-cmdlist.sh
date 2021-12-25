@@ -39,6 +39,7 @@ define_categories () {
 	category_list "$1" |
 	while read cat
 	do
+		cat=$(echo $cat|sed 's/\r$//')
 		echo "#define CAT_$cat (1UL << $bit)"
 		bit=$(($bit+1))
 	done
@@ -53,6 +54,7 @@ define_category_names () {
 	category_list "$1" |
 	while read cat
 	do
+		cat=$(echo $cat|sed 's/\r$//')
 		echo "	\"$cat\", /* (1UL << $bit) */"
 		bit=$(($bit+1))
 	done
@@ -66,6 +68,8 @@ print_command_list () {
 	command_list "$1" |
 	while read cmd rest
 	do
+		cmd=$(echo $cmd|sed 's/\r$//')
+		rest=$(echo $rest|sed 's/\r$//')
 		printf "	{ \"$cmd\", $(get_synopsis $cmd), 0"
 		for cat in $(echo "$rest" | get_categories)
 		do

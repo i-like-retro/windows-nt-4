@@ -270,11 +270,12 @@ static uint64_t total_ram(void)
 	if (!sysctl(mib, 2, &physical_memory, &length, NULL, 0))
 		return physical_memory;
 #elif defined(GIT_WINDOWS_NATIVE)
-	MEMORYSTATUSEX memInfo;
+	//MEMORYSTATUSEX memInfo;
+	MEMORYSTATUS memInfo;
 
-	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
-	if (GlobalMemoryStatusEx(&memInfo))
-		return memInfo.ullTotalPhys;
+	memInfo.dwLength = sizeof(MEMORYSTATUS/*EX*/);
+	GlobalMemoryStatus(&memInfo);//if (GlobalMemoryStatusEx(&memInfo))
+		return memInfo.dwTotalPhys;//ullTotalPhys;
 #endif
 	return 0;
 }
