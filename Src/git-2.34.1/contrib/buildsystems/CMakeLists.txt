@@ -264,11 +264,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 				_CONSOLE STRIP_EXTENSION=".exe"  NO_SYMLINK_HEAD UNRELIABLE_FSTAT #DETECT_MSYS_TTY
 				NOGDI OBJECT_CREATION_MODE=1 __USE_LARGEFILE64=1 _LARGEFILE64_SOURCE=1 #__USE_MINGW_ANSI_STDIO=0
 				USE_NED_ALLOCATOR OVERRIDE_STRDUP MMAP_PREVENTS_DELETE USE_WIN32_MMAP
-				UNICODE _UNICODE ENSURE_MSYSTEM_IS_SET) #HAVE_WPGMPTR
+				UNICODE _UNICODE ENSURE_MSYSTEM_IS_SET NO_PTHREADS NO_INET_NTOP) #HAVE_WPGMPTR
 	list(APPEND compat_SOURCES compat/mingw.c compat/winansi.c compat/win32/path-utils.c
 		compat/win32/pthread.c compat/win32mmap.c compat/win32/syslog.c
 		compat/win32/trace2_win32_process_info.c compat/win32/dirent.c
-		compat/nedmalloc/nedmalloc.c compat/strdup.c)
+		compat/nedmalloc/nedmalloc.c compat/strdup.c compat/inet_ntop.c)
 	set(NO_UNIX_SOCKETS 1)
 
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -280,6 +280,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 	list(APPEND compat_SOURCES compat/simple-ipc/ipc-shared.c compat/simple-ipc/ipc-win32.c)
 	add_compile_definitions(SUPPORTS_SIMPLE_IPC)
 	set(SUPPORTS_SIMPLE_IPC 1)
+	set(NO_PTHREADS 1) # FIXME
 else()
 	# Simple IPC requires both Unix sockets and pthreads on Unix-based systems.
 	if(NOT NO_UNIX_SOCKETS AND NOT NO_PTHREADS)
@@ -684,7 +685,7 @@ if(WIN32)
 	target_link_libraries(common-main ws2_32 ntdll ${CMAKE_BINARY_DIR}/git.res)
 	add_dependencies(common-main git-rc)
 	if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-		target_link_options(common-main PUBLIC -municode -Wl,--nxcompat -Wl,--dynamicbase -Wl,--pic-executable,-e,mainCRTStartup)
+		#target_link_options(common-main PUBLIC -municode -Wl,--nxcompat -Wl,--dynamicbase -Wl,--pic-executable,-e,mainCRTStartup)
 	elseif(CMAKE_C_COMPILER_ID STREQUAL "Clang")
 		target_link_options(common-main PUBLIC -municode -Wl,-nxcompat -Wl,-dynamicbase -Wl,-entry:wmainCRTStartup -Wl,invalidcontinue.obj)
 	elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")

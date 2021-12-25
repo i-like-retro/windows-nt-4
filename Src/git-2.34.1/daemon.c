@@ -1016,7 +1016,7 @@ static int setup_named_sock(char *listen_addr, int listen_port, struct socketlis
 			continue;
 		}
 
-#ifdef IPV6_V6ONLY
+#if defined(IPV6_V6ONLY) && !defined(_MSC_VER)
 		if (ai->ai_family == AF_INET6) {
 			int on = 1;
 			setsockopt(sockfd, IPPROTO_IPV6, IPV6_V6ONLY,

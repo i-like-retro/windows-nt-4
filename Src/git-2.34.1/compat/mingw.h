@@ -303,6 +303,16 @@ int mingw_getaddrinfo(const char *node, const char *service,
 		      const struct addrinfo *hints, struct addrinfo **res);
 #define getaddrinfo mingw_getaddrinfo
 
+void mingw_freeaddrinfo(struct addrinfo* res);
+#define freeaddrinfo mingw_freeaddrinfo
+
+int mingw_getnameinfo(const struct sockaddr* addr, socklen_t addrlen, char* host, socklen_t hostlen,
+		      char* serv, socklen_t servlen, int flags);
+#define getnameinfo mingw_getnameinfo
+
+void mingw_freeaddrinfo(struct addrinfo* res);
+#define freeaddrinfo mingw_freeaddrinfo
+
 int mingw_socket(int domain, int type, int protocol);
 #define socket mingw_socket
 
@@ -354,8 +364,12 @@ static inline int getrlimit(int resource, struct rlimit *rlp)
  * file times.
  */
 #ifndef __MINGW64_VERSION_MAJOR
-#define off64_t __off64_t
-#define off_t off64_t
+ #ifdef __MINGW32__
+  #define off64_t __off64_t
+  #define off_t off64_t
+ #else
+  #define off64_t off_t
+ #endif
 #define lseek _lseeki64
 /*#ifndef _MSC_VER
 struct timespec {
@@ -601,7 +615,7 @@ extern CRITICAL_SECTION pinfo_cs;
  * then hands off to the main() function.
  */
 int wmain(int argc, const wchar_t **w_argv);
-int main(int argc, const char **argv);
+int my_main(int argc, const char **argv);
 
 /*
  * For debugging: if a problem occurs, say, in a Git process that is spawned

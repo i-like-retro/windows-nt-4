@@ -1,4 +1,5 @@
 Makefile
+Makefile.new
 engines/capi.dll
 engines/dasync.dll
 engines/ossltest.dll

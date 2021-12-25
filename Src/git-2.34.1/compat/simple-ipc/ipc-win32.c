@@ -725,10 +725,10 @@ static HANDLE create_new_pipe(wchar_t *wpath, int is_first)
 		FILE_FLAG_OVERLAPPED;
 
 	dwPipeMode = PIPE_TYPE_MESSAGE | PIPE_READMODE_BYTE | PIPE_WAIT |
-		PIPE_REJECT_REMOTE_CLIENTS;
+		0;//PIPE_REJECT_REMOTE_CLIENTS;
 
 	if (is_first) {
-		dwOpenMode |= FILE_FLAG_FIRST_PIPE_INSTANCE;
+		//dwOpenMode |= FILE_FLAG_FIRST_PIPE_INSTANCE;
 
 		/*
 		 * On Windows, the first server pipe instance gets to
@@ -770,7 +770,7 @@ int ipc_server_run_async(struct ipc_server_data **returned_server_data,
 
 	hPipeFirst = create_new_pipe(wpath, 1);
 	if (hPipeFirst == INVALID_HANDLE_VALUE) {
-		errno = EADDRINUSE;
+		errno = WSAEADDRINUSE;
 		return -2;
 	}
 

@@ -10,7 +10,10 @@ void *git_mmap(void *start, size_t length, int prot, int flags, int fd, off_t of
 	uint32_t h = (o >> 32) & 0xFFFFFFFF;
 
 	osfhandle = (HANDLE)_get_osfhandle(fd);
-	if (!GetFileSizeEx(osfhandle, &len))
+	//if (!GetFileSizeEx(osfhandle, &len))
+	//	die("mmap: could not determine filesize");
+	len.LowPart = GetFileSize(osfhandle, &len.HighPart);
+	if (len.LowPart == INVALID_FILE_SIZE && GetLastError() != NO_ERROR)
 		die("mmap: could not determine filesize");
 
 	if ((length + offset) > len.QuadPart)

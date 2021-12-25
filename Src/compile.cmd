@@ -202,7 +202,7 @@ cmake -G "MinGW Makefiles" ^
     -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
     -DZLIB_FOUND:BOOL=TRUE ^
     -DCURL_INCLUDE_DIR:PATH=%CURL%\include ^
-    -DCURL_LIBRARY:PATH=%BUILD%\curl\libcurl.dll.a ^
+    -DCURL_LIBRARY:PATH=%BUILD%\curl\lib\libcurl.dll.a ^
     -DCURL_FOUND:BOOL=TRUE ^
     -DEXPAT_INCLUDE_DIR:PATH=%EXPAT%\lib ^
     -DEXPAT_LIBRARY:PATH=%BUILD%\expat\libexpat.dll.a ^
@@ -211,7 +211,7 @@ cmake -G "MinGW Makefiles" ^
     -DBUILD_TESTING=NO ^
     %GIT%\contrib\buildsystems
 if errorlevel 1 goto error
-mingw32-make
+mingw32-make -j 4
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

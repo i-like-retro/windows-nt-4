@@ -1,5 +1,6 @@
 @echo off
 del openssl-1.1.1m\Makefile
+del openssl-1.1.1m\Makefile.new
 del openssl-1.1.1m\apps\CA.pl
 del openssl-1.1.1m\apps\app_rand.d
 del openssl-1.1.1m\apps\app_rand.o

@@ -11,7 +11,7 @@
 #define BANNED(func) sorry_##func##_is_a_banned_function
 
 #undef strcpy
-#define strcpy(x,y) BANNED(strcpy)
+//#define strcpy(x,y) BANNED(strcpy)
 #undef strcat
 #define strcat(x,y) BANNED(strcat)
 #undef strncpy
@@ -30,9 +30,9 @@
 #endif
 
 #undef gmtime
-#define gmtime(t) BANNED(gmtime)
+//#define gmtime(t) BANNED(gmtime)
 #undef localtime
-#define localtime(t) BANNED(localtime)
+//#define localtime(t) BANNED(localtime)
 #undef ctime
 #define ctime(t) BANNED(ctime)
 #undef ctime_r

@@ -1775,7 +1775,11 @@ static int http_request(const char *url,
 		curl_easy_setopt(slot->curl, CURLOPT_WRITEDATA, result);
 
 		if (target == HTTP_REQUEST_FILE) {
+#ifdef __MINGW32__
+			off_t posn = ftello64(result);
+#else
 			off_t posn = ftello(result);
+#endif
 			curl_easy_setopt(slot->curl, CURLOPT_WRITEFUNCTION,
 					 fwrite);
 			if (posn > 0)
@@ -2199,7 +2203,11 @@ struct http_pack_request *new_direct_http_pack_request(
 	 * If there is data present from a previous transfer attempt,
 	 * resume where it left off
 	 */
+#ifdef __MINGW32__
+	prev_posn = ftello64(preq->packfile);
+#else
 	prev_posn = ftello(preq->packfile);
+#endif
 	if (prev_posn>0) {
 		if (http_is_verbose)
 			fprintf(stderr,

@@ -9,6 +9,11 @@
 #include "../config.h"
 #include "dir.h"
 
+#undef getaddrinfo
+#undef freeaddrinfo
+#undef getnameinfo
+#include "wspiapi.h"
+
 #define HCAST(type, handle) ((type)(intptr_t)handle)
 
 static const int delay[] = { 0, 1, 10, 20, 40 };
@@ -1085,27 +1090,30 @@ int pipe(int filedes[2])
 
 struct tm *gmtime_r(const time_t *timep, struct tm *result)
 {
-	if (gmtime_s(result, timep) == 0)
-		return result;
+	struct tm* tmp = gmtime(timep);
+	if (tmp)
+		return *result = *tmp, result;
 	return NULL;
 }
 
 struct tm *localtime_r(const time_t *timep, struct tm *result)
 {
-	if (localtime_s(result, timep) == 0)
-		return result;
+	struct tm* tmp = localtime(timep);
+	if (tmp)
+		return *result = *tmp, result;
 	return NULL;
 }
 
 char *mingw_getcwd(char *pointer, int len)
 {
-	wchar_t cwd[MAX_PATH], wpointer[MAX_PATH];
+	wchar_t cwd[MAX_PATH];//, wpointer[MAX_PATH];
 	DWORD ret = GetCurrentDirectoryW(ARRAY_SIZE(cwd), cwd);
 
 	if (!ret || ret >= ARRAY_SIZE(cwd)) {
 		errno = ret ? ENAMETOOLONG : err_win_to_posix(GetLastError());
 		return NULL;
 	}
+    /*
 	ret = GetLongPathNameW(cwd, wpointer, ARRAY_SIZE(wpointer));
 	if (!ret && GetLastError() == ERROR_ACCESS_DENIED) {
 		HANDLE hnd = CreateFileW(cwd, 0,
@@ -1123,7 +1131,8 @@ char *mingw_getcwd(char *pointer, int len)
 	}
 	if (!ret || ret >= ARRAY_SIZE(wpointer))
 		return NULL;
-	if (xwcstoutf(pointer, wpointer, len) < 0)
+    */
+	if (xwcstoutf(pointer, /*wpointer*/cwd, len) < 0)
 		return NULL;
 	convert_slashes(pointer);
 	return pointer;
@@ -1515,9 +1524,10 @@ static pid_t mingw_spawnve_fd(const char *cmd, const char **argv, char **deltaen
 			      int prepend_cmd, int fhin, int fhout, int fherr)
 {
 	static int restrict_handle_inheritance = -1;
-	STARTUPINFOEXW si;
+	//STARTUPINFOEXW si;
+	STARTUPINFOW si;
 	PROCESS_INFORMATION pi;
-	LPPROC_THREAD_ATTRIBUTE_LIST attr_list = NULL;
+	//LPPROC_THREAD_ATTRIBUTE_LIST attr_list = NULL;
 	HANDLE stdhandles[3];
 	DWORD stdhandles_count = 0;
 	SIZE_T size;
@@ -1571,23 +1581,23 @@ static pid_t mingw_spawnve_fd(const char *cmd, const char **argv, char **deltaen
 		CloseHandle(cons);
 	}
 	memset(&si, 0, sizeof(si));
-	si.StartupInfo.cb = sizeof(si);
-	si.StartupInfo.hStdInput = winansi_get_osfhandle(fhin);
-	si.StartupInfo.hStdOutput = winansi_get_osfhandle(fhout);
-	si.StartupInfo.hStdError = winansi_get_osfhandle(fherr);
+	si/*.StartupInfo*/.cb = sizeof(si);
+	si/*.StartupInfo*/.hStdInput = winansi_get_osfhandle(fhin);
+	si/*.StartupInfo*/.hStdOutput = winansi_get_osfhandle(fhout);
+	si/*.StartupInfo*/.hStdError = winansi_get_osfhandle(fherr);
 
 	/* The list of handles cannot contain duplicates */
-	if (si.StartupInfo.hStdInput != INVALID_HANDLE_VALUE)
-		stdhandles[stdhandles_count++] = si.StartupInfo.hStdInput;
-	if (si.StartupInfo.hStdOutput != INVALID_HANDLE_VALUE &&
-	    si.StartupInfo.hStdOutput != si.StartupInfo.hStdInput)
-		stdhandles[stdhandles_count++] = si.StartupInfo.hStdOutput;
-	if (si.StartupInfo.hStdError != INVALID_HANDLE_VALUE &&
-	    si.StartupInfo.hStdError != si.StartupInfo.hStdInput &&
-	    si.StartupInfo.hStdError != si.StartupInfo.hStdOutput)
-		stdhandles[stdhandles_count++] = si.StartupInfo.hStdError;
+	if (si/*.StartupInfo*/.hStdInput != INVALID_HANDLE_VALUE)
+		stdhandles[stdhandles_count++] = si/*.StartupInfo*/.hStdInput;
+	if (si/*.StartupInfo*/.hStdOutput != INVALID_HANDLE_VALUE &&
+	    si/*.StartupInfo*/.hStdOutput != si/*.StartupInfo*/.hStdInput)
+		stdhandles[stdhandles_count++] = si/*.StartupInfo*/.hStdOutput;
+	if (si/*.StartupInfo*/.hStdError != INVALID_HANDLE_VALUE &&
+	    si/*.StartupInfo*/.hStdError != si/*.StartupInfo*/.hStdInput &&
+	    si/*.StartupInfo*/.hStdError != si/*.StartupInfo*/.hStdOutput)
+		stdhandles[stdhandles_count++] = si/*.StartupInfo*/.hStdError;
 	if (stdhandles_count)
-		si.StartupInfo.dwFlags |= STARTF_USESTDHANDLES;
+		si/*.StartupInfo*/.dwFlags |= STARTF_USESTDHANDLES;
 
 	if (*argv && !strcmp(cmd, *argv))
 		wcmd[0] = L'\0';
@@ -1645,6 +1655,7 @@ static pid_t mingw_spawnve_fd(const char *cmd, const char **argv, char **deltaen
 	wenvblk = make_environment_block(deltaenv);
 
 	memset(&pi, 0, sizeof(pi));
+    /*
 	if (restrict_handle_inheritance && stdhandles_count &&
 	    (InitializeProcThreadAttributeList(NULL, 1, 0, &size) ||
 	     GetLastError() == ERROR_INSUFFICIENT_BUFFER) &&
@@ -1659,11 +1670,12 @@ static pid_t mingw_spawnve_fd(const char *cmd, const char **argv, char **deltaen
 		si.lpAttributeList = attr_list;
 		flags |= EXTENDED_STARTUPINFO_PRESENT;
 	}
+    */
 
 	ret = CreateProcessW(*wcmd ? wcmd : NULL, wargs, NULL, NULL,
 			     stdhandles_count ? TRUE : FALSE,
 			     flags, wenvblk, dir ? wdir : NULL,
-			     &si.StartupInfo, &pi);
+			     &si/*.StartupInfo*/, &pi);
 
 	/*
 	 * On Windows 2008 R2, it seems that specifying certain types of handles
@@ -1712,10 +1724,10 @@ static pid_t mingw_spawnve_fd(const char *cmd, const char **argv, char **deltaen
 				      "\n");
 		}
 		restrict_handle_inheritance = 0;
-		flags &= ~EXTENDED_STARTUPINFO_PRESENT;
+		//flags &= ~EXTENDED_STARTUPINFO_PRESENT;
 		ret = CreateProcessW(*wcmd ? wcmd : NULL, wargs, NULL, NULL,
 				     TRUE, flags, wenvblk, dir ? wdir : NULL,
-				     &si.StartupInfo, &pi);
+				     &si/*.StartupInfo*/, &pi);
 		if (!ret)
 			errno = err_win_to_posix(GetLastError());
 		if (ret && buf.len) {
@@ -1726,10 +1738,10 @@ static pid_t mingw_spawnve_fd(const char *cmd, const char **argv, char **deltaen
 	} else if (!ret)
 		errno = err_win_to_posix(GetLastError());
 
-	if (si.lpAttributeList)
-		DeleteProcThreadAttributeList(si.lpAttributeList);
-	if (attr_list)
-		HeapFree(GetProcessHeap(), 0, attr_list);
+	//if (si.lpAttributeList)
+	//	DeleteProcThreadAttributeList(si.lpAttributeList);
+	//if (attr_list)
+	//	HeapFree(GetProcessHeap(), 0, attr_list);
 
 	free(wenvblk);
 	free(wargs);
@@ -2010,12 +2022,23 @@ struct hostent *mingw_gethostbyname(const char *host)
 	return gethostbyname(host);
 }
 
-#undef getaddrinfo
 int mingw_getaddrinfo(const char *node, const char *service,
 		      const struct addrinfo *hints, struct addrinfo **res)
 {
 	ensure_socket_initialization();
 	return getaddrinfo(node, service, hints, res);
+}
+
+void mingw_freeaddrinfo(struct addrinfo* res)
+{
+	freeaddrinfo(res);
+}
+
+int mingw_getnameinfo(const struct sockaddr* addr, socklen_t addrlen, char* host, socklen_t hostlen,
+		      char* serv, socklen_t servlen, int flags)
+{
+	ensure_socket_initialization();
+	return getnameinfo(addr, addrlen, host, hostlen, serv, servlen, flags);
 }
 
 int mingw_socket(int domain, int type, int protocol)
@@ -2425,11 +2448,11 @@ int link(const char *oldpath, const char *newpath)
 		xutftowcs_path(wnewpath, newpath) < 0)
 		return -1;
 
-	if (!CreateHardLinkW(wnewpath, woldpath, NULL)) {
-		errno = err_win_to_posix(GetLastError());
+	//if (!CreateHardLinkW(wnewpath, woldpath, NULL)) {
+		errno = ENOSYS;//err_win_to_posix(GetLastError());
 		return -1;
-	}
-	return 0;
+	//}
+	//return 0;
 }
 
 pid_t waitpid(pid_t pid, int *status, int options)
@@ -2836,8 +2859,10 @@ static void maybe_redirect_std_handles(void)
 #endif
 #endif
 
+#ifdef __MINGW32__
 #define _fmode  (*_imp___fmode)
 extern int *_imp___fmode;
+#endif
 
 /*
  * We implement wmain() and compile with -municode, which would
@@ -2907,7 +2932,7 @@ int wmain(int argc, const wchar_t **wargv)
 	winansi_init();
 
 	/* invoke the real main() using our utf8 version of argv. */
-	exit_status = main(argc, argv);
+	exit_status = my_main(argc, argv);
 
 	for (i = 0; i < argc; i++)
 		free(save[i]);
@@ -2929,3 +2954,41 @@ int uname(struct utsname *buf)
 		  "%u", (v >> 16) & 0x7fff);
 	return 0;
 }
+
+#ifdef __MINGW32__
+
+// https://github.com/coderforlife/mingw-unicode-main/blob/master/mingw-unicode.c
+// Code below is released into the public domain. Absolutely no warranty is provided.
+// See http://www.coderforlife.com/projects/utilities.
+//
+// This is for the MinGW compiler which does not support wmain.
+// It is a wrapper for _tmain when _UNICODE is defined (wmain).
+//
+// !! Do not compile this file, but instead include it right before your _tmain function like:
+// #include "mingw-unicode.c"
+// int _tmain(int argc, _TCHAR *argv[]) {
+//
+// If you wish to have enpv in your main, then define the following before including this file:
+// #define MAIN_USE_ENVP
+//
+// This wrapper adds ~300 bytes to the program and negligible overhead
+
+#ifndef __MSVCRT__
+#error Unicode main function requires linking to MSVCRT
+#endif
+
+#include <wchar.h>
+#include <stdlib.h>
+
+extern int _CRT_glob;
+void __wgetmainargs(int*,wchar_t***,wchar_t***,int,int*);
+
+int main()
+{
+	wchar_t **enpv, **argv;
+	int argc, si = 0;
+	__wgetmainargs(&argc, &argv, &enpv, _CRT_glob, &si); // this also creates the global variable __wargv
+	return wmain(argc, argv);
+}
+
+#endif
