@@ -8,21 +8,15 @@ set CURL=%~dp0curl-7.80.0
 
 rem ==========================================================================
 
-set PATH=%~dp0..\Toolchain\TDM-GCC\bin;%~dp0..\Toolchain\MSYS64\usr\bin;%PATH%
+set TOOLCHAIN=%~dp0..\Toolchain
+set BUILD=%~dp0_build
+
+set PATH=%TOOLCHAIN%\TDM-GCC\bin;%TOOLCHAIN%\MSYS64\usr\bin;%TOOLCHAIN%\NSIS;%PATH%
 
 rem ==========================================================================
 
-set BUILD=%~dp0_BUILD_
-set OUT=%~dp0_PUBLISH_
-
-if not exist %OUT%\bin mkdir %OUT%\bin
+if not exist %BUILD% mkdir %BUILD%
 if errorlevel 1 goto error
-if not exist %OUT%\include mkdir %OUT%\include
-if errorlevel 1 goto error
-if not exist %OUT%\lib mkdir %OUT%\lib
-if errorlevel 1 goto error
-
-rem ==========================================================================
 
 if not "%1" == "" goto :%1
 
@@ -32,10 +26,10 @@ rem ========
 rem  Common
 rem ========
 
-if exist %OUT%\bin\libgcc_s_dw2-1.dll goto haslibgcc
-copy /b %~dp0..\Toolchain\TDM-GCC\bin\libgcc_s_dw2-1.dll %OUT%\bin
+if exist %BUILD%\libgcc_s_dw2-1.dll goto haslibgcc
+copy /b %~dp0..\Toolchain\TDM-GCC\bin\libgcc_s_dw2-1.dll %BUILD%
 if errorlevel 1 goto error
-strip %OUT%\bin\libgcc_s_dw2-1.dll
+strip %BUILD%\libgcc_s_dw2-1.dll
 if errorlevel 1 goto error
 :haslibgcc
 
@@ -57,17 +51,6 @@ if errorlevel 1 goto error
 mingw32-make -j 4
 if errorlevel 1 goto error
 
-cmake -E copy_if_different zlib.dll %OUT%\bin\zlib.dll
-if errorlevel 1 goto error
-cmake -E copy_if_different libzlib.dll.a %OUT%\lib\libz.a
-if errorlevel 1 goto error
-cmake -E copy_if_different libzlibstatic.a %OUT%\lib
-if errorlevel 1 goto error
-for %%f in (%ZLIB%\*.h) do cmake -E copy_if_different %%f %OUT%\include
-if errorlevel 1 goto error
-cmake -E copy_if_different zconf.h %OUT%\include
-if errorlevel 1 goto error
-
 if not "%1" == "" goto next
 
 rem =========
@@ -85,8 +68,10 @@ perl Configure mingw ^
     no-tests ^
     zlib ^
     "--openssldir=C:\Program Files\GNU" ^
-    --with-zlib-include=%OUT%\include ^
-    --with-zlib-lib=%OUT%\lib ^
+    --with-zlib-include=%ZLIB% ^
+    --with-zlib-lib=%BUILD%\zlib\libzlib.dll.a ^
+    -I%BUILD%\zlib ^
+    -L%BUILD%\zlib ^
     -fno-ident ^
     -fno-stack-protector ^
     -fno-unwind-tables ^
@@ -95,38 +80,6 @@ perl Configure mingw ^
     -Wl,-s
 if errorlevel 1 goto error
 mingw32-make -j 4
-if errorlevel 1 goto error
-
-if not exist %OUT%\include\openssl mkdir %OUT%\include\openssl
-if errorlevel 1 goto error
-if not exist %OUT%\share\openssl.1_1\engines mkdir %OUT%\share\openssl.1_1\engines
-if errorlevel 1 goto error
-
-cmake -E copy_if_different libcrypto.a %OUT%\lib\libcryptostatic.a
-if errorlevel 1 goto error
-cmake -E copy_if_different libcrypto.dll.a %OUT%\lib\libcrypto.a
-if errorlevel 1 goto error
-cmake -E copy_if_different libeay11.dll %OUT%\bin
-if errorlevel 1 goto error
-cmake -E copy_if_different libssl.a %OUT%\lib\libsslstatic.a
-if errorlevel 1 goto error
-cmake -E copy_if_different libssl.dll.a %OUT%\lib\libssl.a
-if errorlevel 1 goto error
-cmake -E copy_if_different ssleay11.dll %OUT%\bin
-if errorlevel 1 goto error
-for %%f in (include\openssl\*.h) do cmake -E copy_if_different %%f %OUT%\include\openssl
-if errorlevel 1 goto error
-cmake -E copy_if_different engines\capi.dll %OUT%\share\openssl.1_1\engines
-if errorlevel 1 goto error
-cmake -E copy_if_different engines\dasync.dll %OUT%\share\openssl.1_1\engines
-if errorlevel 1 goto error
-cmake -E copy_if_different engines\padlock.dll %OUT%\share\openssl.1_1\engines
-if errorlevel 1 goto error
-cmake -E copy_if_different apps\openssl.exe %OUT%\bin
-if errorlevel 1 goto error
-cmake -E copy_if_different apps\openssl.cnf %OUT%\share\openssl.1_1
-if errorlevel 1 goto error
-cmake -E copy_if_different apps\ct_log_list.cnf %OUT%\share\openssl.1_1
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next
@@ -149,24 +102,17 @@ cmake -G "MinGW Makefiles" ^
     -DBUILD_EXAMPLES=OFF ^
     -DBUILD_TESTING=OFF ^
     -DCMAKE_MAKE_PROGRAM=mingw32-make ^
-    -DZLIB_INCLUDE_DIR:PATH=%OUT%\include ^
-    -DZLIB_LIBRARY:PATH=%OUT%\lib\libz.a ^
+    -DZLIB_INCLUDE_DIR:PATH=%ZLIB%;%BUILD%\zlib ^
+    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
     -DZLIB_FOUND:BOOL=TRUE ^
-    -DOPENSSL_INCLUDE_DIR:PATH=%OUT%\include ^
-    -DOPENSSL_CRYPTO_LIBRARY:PATH=%OUT%\libcrypto.a ^
-    -DOPENSSL_SSL_LIBRARY:PATH=%OUT%\lib\libssl.a ^
-    -DOPENSSL_ROOT_DIR:PATH=%OUT% ^
+    -DOPENSSL_INCLUDE_DIR:PATH=%OPENSSL%\include ^
+    -DOPENSSL_CRYPTO_LIBRARY:PATH=%OPENSSL%\libcrypto.dll.a ^
+    -DOPENSSL_SSL_LIBRARY:PATH=%OPENSSL%\libssl.dll.a ^
+    -DOPENSSL_ROOT_DIR:PATH=%OPENSSL% ^
     -DOPENSSL_FOUND:BOOL=TRUE ^
     %LIBSSH2%
 if errorlevel 1 goto error
 mingw32-make -j 4
-if errorlevel 1 goto error
-
-cmake -E copy_if_different src\libssh2.dll %OUT%\bin
-if errorlevel 1 goto error
-cmake -E copy_if_different src\liblibssh2.dll.a %OUT%\lib\libssh2.a
-if errorlevel 1 goto error
-for %%f in (%LIBSSH2%\include\*.h) do cmake -E copy_if_different %%f %OUT%\include
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next
@@ -191,16 +137,16 @@ cmake -G "MinGW Makefiles" ^
     -DCURL_TARGET_WINDOWS_VERSION=0x400 ^
     -DCURL_LTO=NO ^
     -DCURL_ENABLE_SSL=YES ^
-    -DZLIB_INCLUDE_DIR:PATH=%OUT%\include ^
-    -DZLIB_LIBRARY:PATH=%OUT%\lib\libz.a ^
+    -DZLIB_INCLUDE_DIR:PATH=%ZLIB%;%BUILD%\zlib ^
+    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
     -DZLIB_FOUND:BOOL=TRUE ^
-    -DOPENSSL_INCLUDE_DIR:PATH=%OUT%\include ^
-    -DOPENSSL_CRYPTO_LIBRARY:PATH=%OUT%\libcrypto.a ^
-    -DOPENSSL_SSL_LIBRARY:PATH=%OUT%\lib\libssl.a ^
-    -DOPENSSL_ROOT_DIR:PATH=%OUT% ^
+    -DOPENSSL_INCLUDE_DIR:PATH=%OPENSSL%\include ^
+    -DOPENSSL_CRYPTO_LIBRARY:PATH=%OPENSSL%\libcrypto.dll.a ^
+    -DOPENSSL_SSL_LIBRARY:PATH=%OPENSSL%\libssl.dll.a ^
+    -DOPENSSL_ROOT_DIR:PATH=%OPENSSL% ^
     -DOPENSSL_FOUND:BOOL=TRUE ^
-    -DLIBSSH2_INCLUDE_DIR:PATH=%OUT%\include ^
-    -DLIBSSH2_LIBRARY:PATH=%OUT%\lib\libssh2.a ^
+    -DLIBSSH2_INCLUDE_DIR:PATH=%LIBSSH2%\include ^
+    -DLIBSSH2_LIBRARY:PATH=%BUILD%\libssh2\src\liblibssh2.dll.a ^
     %CURL%
 if errorlevel 1 goto error
 mingw32-make -j 4
@@ -209,15 +155,18 @@ if errorlevel 1 goto error
 if not exist %OUT%\include\curl mkdir %OUT%\include\curl
 if errorlevel 1 goto error
 
-cmake -E copy_if_different src\curl.exe %OUT%\bin
+if not "%1" == "" goto next
+
+rem ==========================================================================
+:installer
+
+cd %~dp0_setup
 if errorlevel 1 goto error
-cmake -E copy_if_different lib\libcurl.dll %OUT%\bin
+
+if exist %~dp0..\..\CD\SOFTWARE\GNU-NT4.EXE del %~dp0..\..\CD\SOFTWARE\GNU-NT4.EXE
 if errorlevel 1 goto error
-cmake -E copy_if_different lib\libcurl.dll.a %OUT%\lib\libcurl.a
-if errorlevel 1 goto error
-cmake -E copy_if_different %~dp0cacert/cacert.pem %OUT%\bin\curl-ca.crt
-if errorlevel 1 goto error
-for %%f in (%CURL%\include\curl\*.h) do cmake -E copy_if_different %%f %OUT%\include\curl
+
+makensis setup.nsi
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

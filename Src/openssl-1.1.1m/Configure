@@ -864,7 +864,9 @@ while (@argvcopy)
                         }
                 elsif (/^-L(.*)$/ or /^-Wl,/)
                         {
-                        push @{$useradd{LDFLAGS}}, $_;
+                        my $libpath = $_;
+                        $libpath =~ s|\\|/|g;
+                        push @{$useradd{LDFLAGS}}, $libpath;
                         }
                 elsif (/^-rpath$/ or /^-R$/)
                         # -rpath is the OSF1 rpath flag
@@ -884,7 +886,9 @@ while (@argvcopy)
                         }
                 elsif (m|^[-/]I(.*)$|)
                         {
-                        push @{$useradd{CPPINCLUDES}}, $1;
+                        my $incpath = $1;
+                        $incpath =~ s|\\|/|g;
+                        push @{$useradd{CPPINCLUDES}}, $incpath;
                         }
                 elsif (/^-Wp,$/)
                         {
