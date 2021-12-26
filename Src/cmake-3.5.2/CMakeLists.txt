@@ -19,7 +19,9 @@ endif()
 project(CMake)
 
 if(MINGW)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-ident -fno-stack-protector -march=i586")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-ident -fno-stack-protector -march=i586")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -Wl,--allow-multiple-definition -Wl,--build-id=none -Wl,-s -march=i586")
 endif()
 
 if(CMAKE_BOOTSTRAP)

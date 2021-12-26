@@ -195,7 +195,7 @@ if errorlevel 1 goto error
 
 sh configure ^
     MAKE=mingw32-make ^
-    CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables" ^
+    CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586" ^
     LDFLAGS="-Wl,--build-id=none -Wl,-s" ^
     --without-ada ^
     --without-manpages ^
@@ -209,7 +209,7 @@ sh configure ^
     --without-progs ^
     --without-tests
 if errorlevel 1 goto error
-mingw32-make
+mingw32-make -j 4
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next
