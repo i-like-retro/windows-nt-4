@@ -5,6 +5,7 @@ set BUILD=_build
 set OPENSSL=openssl-1.1.1m
 set NCURSES=ncurses-6.3
 set GIT=git-2.34.1
+set LESS=less-590
 
 cd %~dp0
 if errorlevel 1 goto error
@@ -1789,6 +1790,23 @@ del %NCURSES%\test\xmas.exe
 rmdir /S/Q %NCURSES%\lib
 rmdir /S/Q %NCURSES%\obj_g
 rmdir /S/Q %NCURSES%\objects
+
+if not "%1" == "" goto next
+
+:less
+
+del %LESS%\conf1454.dir
+del %LESS%\conf55.dir
+del %LESS%\config.log
+del %LESS%\confdefs.h
+del %LESS%\conftest.c
+del %LESS%\conftest.err
+del %LESS%\conftest.exe
+del %LESS%\Makefile
+del %LESS%\config.status
+del %LESS%\defines.h
+del %LESS%\main.o
+del %LESS%\stamp-h
 
 if not "%1" == "" goto next
 

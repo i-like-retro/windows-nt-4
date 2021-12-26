@@ -214,6 +214,23 @@ if errorlevel 1 goto error
 
 if not "%1" == "" goto next
 
+rem ======
+rem  LESS
+rem ======
+:less
+
+cd %LESS%
+if errorlevel 1 goto error
+
+rem sh configure ^
+rem     CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -I%NCURSES%/include -march=i586" ^
+rem     LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%NCURSES%/lib" ^
+if errorlevel 1 goto error
+mingw32-make
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
 rem =====
 rem  GIT
 rem =====
