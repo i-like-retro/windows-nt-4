@@ -1,4 +1,5 @@
 /_build
+/_diff
 /zlib-1.2.11/zconf.h.included
 /ncurses-6.3/Makefile
 /ncurses-6.3/c++/Makefile
