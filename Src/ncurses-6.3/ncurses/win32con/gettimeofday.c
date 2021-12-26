@@ -30,7 +30,7 @@
 #ifdef WINVER
 #  undef WINVER
 #endif
-#define WINVER 0x0501
+#define WINVER 0x0400
 
 #include <curses.priv.h>
 

@@ -2218,8 +2218,17 @@ InitConsole(void)
 
 	b = AllocConsole();
 
-	if (!b)
-	    b = AttachConsole(ATTACH_PARENT_PROCESS);
+	if (!b) {
+        typedef BOOL (WINAPI* PFNATTACHCONSOLEPROC)(DWORD);
+        static PFNATTACHCONSOLEPROC AttachConsoleProc;
+        if (!AttachConsoleProc) {
+            AttachConsoleProc = (PFNATTACHCONSOLEPROC)GetProcAddress(GetModuleHandleA("kernel32"), "AttachConsole");
+            if (AttachConsoleProc) {
+                const DWORD ATTACH_PARENT_PROCESS = 0xffffffff;
+                b = AttachConsoleProc(ATTACH_PARENT_PROCESS);
+            }
+        }
+    }
 
 	if (getenv("NCGDB") || getenv("NCURSES_CONSOLE2")) {
 	    T(("... will not buffer console"));

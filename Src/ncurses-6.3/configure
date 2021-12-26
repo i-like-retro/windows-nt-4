@@ -100,7 +100,7 @@ cross_compiling=no
 subdirs=
 MFLAGS=
 MAKEFLAGS=
-SHELL=${CONFIG_SHELL-/bin/sh}
+SHELL=${CONFIG_SHELL-sh}
 
 # Maximum number of lines to put in a shell here document.
 # This variable seems obsolete.  It should probably be removed, and
@@ -4398,18 +4398,18 @@ set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y,./+-,__p_,'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  cat >conftest.make <<\EOF
-all:
-	@echo 'ac_maketemp="${MAKE}"'
-EOF
+#  cat >conftest.make <<\EOF
+#all:
+#	@echo 'ac_maketemp="${MAKE}"'
+#EOF
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
-if test -n "$ac_maketemp"; then
+#eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
+#if test -n "$ac_maketemp"; then
   eval ac_cv_prog_make_${ac_make}_set=yes
-else
-  eval ac_cv_prog_make_${ac_make}_set=no
-fi
-rm -f conftest.make
+#else
+#  eval ac_cv_prog_make_${ac_make}_set=no
+#fi
+#rm -f conftest.make
 fi
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
   echo "$as_me:4415: result: yes" >&5
@@ -6181,13 +6181,15 @@ CF_EOF
 		#!$SHELL
 		SHARED_LIB=\$1
 		IMPORT_LIB=\`echo "\$1" | sed -e 's/msys-/lib/' -e 's/[0-9]*\.dll$/.dll.a/'\`
+		IMPORT_DEF=\`echo "\$1" | sed -e 's/cyg/lib/' -e 's/[0-9]*\.dll$/.def/'\`
 		shift
 		cat <<-EOF
 		Linking shared library
 		** SHARED_LIB \$SHARED_LIB
 		** IMPORT_LIB \$IMPORT_LIB
+		** IMPORT_DEF \$IMPORT_DEF
 EOF
-		exec \$* ${LDFLAGS} -shared -Wl,--out-implib=\${IMPORT_LIB} -Wl,--export-all-symbols -o \${SHARED_LIB}
+		exec \$* ${LDFLAGS} -shared -Wl,--out-implib=\${IMPORT_LIB} -Wl,--output-def,\${IMPORT_DEF} -Wl,--export-all-symbols -o \${SHARED_LIB}
 CF_EOF
 		chmod +x mk_shared_lib.sh
 		;;
@@ -18593,16 +18595,16 @@ echo "$as_me:18592: result: $enable_gnat_projects" >&5
 echo "${ECHO_T}$enable_gnat_projects" >&6
 
 ###	Checks for libraries.
-case "$cf_cv_system_name" in
-(*mingw32*|*mingw64*)
+#case "$cf_cv_system_name" in
+#(*mingw32*|*mingw64*)
 	if test "x$with_exp_win32" = xyes ; then
-	CPPFLAGS="$CPPFLAGS -DWINVER=0x0600 -DWIN32_LEAN_AND_MEAN"
+	CPPFLAGS="$CPPFLAGS -DWINVER=0x0400 -DWIN32_LEAN_AND_MEAN"
 	else
-	CPPFLAGS="$CPPFLAGS -DWINVER=0x0501 -DWIN32_LEAN_AND_MEAN"
+	CPPFLAGS="$CPPFLAGS -DWINVER=0x0400 -DWIN32_LEAN_AND_MEAN"
 	fi
 	# Note: WINVER may be a problem with Windows 10
-	;;
-(*)
+#	;;
+#(*)
 echo "$as_me:18606: checking for gettimeofday" >&5
 echo $ECHO_N "checking for gettimeofday... $ECHO_C" >&6
 if test "${ac_cv_func_gettimeofday+set}" = set; then
@@ -18743,8 +18745,8 @@ LIBS="$cf_add_libs"
 fi
 
 fi
-	;;
-esac
+#	;;
+#esac
 
 echo "$as_me:18749: checking if -lm needed for math functions" >&5
 echo $ECHO_N "checking if -lm needed for math functions... $ECHO_C" >&6
@@ -27554,19 +27556,19 @@ LIB_SUBSETS="${LIB_SUBSETS}base"
 # base library (so it resides in base).
 if test "$with_term_driver" != no ; then
 	LIB_SUBSETS="${LIB_SUBSETS}+port_drivers"
-	case "$cf_cv_system_name" in
-	(*mingw32*|*mingw64*)
+	#case "$cf_cv_system_name" in
+	#(*mingw32*|*mingw64*)
 		if test "x$with_exp_win32" = xyes ; then
 			LIB_SUBSETS="${LIB_SUBSETS}+port_tinfo+port_win32"
 		else
 			LIB_SUBSETS="${LIB_SUBSETS}+port_tinfo+port_win32con"
 		fi
 		CPPFLAGS="$CPPFLAGS -DUSE_WIN32CON_DRIVER"
-		;;
-	(*)
-		LIB_SUBSETS="${LIB_SUBSETS}+port_tinfo"
-		;;
-	esac
+	#	;;
+	#(*)
+	#	LIB_SUBSETS="${LIB_SUBSETS}+port_tinfo"
+	#	;;
+	#esac
 elif test "x$with_exp_win32" = xyes ; then
 	case "$cf_cv_system_name" in
 	(*mingw32*|*mingw64*)
@@ -30102,12 +30104,14 @@ eval cf_libname="\$${cf_map_lib_basename}_NAME"
 					cf_add_lib="../lib/cyg${cf_libname}${cf_cygsuf}"
 					;;
 				(msysdll)
-					cf_cygsuf=`echo "$cf_suffix" | sed -e 's/\.dll/\${ABI_VERSION}.dll/'`
-					cf_add_lib="../lib/msys-${cf_libname}${cf_cygsuf}"
-					;;
 				(mingw)
-					cf_cygsuf=`echo "$cf_suffix" | sed -e 's/\.dll/\${ABI_VERSION}.dll/'`
-					cf_add_lib="../lib/lib${cf_libname}${cf_cygsuf}"
+					if test "$cf_libname" = ncurses ; then
+						cf_cygsuf=`echo "$cf_suffix" | sed -e 's/\.dll/\${ABI_VERSION}.dll/'`
+						cf_add_lib="../lib/${cf_libname}${cf_cygsuf}"
+					else
+						cf_cygsuf=`echo "$cf_suffix" | sed -e 's/\.dll/\${ABI_VERSION}.dll/'`
+						cf_add_lib="../lib/lib${cf_libname}${cf_cygsuf}"
+					fi
 					;;
 				(msvcdll)
 					cf_cygsuf=`echo "$cf_suffix" | sed -e 's/\.dll/\${ABI_VERSION}.dll/'`

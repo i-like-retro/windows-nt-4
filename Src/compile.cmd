@@ -8,6 +8,8 @@ set OPENSSL=%BASEDIR%openssl-1.1.1m
 set LIBSSH2=%BASEDIR%libssh2-1.10.0
 set CURL=%BASEDIR%curl-7.80.0
 set EXPAT=%BASEDIR%expat-2.4.2
+set NCURSES=%BASEDIR%ncurses-6.3
+set LESS=%BASEDIR%less-590
 set GIT=%BASEDIR%git-2.34.1
 
 rem ==========================================================================
@@ -179,6 +181,35 @@ cmake -G "MinGW Makefiles" ^
     %EXPAT%
 if errorlevel 1 goto error
 mingw32-make -j 4
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem =========
+rem  NCURSES
+rem =========
+:ncurses
+
+cd %NCURSES%
+if errorlevel 1 goto error
+
+sh configure ^
+    MAKE=mingw32-make ^
+    CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables" ^
+    LDFLAGS="-Wl,--build-id=none -Wl,-s" ^
+    --without-ada ^
+    --without-manpages ^
+    --without-debug ^
+    --with-shared ^
+    --with-panel-libname=pane ^
+    --enable-term-driver ^
+    --enable-fvisibility ^
+    --disable-exp-win32 ^
+    --without-cxx-binding ^
+    --without-progs ^
+    --without-tests
+if errorlevel 1 goto error
+mingw32-make
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

@@ -90,7 +90,10 @@ function abi_name_of(a_name) {
 		if (ShlibVerInfix == "cygdll") {
 			result = sprintf("%s%s$(ABI_VERSION)%s", "cyg", a_name, suffix);
 		} else if (ShlibVerInfix == "msysdll") {
-			result = sprintf("%s%s$(ABI_VERSION)%s", "msys-", a_name, suffix);
+			if (a_name == "ncurses")
+				result = sprintf("%s%s$(ABI_VERSION)%s", "", a_name, suffix);
+			else
+				result = sprintf("%s%s$(ABI_VERSION)%s", prefix, a_name, suffix);
 		} else if (ShlibVerInfix == "mingw" || ShlibVerInfix == "msvcdll") {
 			result = sprintf("%s%s$(ABI_VERSION)%s", prefix, a_name, suffix);
 		} else if (ShlibVerInfix == "yes") {
@@ -105,7 +108,10 @@ function rel_name_of(a_name) {
 		if (ShlibVerInfix == "cygdll") {
 			result = sprintf("%s%s$(REL_VERSION)%s", "cyg", a_name, suffix);
 		} else if (ShlibVerInfix == "msysdll") {
-			result = sprintf("%s%s$(ABI_VERSION)%s", "msys-", a_name, suffix);
+			if (a_name == "ncurses")
+				result = sprintf("%s%s$(REL_VERSION)%s", "", a_name, suffix);
+			else
+				result = sprintf("%s%s$(REL_VERSION)%s", prefix, a_name, suffix);
 		} else if (ShlibVerInfix == "mingw" || ShlibVerInfix == "msvcdll") {
 			result = sprintf("%s%s$(REL_VERSION)%s", prefix, a_name, suffix);
 		} else if (ShlibVerInfix == "yes") {

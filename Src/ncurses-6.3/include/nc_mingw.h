@@ -39,11 +39,11 @@
 #ifdef _WIN32
 
 #ifdef WINVER
-#  if WINVER < 0x0501
-#    error WINVER must at least be 0x0501
+#  if WINVER != 0x0400
+#    error WINVER must be 0x0400
 #  endif
 #else
-#  define WINVER 0x0501
+#  define WINVER 0x0400
 #endif
 #include <windows.h>
 

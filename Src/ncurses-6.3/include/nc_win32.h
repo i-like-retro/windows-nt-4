@@ -51,11 +51,11 @@
    aka Windows NT 6.0
 */
 #ifdef WINVER
-#  if WINVER < 0x0600
-#    error WINVER must at least be 0x0600
+#  if WINVER != 0x0400
+#    error WINVER must be 0x0400
 #  endif
 #else
-#  define WINVER 0x0600
+#  define WINVER 0x0400
 #endif
 
 #undef _NC_CHECK_MINTTY

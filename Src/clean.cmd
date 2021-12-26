@@ -1,4 +1,12 @@
 @echo off
+
+cd %~dp0
+if errorlevel 1 goto error
+
+if not "%1" == "" goto :%1
+
+:openssl
+
 del openssl-1.1.1m\Makefile
 del openssl-1.1.1m\Makefile.new
 del openssl-1.1.1m\apps\CA.pl
@@ -1591,4 +1599,181 @@ del openssl-1.1.1m\fuzz\libeay11.dll
 del openssl-1.1.1m\fuzz\ssleay11.dll
 del openssl-1.1.1m\libeay11.dll
 del openssl-1.1.1m\ssleay11.dll
+
+if not "%1" == "" goto next
+
+:git
+
 del git-2.34.1\GIT-VERSION-FILE
+
+if not "%1" == "" goto next
+
+:ncurses
+
+del ncurses-6.3\Makefile
+del ncurses-6.3\c++\Makefile
+del ncurses-6.3\config.log
+del ncurses-6.3\config.status
+del ncurses-6.3\edit_man.sh
+del ncurses-6.3\form\Makefile
+del ncurses-6.3\headers.sh
+del ncurses-6.3\include\MKterm.h.awk
+del ncurses-6.3\include\Makefile
+del ncurses-6.3\include\curses.head
+del ncurses-6.3\include\ncurses_cfg.h
+del ncurses-6.3\include\ncurses_dll.h
+del ncurses-6.3\include\termcap.h
+del ncurses-6.3\include\unctrl.h
+del ncurses-6.3\man\Makefile
+del ncurses-6.3\man\ncurses6-config.1
+del ncurses-6.3\menu\Makefile
+del ncurses-6.3\misc\Makefile
+del ncurses-6.3\misc\ncurses-config
+del ncurses-6.3\misc\run_tic.sh
+del ncurses-6.3\mk_shared_lib.sh
+del ncurses-6.3\ncurses\Makefile
+del ncurses-6.3\panel\Makefile
+del ncurses-6.3\progs\Makefile
+del ncurses-6.3\test\Makefile
+del ncurses-6.3\include\config.h
+del ncurses-6.3\include\curses.h
+del ncurses-6.3\include\hashsize.h
+del ncurses-6.3\include\ncurses_def.h
+del ncurses-6.3\include\parametrized.h
+del ncurses-6.3\include\term.h
+del ncurses-6.3\man\terminfo.5
+del ncurses-6.3\ncurses\codes.c
+del ncurses-6.3\ncurses\expanded.c
+del ncurses-6.3\ncurses\fallback.c
+del ncurses-6.3\ncurses\lib_gen.c
+del ncurses-6.3\conf1091.src
+del ncurses-6.3\confdefs.h
+del ncurses-6.3\conftest.cc
+del ncurses-6.3\ncurses\comp_captab.c
+del ncurses-6.3\ncurses\comp_userdefs.c
+del ncurses-6.3\ncurses\init_keytry.h
+del ncurses-6.3\ncurses\keys.list
+del ncurses-6.3\ncurses\lib_keyname.c
+del ncurses-6.3\ncurses\link_test.c
+del ncurses-6.3\ncurses\make_hash.exe
+del ncurses-6.3\ncurses\make_keys.exe
+del ncurses-6.3\ncurses\names.c
+del ncurses-6.3\ncurses\report_offsets.exe
+del ncurses-6.3\ncurses\unctrl.c
+del ncurses-6.3\progs\termsort.h
+del ncurses-6.3\progs\transform.h
+del ncurses-6.3\man\ncursesw6-config.1
+del ncurses-6.3\c++\demo.exe
+del ncurses-6.3\c++\etip.h
+del ncurses-6.3\include\eti.h
+del ncurses-6.3\include\form.h
+del ncurses-6.3\include\menu.h
+del ncurses-6.3\include\mf_common.h
+del ncurses-6.3\include\panel.h
+del ncurses-6.3\misc\run_tic.sed
+del ncurses-6.3\misc\terminfo.tmp
+del ncurses-6.3\progs\clear.exe
+del ncurses-6.3\progs\infocmp.exe
+del ncurses-6.3\progs\tabs.exe
+del ncurses-6.3\progs\tic.exe
+del ncurses-6.3\progs\toe.exe
+del ncurses-6.3\progs\tput.exe
+del ncurses-6.3\progs\tset.exe
+del ncurses-6.3\test\back_ground.exe
+del ncurses-6.3\test\background.exe
+del ncurses-6.3\test\blue.exe
+del ncurses-6.3\test\bs.exe
+del ncurses-6.3\test\cardfile.exe
+del ncurses-6.3\test\chgat.exe
+del ncurses-6.3\test\clip_printw.exe
+del ncurses-6.3\test\color_content.exe
+del ncurses-6.3\test\color_set.exe
+del ncurses-6.3\test\demo_altkeys.exe
+del ncurses-6.3\test\demo_defkey.exe
+del ncurses-6.3\test\demo_forms.exe
+del ncurses-6.3\test\demo_keyok.exe
+del ncurses-6.3\test\demo_menus.exe
+del ncurses-6.3\test\demo_new_pair.exe
+del ncurses-6.3\test\demo_panels.exe
+del ncurses-6.3\test\demo_tabs.exe
+del ncurses-6.3\test\demo_termcap.exe
+del ncurses-6.3\test\demo_terminfo.exe
+del ncurses-6.3\test\ditto.exe
+del ncurses-6.3\test\dots.exe
+del ncurses-6.3\test\dots_curses.exe
+del ncurses-6.3\test\dots_mvcur.exe
+del ncurses-6.3\test\dots_termcap.exe
+del ncurses-6.3\test\dots_xcurses.exe
+del ncurses-6.3\test\dup_field.exe
+del ncurses-6.3\test\echochar.exe
+del ncurses-6.3\test\extended_color.exe
+del ncurses-6.3\test\filter.exe
+del ncurses-6.3\test\firework.exe
+del ncurses-6.3\test\firstlast.exe
+del ncurses-6.3\test\foldkeys.exe
+del ncurses-6.3\test\form_driver_w.exe
+del ncurses-6.3\test\gdc.exe
+del ncurses-6.3\test\hanoi.exe
+del ncurses-6.3\test\hashtest.exe
+del ncurses-6.3\test\inch_wide.exe
+del ncurses-6.3\test\inchs.exe
+del ncurses-6.3\test\ins_wide.exe
+del ncurses-6.3\test\insdelln.exe
+del ncurses-6.3\test\inserts.exe
+del ncurses-6.3\test\key_names.exe
+del ncurses-6.3\test\keynames.exe
+del ncurses-6.3\test\knight.exe
+del ncurses-6.3\test\list_keys.exe
+del ncurses-6.3\test\lrtest.exe
+del ncurses-6.3\test\move_field.exe
+del ncurses-6.3\test\movewindow.exe
+del ncurses-6.3\test\ncurses.exe
+del ncurses-6.3\test\newdemo.exe
+del ncurses-6.3\test\padview.exe
+del ncurses-6.3\test\pair_content.exe
+del ncurses-6.3\test\picsmap.exe
+del ncurses-6.3\test\railroad.exe
+del ncurses-6.3\test\rain.exe
+del ncurses-6.3\test\redraw.exe
+del ncurses-6.3\test\savescreen.exe
+del ncurses-6.3\test\sp_tinfo.exe
+del ncurses-6.3\test\tclock.exe
+del ncurses-6.3\test\test_add_wchstr.exe
+del ncurses-6.3\test\test_addchstr.exe
+del ncurses-6.3\test\test_addstr.exe
+del ncurses-6.3\test\test_addwstr.exe
+del ncurses-6.3\test\test_arrays.exe
+del ncurses-6.3\test\test_get_wstr.exe
+del ncurses-6.3\test\test_getstr.exe
+del ncurses-6.3\test\test_instr.exe
+del ncurses-6.3\test\test_inwstr.exe
+del ncurses-6.3\test\test_opaque.exe
+del ncurses-6.3\test\test_setupterm.exe
+del ncurses-6.3\test\test_sgr.exe
+del ncurses-6.3\test\test_termattrs.exe
+del ncurses-6.3\test\test_tparm.exe
+del ncurses-6.3\test\test_vid_puts.exe
+del ncurses-6.3\test\test_vidputs.exe
+del ncurses-6.3\test\testaddch.exe
+del ncurses-6.3\test\testcurs.exe
+del ncurses-6.3\test\testscanw.exe
+del ncurses-6.3\test\view.exe
+del ncurses-6.3\test\worm.exe
+del ncurses-6.3\test\xmas.exe
+rmdir /S/Q ncurses-6.3\lib
+rmdir /S/Q ncurses-6.3\obj_g
+rmdir /S/Q ncurses-6.3\objects
+
+if not "%1" == "" goto next
+
+:done
+echo DONE!
+exit
+
+:next
+shift
+if not "%1" == "" goto :%1
+goto done
+
+:error
+echo ERROR!
