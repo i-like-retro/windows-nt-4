@@ -4482,6 +4482,10 @@ fi
 
 done
 
+cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_TERMIOS_H" | $as_tr_cpp` 1
+_ACEOF
+
 
 # Checks for typedefs, structures, and compiler characteristics.
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether stat file-mode macros are broken" >&5
@@ -4957,6 +4961,7 @@ if test "x$ac_cv_func_tcgetattr" = xyes; then :
   $as_echo "#define HAVE_TERMIOS_FUNCS 1" >>confdefs.h
 
 fi
+$as_echo "#define HAVE_TERMIOS_FUNCS 1" >>confdefs.h
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for fileno" >&5
@@ -5402,13 +5407,13 @@ fi
 
 if test $have_regex = no; then
 if test $WANT_REGEX = auto -o $WANT_REGEX = pcre2; then
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pcre2_compile_8 in -lpcre2-8" >&5
-$as_echo_n "checking for pcre2_compile_8 in -lpcre2-8... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pcre2_compile_8 in -lpcre2.dll" >&5
+$as_echo_n "checking for pcre2_compile_8 in -lpcre2.dll... " >&6; }
 if ${ac_cv_lib_pcre2_8_pcre2_compile_8+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpcre2-8  $LIBS"
+LIBS="-lpcre2.dll  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -5440,7 +5445,7 @@ fi
 $as_echo "$ac_cv_lib_pcre2_8_pcre2_compile_8" >&6; }
 if test "x$ac_cv_lib_pcre2_8_pcre2_compile_8" = xyes; then :
   $as_echo "#define HAVE_PCRE2 1" >>confdefs.h
- LIBS="$LIBS -lpcre2-8" have_regex=yes; supported_regex="$supported_regex pcre2"
+ LIBS="$LIBS -lpcre2.dll" have_regex=yes; supported_regex="$supported_regex pcre2"
 fi
 
 fi

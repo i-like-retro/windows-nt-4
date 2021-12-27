@@ -7556,7 +7556,7 @@ echo "${ECHO_T}$with_pcre2" >&6
 
 if test "x$with_pcre2" != xno ; then
 	cf_with_pcre2_ok=no
-	for cf_with_pcre2 in libpcre2 libpcre2-posix libpcre
+	for cf_with_pcre2 in libpcre2.dll libpcre2x.dll libpcre
 	do
 
 if test "$PKG_CONFIG" != none && "$PKG_CONFIG" --exists "$cf_with_pcre2"; then
@@ -7706,16 +7706,16 @@ EOF
 
 	# if pkgconfig gave no results, look for the libraries directly
 	case "$LIBS" in
-	(*pcre2-posix*|*pcreposix*)
+	(*pcre2x*|*pcreposix*)
 		;;
 	(*)
-		echo "$as_me:7710: checking for regcomp in -lpcre2-posix" >&5
-echo $ECHO_N "checking for regcomp in -lpcre2-posix... $ECHO_C" >&6
+		echo "$as_me:7710: checking for pcre2_regcomp in -lpcre2x.dll" >&5
+echo $ECHO_N "checking for pcre2_regcomp in -lpcre2x.dll... $ECHO_C" >&6
 if test "${ac_cv_lib_pcre2_posix_regcomp+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpcre2-posix  $LIBS"
+LIBS="-lpcre2x.dll  $LIBS"
 cat >"conftest.$ac_ext" <<_ACEOF
 #line 7718 "configure"
 #include "confdefs.h"
@@ -7726,11 +7726,11 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char regcomp ();
+char pcre2_regcomp ();
 int
 main (void)
 {
-regcomp ();
+pcre2_regcomp ();
   ;
   return 0;
 }
@@ -7763,7 +7763,7 @@ if test "$ac_cv_lib_pcre2_posix_regcomp" = yes; then
 cf_add_libs="$LIBS"
 # reverse order
 cf_add_0lib=
-for cf_add_1lib in -lpcre2-posix; do cf_add_0lib="$cf_add_1lib $cf_add_0lib"; done
+for cf_add_1lib in -lpcre2x.dll; do cf_add_0lib="$cf_add_1lib $cf_add_0lib"; done
 # filter duplicates
 for cf_add_1lib in $cf_add_0lib; do
 	for cf_add_2lib in $cf_add_libs; do

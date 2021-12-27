@@ -55,7 +55,9 @@ extern int fd0;
 #endif
 
 #if HAVE_TERMIOS_H && HAVE_TERMIOS_FUNCS
-#include <termios.h>
+#include <ncurses_dll.h>
+#include <ncurses_mingw.h>
+#include <nc_termios.h>
 #else
 #if HAVE_TERMIO_H
 #include <termio.h>
@@ -254,8 +256,8 @@ static void tmodes LESSPARAMS((char *incap, char *outcap, char **instr,
  * and needed by, the termcap library.
  */
 #if MUST_DEFINE_OSPEED
-extern short ospeed;    /* Terminal output baud rate */
-extern char PC;         /* Pad character */
+//extern short ospeed;    /* Terminal output baud rate */
+//extern char PC;         /* Pad character */
 #endif
 #ifdef _OSK
 short ospeed;
@@ -290,8 +292,8 @@ extern DWORD console_mode;
 extern int tty;
 #endif
 
-extern char *tgetstr();
-extern char *tgoto();
+//extern char *tgetstr();
+//extern char *tgoto();
 
 
 /*

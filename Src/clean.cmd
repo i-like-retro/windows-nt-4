@@ -1635,6 +1635,12 @@ rmdir /S/Q %BUILD%\expat
 
 if not "%1" == "" goto next
 
+:pcre2
+
+rmdir /S/Q %BUILD%\pcre2
+
+if not "%1" == "" goto next
+
 :ncurses
 
 del %NCURSES%\Makefile
@@ -1793,16 +1799,9 @@ rmdir /S/Q %NCURSES%\objects
 
 if not "%1" == "" goto next
 
-:pcre2
-
-rmdir /S/Q %BUILD%\pcre2
-
-if not "%1" == "" goto next
-
 :less
 
-del %LESS%\conf1454.dir
-del %LESS%\conf55.dir
+rmdir /S/Q %LESS%\conf*.dir
 del %LESS%\config.log
 del %LESS%\confdefs.h
 del %LESS%\conftest.c
@@ -1813,6 +1812,45 @@ del %LESS%\config.status
 del %LESS%\defines.h
 del %LESS%\main.o
 del %LESS%\stamp-h
+del %LESS%\brac.o
+del %LESS%\ch.o
+del %LESS%\charset.o
+del %LESS%\cmdbuf.o
+del %LESS%\command.o
+del %LESS%\cvt.o
+del %LESS%\decode.o
+del %LESS%\edit.o
+del %LESS%\filename.o
+del %LESS%\forwback.o
+del %LESS%\help.o
+del %LESS%\ifile.o
+del %LESS%\input.o
+del %LESS%\jump.o
+del %LESS%\less.exe
+del %LESS%\lessecho.exe
+del %LESS%\lessecho.o
+del %LESS%\lesskey.exe
+del %LESS%\lesskey.o
+del %LESS%\lesskey_parse.o
+del %LESS%\line.o
+del %LESS%\linenum.o
+del %LESS%\lsystem.o
+del %LESS%\mark.o
+del %LESS%\optfunc.o
+del %LESS%\option.o
+del %LESS%\opttbl.o
+del %LESS%\os.o
+del %LESS%\output.o
+del %LESS%\pattern.o
+del %LESS%\position.o
+del %LESS%\prompt.o
+del %LESS%\screen.o
+del %LESS%\search.o
+del %LESS%\signal.o
+del %LESS%\tags.o
+del %LESS%\ttyin.o
+del %LESS%\version.o
+del %LESS%\xbuf.o
 
 if not "%1" == "" goto next
 

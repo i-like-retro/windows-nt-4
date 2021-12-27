@@ -186,35 +186,6 @@ if errorlevel 1 goto error
 
 if not "%1" == "" goto next
 
-rem =========
-rem  NCURSES
-rem =========
-:ncurses
-
-cd %NCURSES%
-if errorlevel 1 goto error
-
-sh configure ^
-    MAKE=mingw32-make ^
-    CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586" ^
-    LDFLAGS="-Wl,--build-id=none -Wl,-s" ^
-    --without-ada ^
-    --without-manpages ^
-    --without-debug ^
-    --with-shared ^
-    --with-panel-libname=pane ^
-    --enable-term-driver ^
-    --enable-fvisibility ^
-    --disable-exp-win32 ^
-    --without-cxx-binding ^
-    --without-progs ^
-    --without-tests
-if errorlevel 1 goto error
-mingw32-make -j 4
-if errorlevel 1 goto error
-
-if not "%1" == "" goto next
-
 rem =======
 rem  PCRE2
 rem =======
@@ -244,6 +215,37 @@ if errorlevel 1 goto error
 
 if not "%1" == "" goto next
 
+rem =========
+rem  NCURSES
+rem =========
+:ncurses
+
+cd %NCURSES%
+if errorlevel 1 goto error
+
+sh configure ^
+    MAKE=mingw32-make ^
+    CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -I%PCRE%2/src" ^
+    LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%BUILD%/pcre2" ^
+    --without-ada ^
+    --without-manpages ^
+    --without-debug ^
+    --with-pcre2 ^
+    --with-shared ^
+    --with-panel-libname=pane ^
+    --enable-term-driver ^
+    --enable-fvisibility ^
+    --disable-exp-win32 ^
+    --without-cxx-binding ^
+    --without-tests
+if errorlevel 1 goto error
+mingw32-make -j 4
+if errorlevel 1 goto error
+mingw32-make install.data
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
 rem ======
 rem  LESS
 rem ======
@@ -252,9 +254,9 @@ rem ======
 cd %LESS%
 if errorlevel 1 goto error
 
-rem sh configure ^
-rem     CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -I%NCURSES%/include -march=i586" ^
-rem     LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%NCURSES%/lib" ^
+sh configure ^
+    CFLAGS="-march=i586 -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -I%NCURSES%/include -I%BUILD%/pcre2 -I%~dp0termios" ^
+    LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%NCURSES%/lib -Wl,-L%BUILD%/pcre2" ^
 if errorlevel 1 goto error
 mingw32-make
 if errorlevel 1 goto error

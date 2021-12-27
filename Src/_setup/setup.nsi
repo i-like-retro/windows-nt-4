@@ -163,6 +163,11 @@ SectionGroup /e "!Core"
         SetOutPath "$INSTDIR\include\curl"
         File "..\curl-7.80.0\include\curl\*.h"
     SectionEnd
+    Section "less-590" LESS
+        SectionIn 2
+        SetOutPath "$INSTDIR\bin"
+        File "..\less-590\less.exe"
+    SectionEnd
     Section "libexpat-2.4.2" EXPAT
         SectionIn 2
         SetOutPath "$INSTDIR\bin"
@@ -210,6 +215,7 @@ SectionGroup /e "!Core"
         File "..\ncurses-6.3\include\termcap.h"
         File "..\ncurses-6.3\include\ncurses_mingw.h"
         File "..\ncurses-6.3\include\nc_mingw.h"
+        File "..\ncurses-6.3\include\nc_termios.h"
         File "..\ncurses-6.3\menu\eti.h"
         File "..\ncurses-6.3\menu\menu.h"
         File "..\ncurses-6.3\panel\panel.h"
@@ -299,6 +305,7 @@ SectionGroupEnd
 
 Var CURL
 Var CURL_DEVEL
+Var LESS
 Var EXPAT
 Var EXPAT_DEVEL
 Var NCURSES
@@ -340,6 +347,7 @@ Var ZLIB_DEVEL
 Function .onSelChange
     StrCpy $CURL                "NO"
     StrCpy $CURL_DEVEL          "NO"
+    StrCpy $LESS                "NO"
     StrCpy $EXPAT               "NO"
     StrCpy $EXPAT_DEVEL         "NO"
     StrCpy $NCURSES             "NO"
@@ -360,6 +368,9 @@ Function .onSelChange
     !insertmacro Depends        ${LIBSSH2_DEVEL}    $LIBSSH2_DEVEL      $LIBSSH2
     !insertmacro Depends        ${OPENSSL_DEVEL}    $OPENSSL_DEVEL      $OPENSSL
     !insertmacro Depends        ${ZLIB_DEVEL}       $ZLIB_DEVEL         $ZLIB
+    !insertmacro Depends        ${LESS}             $LESS               $NCURSES
+    !insertmacro Depends        ${LESS}             $LESS               $LIBPCRE2
+    !insertmacro Depends        ${NCURSES}          $NCURSES            $LIBPCRE2
     !insertmacro Depends        ${CURL}             $CURL               $LIBSSH2
     !insertmacro Depends        ${CURL}             $CURL               $OPENSSL
     !insertmacro Depends        ${CURL}             $CURL               $ZLIB
@@ -369,6 +380,7 @@ Function .onSelChange
 
     !insertmacro MaybeNeeded    ${CURL}             $CURL
     !insertmacro MaybeNeeded    ${CURL_DEVEL}       $CURL_DEVEL
+    !insertmacro MaybeNeeded    ${LESS}             $LESS
     !insertmacro MaybeNeeded    ${EXPAT}            $EXPAT
     !insertmacro MaybeNeeded    ${EXPAT_DEVEL}      $EXPAT_DEVEL
     !insertmacro MaybeNeeded    ${NCURSES}          $NCURSES
