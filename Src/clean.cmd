@@ -2,6 +2,7 @@
 
 set BUILD=_build
 
+set BZIP2=bzip2-1.0.8
 set OPENSSL=openssl-1.1.1m
 set NCURSES=ncurses-6.3
 set GIT=git-2.34.1
@@ -17,6 +18,34 @@ del %BUILD%\libgcc_s_dw2-1.dll
 :zlib
 
 rmdir /S/Q %BUILD%\zlib
+
+if not "%1" == "" goto next
+
+:bzip2
+
+del %BZIP2%\blocksort.o
+del %BZIP2%\bzip2.exe
+del %BZIP2%\bzip2.o
+del %BZIP2%\bzip2recover.exe
+del %BZIP2%\bzip2recover.o
+del %BZIP2%\bzlib.o
+del %BZIP2%\compress.o
+del %BZIP2%\crctable.o
+del %BZIP2%\decompress.o
+del %BZIP2%\huffman.o
+del %BZIP2%\libbz2.a
+del %BZIP2%\randtable.o
+del %BZIP2%\sample1.rb2
+del %BZIP2%\sample1.tst
+del %BZIP2%\sample2.rb2
+del %BZIP2%\sample2.tst
+del %BZIP2%\sample3.rb2
+del %BZIP2%\sample3.tst
+del %BZIP2%\bzip2-shared.exe
+del %BZIP2%\libbz2.so.1.0
+del %BZIP2%\libbz2.so.1.0.8
+del %BZIP2%\bzip2.dll
+del %BZIP2%\bzip2.dll.a
 
 if not "%1" == "" goto next
 

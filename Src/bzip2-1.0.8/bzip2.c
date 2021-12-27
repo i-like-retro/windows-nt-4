@@ -1825,7 +1825,7 @@ IntNative main ( IntNative argc, Char *argv[] )
         expand filename wildcards in arg list.
    --*/
    argList = NULL;
-   addFlagsFromEnvVar ( &argList,  (Char*)"BZIP2" );
+   //addFlagsFromEnvVar ( &argList,  (Char*)"BZIP2" );
    addFlagsFromEnvVar ( &argList,  (Char*)"BZIP" );
    for (i = 1; i <= argc-1; i++)
       APPEND_FILESPEC(argList, argv[i]);

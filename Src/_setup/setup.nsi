@@ -148,6 +148,20 @@ Section "Base"
 SectionEnd
 
 SectionGroup /e "!Core"
+    Section "bzip2-1.0.8" BZIP2
+        SectionIn 1 2
+        SetOutPath "$INSTDIR\bin"
+        File /oname=bzip2.exe "..\bzip2-1.0.8\bzip2-shared.exe"
+        File "..\bzip2-1.0.8\bzip2.dll"
+        File "..\bzip2-1.0.8\bzip2recover.exe"
+    SectionEnd
+    Section "bzip2-1.0.8-devel" BZIP2_DEVEL
+        SectionIn 2
+        SetOutPath "$INSTDIR\lib"
+        File "..\bzip2-1.0.8\libbz2.def"
+        File /oname=libbz2.a "..\bzip2-1.0.8\bzip2.dll.a"
+        File /oname=libbz2-static.a "..\bzip2-1.0.8\libbz2.a"
+    SectionEnd
     Section "curl-7.80.0" CURL
         SectionIn 1 2
         SetOutPath "$INSTDIR\bin"
@@ -307,6 +321,8 @@ SectionGroup /e "!Core"
     SectionEnd
 SectionGroupEnd
 
+Var BZIP2
+Var BZIP2_DEVEL
 Var CURL
 Var CURL_DEVEL
 Var LESS
@@ -349,6 +365,8 @@ Var ZLIB_DEVEL
 !macroend
 
 Function .onSelChange
+    StrCpy $BZIP2               "NO"
+    StrCpy $BZIP2_DEVEL         "NO"
     StrCpy $CURL                "NO"
     StrCpy $CURL_DEVEL          "NO"
     StrCpy $LESS                "NO"
@@ -365,6 +383,7 @@ Function .onSelChange
     StrCpy $ZLIB                "NO"
     StrCpy $ZLIB_DEVEL          "NO"
 
+    !insertmacro Depends        ${BZIP2_DEVEL}      $BZIP2_DEVEL        $BZIP2
     !insertmacro Depends        ${CURL_DEVEL}       $CURL_DEVEL         $CURL
     !insertmacro Depends        ${EXPAT_DEVEL}      $EXPAT_DEVEL        $EXPAT
     !insertmacro Depends        ${NCURSES_DEVEL}    $NCURSES_DEVEL      $NCURSES
@@ -382,6 +401,8 @@ Function .onSelChange
     !insertmacro Depends        ${LIBSSH2}          $LIBSSH2            $ZLIB
     !insertmacro Depends        ${OPENSSL}          $OPENSSL            $ZLIB
 
+    !insertmacro MaybeNeeded    ${BZIP2}            $BZIP2
+    !insertmacro MaybeNeeded    ${BZIP2_DEVEL}      $BZIP2_DEVEL
     !insertmacro MaybeNeeded    ${CURL}             $CURL
     !insertmacro MaybeNeeded    ${CURL_DEVEL}       $CURL_DEVEL
     !insertmacro MaybeNeeded    ${LESS}             $LESS

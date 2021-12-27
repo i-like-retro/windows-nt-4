@@ -23,8 +23,8 @@
 
 SHELL=/bin/sh
 CC=gcc
-BIGFILES=-D_FILE_OFFSET_BITS=64
-CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
+BIGFILES=-D_FILE_OFFSET_BITS=64 -DWIN32
+CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES) -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -Wl,--build-id=none -Wl,-s
 
 OBJS= blocksort.o  \
       huffman.o    \
@@ -35,13 +35,11 @@ OBJS= blocksort.o  \
       bzlib.o
 
 all: $(OBJS)
-	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.8 $(OBJS)
-	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c libbz2.so.1.0.8
-	rm -f libbz2.so.1.0
-	ln -s libbz2.so.1.0.8 libbz2.so.1.0
+	$(CC) -shared -Wl,-out-implib=bzip2.dll.a -o bzip2.dll $(OBJS)
+	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c bzip2.dll
 
 clean: 
-	rm -f $(OBJS) bzip2.o libbz2.so.1.0.8 libbz2.so.1.0 bzip2-shared
+	rm -f $(OBJS) bzip2.o libbz2.so.1.0.8 libbz2.so.1.0 bzip2-shared bzip2.dll
 
 blocksort.o: blocksort.c
 	$(CC) $(CFLAGS) -c blocksort.c

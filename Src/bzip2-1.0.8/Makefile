@@ -20,8 +20,8 @@ AR=ar
 RANLIB=ranlib
 LDFLAGS=
 
-BIGFILES=-D_FILE_OFFSET_BITS=64
-CFLAGS=-Wall -Winline -O2 -g $(BIGFILES)
+BIGFILES=-D_FILE_OFFSET_BITS=64 -DWIN32
+CFLAGS=-Wall -Winline -O2 -g $(BIGFILES) -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -Wl,--build-id=none -Wl,-s
 
 # Where you want it installed when you do 'make install'
 PREFIX=/usr/local

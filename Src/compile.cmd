@@ -4,6 +4,7 @@ setlocal
 set BASEDIR=%~dp0
 
 set ZLIB=%BASEDIR%zlib-1.2.11
+set BZIP2=%BASEDIR%bzip2-1.0.8
 set OPENSSL=%BASEDIR%openssl-1.1.1m
 set LIBSSH2=%BASEDIR%libssh2-1.10.0
 set CURL=%BASEDIR%curl-7.80.0
@@ -56,6 +57,20 @@ cmake -G "MinGW Makefiles" ^
     %ZLIB%
 if errorlevel 1 goto error
 mingw32-make -j 4
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem =======
+rem  BZIP2
+rem =======
+:bzip2
+
+cd %BZIP2%
+
+mingw32-make -j 4 -f Makefile
+if errorlevel 1 goto error
+mingw32-make -j 4 -f Makefile-libbz2_so
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next
