@@ -24,7 +24,7 @@
 SHELL=/bin/sh
 CC=gcc
 BIGFILES=-D_FILE_OFFSET_BITS=64 -DWIN32
-CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES) -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -Wl,--build-id=none -Wl,-s
+CFLAGS=-Wall -Winline -O2 -g $(BIGFILES) -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -Wl,--build-id=none -Wl,-s
 
 OBJS= blocksort.o  \
       huffman.o    \
@@ -35,7 +35,7 @@ OBJS= blocksort.o  \
       bzlib.o
 
 all: $(OBJS)
-	$(CC) -shared -Wl,-out-implib=bzip2.dll.a -o bzip2.dll $(OBJS)
+	$(CC) $(CFLAGS) -shared -Wl,-out-implib=bzip2.dll.a -o bzip2.dll $(OBJS)
 	$(CC) $(CFLAGS) -o bzip2-shared bzip2.c bzip2.dll
 
 clean: 
