@@ -268,6 +268,8 @@ rem =========
 cd %NCURSES%
 if errorlevel 1 goto error
 
+rmdir %NCURSES%\misc\_terminfo_
+
 sh configure ^
     MAKE=mingw32-make ^
     CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -I%PCRE2%/src" ^
@@ -275,14 +277,27 @@ sh configure ^
     --without-ada ^
     --without-manpages ^
     --without-debug ^
+    --without-cxx-binding ^
+    --without-tests ^
     --with-pcre2 ^
     --with-shared ^
+    --with-trace ^
     --with-panel-libname=pane ^
+    --disable-exp-win32 ^
+    --disable-home-terminfo ^
+    --disable-getcap ^
+    --disable-termcap ^
+    --disable-hard-tabs ^
+    --disable-leaks ^
+    --enable-opaque-curses ^
+    --enable-opaque-form ^
+    --enable-opaque-menu ^
+    --enable-opaque-panel ^
+    --enable-database ^
+    --enable-sp-funcs ^
     --enable-term-driver ^
     --enable-fvisibility ^
-    --disable-exp-win32 ^
-    --without-cxx-binding ^
-    --without-tests
+    --enable-interop
 if errorlevel 1 goto error
 mingw32-make -j 4
 if errorlevel 1 goto error
