@@ -177,6 +177,27 @@ SectionGroup /e "!Core"
         SetOutPath "$INSTDIR\include\curl"
         File "..\curl-7.80.0\include\curl\*.h"
     SectionEnd
+    Section "iconv-1.16" ICONV
+        SectionIn 1 2
+        SetOutPath "$INSTDIR\bin"
+        File "..\libiconv-1.16\src\.libs\iconv.exe"
+        File "..\libiconv-1.16\lib\.libs\iconv.dll"
+        File "..\libiconv-1.16\libcharset\lib\.libs\charset.dll"
+    SectionEnd
+    Section "iconv-1.16-devel" ICONV_DEVEL
+        SectionIn 2
+        SetOutPath "$INSTDIR\lib"
+        File "..\libiconv-1.16\lib\libiconv.def"
+        File "..\libiconv-1.16\lib\libiconv.dll.a"
+        File "..\libiconv-1.16\libcharset\lib\libcharset.def"
+        File "..\libiconv-1.16\libcharset\lib\libcharset.dll.a"
+        File /oname=libiconv-static.a "..\libiconv-1.16\lib\.libs\libiconv.a"
+        File /oname=libcharset-static.a "..\libiconv-1.16\lib\.libs\libcharset.a"
+        SetOutPath "$INSTDIR\include"
+        File "..\libiconv-1.16\libcharset\include\libcharset.h"
+        File "..\libiconv-1.16\libcharset\include\localcharset.h"
+        File "..\libiconv-1.16\include\iconv.h"
+    SectionEnd
     Section "less-590" LESS
         SectionIn 2
         SetOutPath "$INSTDIR\bin"
@@ -325,6 +346,8 @@ Var BZIP2
 Var BZIP2_DEVEL
 Var CURL
 Var CURL_DEVEL
+Var ICONV
+Var ICONV_DEVEL
 Var LESS
 Var EXPAT
 Var EXPAT_DEVEL
@@ -369,6 +392,8 @@ Function .onSelChange
     StrCpy $BZIP2_DEVEL         "NO"
     StrCpy $CURL                "NO"
     StrCpy $CURL_DEVEL          "NO"
+    StrCpy $ICONV               "NO"
+    StrCpy $ICONV_DEVEL         "NO"
     StrCpy $LESS                "NO"
     StrCpy $EXPAT               "NO"
     StrCpy $EXPAT_DEVEL         "NO"
@@ -385,6 +410,7 @@ Function .onSelChange
 
     !insertmacro Depends        ${BZIP2_DEVEL}      $BZIP2_DEVEL        $BZIP2
     !insertmacro Depends        ${CURL_DEVEL}       $CURL_DEVEL         $CURL
+    !insertmacro Depends        ${ICONV_DEVEL}      $ICONV_DEVEL        $ICONV
     !insertmacro Depends        ${EXPAT_DEVEL}      $EXPAT_DEVEL        $EXPAT
     !insertmacro Depends        ${NCURSES_DEVEL}    $NCURSES_DEVEL      $NCURSES
     !insertmacro Depends        ${LIBPCRE2_DEVEL}   $LIBPCRE2_DEVEL     $LIBPCRE2
@@ -405,6 +431,8 @@ Function .onSelChange
     !insertmacro MaybeNeeded    ${BZIP2_DEVEL}      $BZIP2_DEVEL
     !insertmacro MaybeNeeded    ${CURL}             $CURL
     !insertmacro MaybeNeeded    ${CURL_DEVEL}       $CURL_DEVEL
+    !insertmacro MaybeNeeded    ${ICONV}            $ICONV
+    !insertmacro MaybeNeeded    ${ICONV_DEVEL}      $ICONV_DEVEL
     !insertmacro MaybeNeeded    ${LESS}             $LESS
     !insertmacro MaybeNeeded    ${EXPAT}            $EXPAT
     !insertmacro MaybeNeeded    ${EXPAT_DEVEL}      $EXPAT_DEVEL

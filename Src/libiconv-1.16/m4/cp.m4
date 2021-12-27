@@ -12,7 +12,7 @@ AC_PREREQ(2.13)
 AC_DEFUN([CL_PROG_CP],
 [AC_CACHE_CHECK(how to copy files, cl_cv_prog_cp, [
 echo "blabla" > conftest.x
-err=`/bin/sh -c "cp -p conftest.x conftest.y 2>&1"`
+err=`sh -c "cp -p conftest.x conftest.y 2>&1"`
 if test -z "$err"; then
   cl_cv_prog_cp='cp -p'
 else

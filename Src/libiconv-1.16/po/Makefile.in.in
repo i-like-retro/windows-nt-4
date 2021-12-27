@@ -40,8 +40,8 @@ INSTALL_DATA = @INSTALL_DATA@
 # versions, $(mkinstalldirs) and $(install_sh) are unused.
 mkinstalldirs = $(SHELL) @install_sh@ -d
 install_sh = $(SHELL) @install_sh@
-MKDIR_P = @MKDIR_P@
-mkdir_p = @mkdir_p@
+MKDIR_P = mkdir -p
+mkdir_p = mkdir -p
 
 # When building gettext-tools, we prefer to use the built programs
 # rather than installed programs.  However, we can't do that when we

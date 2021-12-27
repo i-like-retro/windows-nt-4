@@ -7,6 +7,7 @@ set ZLIB=%BASEDIR%zlib-1.2.11
 set BZIP2=%BASEDIR%bzip2-1.0.8
 set OPENSSL=%BASEDIR%openssl-1.1.1m
 set LIBSSH2=%BASEDIR%libssh2-1.10.0
+set ICONV=libiconv-1.16
 set CURL=%BASEDIR%curl-7.80.0
 set EXPAT=%BASEDIR%expat-2.4.2
 set NCURSES=%BASEDIR%ncurses-6.3
@@ -135,6 +136,35 @@ cmake -G "MinGW Makefiles" ^
     %LIBSSH2%
 if errorlevel 1 goto error
 mingw32-make -j 4
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem =======
+rem  ICONV
+rem =======
+:iconv
+
+cd %ICONV%
+if errorlevel 1 goto error
+
+sh configure ^
+    --build=i586-mingw32msvc ^
+    --host=i586-mingw32msvc ^
+    --target=i586-mingw32msvc ^
+    --enable-static=yes ^
+    --enable-shared=yes ^
+    --disable-fast-install ^
+    --disable-nls ^
+    MAKE=mingw32-make ^
+    CFLAGS="-march=i586 -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables" ^
+    LDFLAGS="-Wl,--build-id=none -Wl,-s" ^
+if errorlevel 1 goto error
+mingw32-make
+if errorlevel 1 goto error
+cd src
+if errorlevel 1 goto error
+mingw32-make install
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

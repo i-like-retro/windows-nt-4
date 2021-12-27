@@ -480,7 +480,7 @@ relocate (const char *pathname)
          to curr_prefix, 2. unlike the program, it has not moved away from
          orig_prefix.  */
       const char *orig_installprefix = INSTALLPREFIX;
-      const char *orig_installdir = INSTALLDIR;
+      const char *orig_installdir = "C:/Program Files/GNU/lib";//INSTALLDIR;
       char *curr_prefix_better;
 
       curr_prefix_better =

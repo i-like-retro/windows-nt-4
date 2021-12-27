@@ -77,7 +77,7 @@ AC_REQUIRE([LTVERSION_VERSION])dnl
 AC_REQUIRE([LTOBSOLETE_VERSION])dnl
 m4_require([_LT_PROG_LTMAIN])dnl
 
-_LT_SHELL_INIT([SHELL=${CONFIG_SHELL-/bin/sh}])
+_LT_SHELL_INIT([SHELL=${CONFIG_SHELL-sh}])
 
 dnl Parse OPTIONS
 _LT_SET_OPTIONS([$0], [$1])
@@ -1774,7 +1774,7 @@ AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
       for i in 1 2 3 4 5 6 7 8; do
         teststring=$teststring$teststring
       done
-      SHELL=${SHELL-${CONFIG_SHELL-/bin/sh}}
+      SHELL=${SHELL-${CONFIG_SHELL-sh}}
       # If test is not a shell built-in, we'll probably end up computing a
       # maximum length that is only half of the actual maximum length, but
       # we can't tell.
@@ -5110,7 +5110,7 @@ _LT_EOF
       _LT_TAGVAR(exclude_expsyms, $1)=['[_]+GLOBAL_OFFSET_TABLE_|[_]+GLOBAL__[FID]_.*|[_]+head_[A-Za-z0-9_]+_dll|[A-Za-z0-9_]+_dll_iname']
 
       if $LD --help 2>&1 | $GREP 'auto-import' > /dev/null; then
-        _LT_TAGVAR(archive_cmds, $1)='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+        _LT_TAGVAR(archive_cmds, $1)='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base'
 	# If the export-symbols file already is a .def file, use it as
 	# is; otherwise, prepend EXPORTS...
 	_LT_TAGVAR(archive_expsym_cmds, $1)='if _LT_DLL_DEF_P([$export_symbols]); then
@@ -5119,7 +5119,7 @@ _LT_EOF
           echo EXPORTS > $output_objdir/$soname.def;
           cat $export_symbols >> $output_objdir/$soname.def;
         fi~
-        $CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+        $CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base'
       else
 	_LT_TAGVAR(ld_shlibs, $1)=no
       fi
@@ -6684,7 +6684,7 @@ if test yes != "$_lt_caught_CXX_error"; then
 	  _LT_TAGVAR(enable_shared_with_static_runtimes, $1)=yes
 
 	  if $LD --help 2>&1 | $GREP 'auto-import' > /dev/null; then
-	    _LT_TAGVAR(archive_cmds, $1)='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+	    _LT_TAGVAR(archive_cmds, $1)='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base'
 	    # If the export-symbols file already is a .def file, use it as
 	    # is; otherwise, prepend EXPORTS...
 	    _LT_TAGVAR(archive_expsym_cmds, $1)='if _LT_DLL_DEF_P([$export_symbols]); then
@@ -6693,7 +6693,7 @@ if test yes != "$_lt_caught_CXX_error"; then
               echo EXPORTS > $output_objdir/$soname.def;
               cat $export_symbols >> $output_objdir/$soname.def;
             fi~
-            $CC -shared -nostdlib $output_objdir/$soname.def $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+            $CC -shared -nostdlib $output_objdir/$soname.def $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base'
 	  else
 	    _LT_TAGVAR(ld_shlibs, $1)=no
 	  fi

@@ -6,6 +6,7 @@ set BZIP2=bzip2-1.0.8
 set OPENSSL=openssl-1.1.1m
 set NCURSES=ncurses-6.3
 set GIT=git-2.34.1
+set ICONV=libiconv-1.16
 set LESS=less-590
 
 cd %~dp0
@@ -1649,6 +1650,124 @@ if not "%1" == "" goto next
 :libssh2
 
 rmdir /S/Q %BUILD%\libssh2
+
+if not "%1" == "" goto next
+
+:iconv
+
+del %ICONV%\Makefile
+del %ICONV%\config.h
+del %ICONV%\config.log
+del %ICONV%\config.status
+del %ICONV%\include\iconv.h
+del %ICONV%\include\iconv.h.inst
+del %ICONV%\lib\Makefile
+del %ICONV%\lib\config.h
+del %ICONV%\lib\stamp-h2
+del %ICONV%\libcharset\Makefile
+del %ICONV%\libcharset\config.h
+del %ICONV%\libcharset\config.log
+del %ICONV%\libcharset\config.status
+del %ICONV%\libcharset\include\libcharset.h
+del %ICONV%\libcharset\include\localcharset.h
+del %ICONV%\libcharset\include\localcharset.h.inst
+del %ICONV%\libcharset\lib\Makefile
+del %ICONV%\libcharset\libtool
+del %ICONV%\libtool
+del %ICONV%\man\Makefile
+del %ICONV%\po\Makefile
+del %ICONV%\po\Makefile.in
+del %ICONV%\po\POTFILES
+del %ICONV%\src\Makefile
+del %ICONV%\srclib\Makefile
+del %ICONV%\stamp-h1
+del %ICONV%\tests\Makefile
+del %ICONV%\lib\libcharset.a
+del %ICONV%\lib\libcharset.h
+del %ICONV%\lib\libcharset.la
+del %ICONV%\lib\libcharset.so
+del %ICONV%\lib\libcharset.so.1
+del %ICONV%\lib\libcharset.so.1.0.0
+del %ICONV%\lib\localcharset.h
+del %ICONV%\libcharset\lib\libcharset.la
+del %ICONV%\libcharset\lib\localcharset.lo
+del %ICONV%\libcharset\lib\localcharset.o
+del %ICONV%\libcharset\lib\relocatable-stub.lo
+del %ICONV%\libcharset\lib\relocatable-stub.o
+del %ICONV%\lib\iconv.lo
+del %ICONV%\lib\libiconv.la
+del %ICONV%\lib\localcharset.lo
+del %ICONV%\lib\relocatable.lo
+del %ICONV%\src\iconv.o
+del %ICONV%\src\iconv_no_i18n.exe
+del %ICONV%\src\iconv_no_i18n.o
+del %ICONV%\srclib\alloca.h
+del %ICONV%\srclib\allocator.o
+del %ICONV%\srclib\areadlink.o
+del %ICONV%\srclib\basename-lgpl.o
+del %ICONV%\srclib\binary-io.o
+del %ICONV%\srclib\canonicalize-lgpl.o
+del %ICONV%\srclib\careadlinkat.o
+del %ICONV%\srclib\dirname-lgpl.o
+del %ICONV%\srclib\errno.h
+del %ICONV%\srclib\error.o
+del %ICONV%\srclib\fcntl.h
+del %ICONV%\srclib\getprogname.o
+del %ICONV%\srclib\libicrt.a
+del %ICONV%\srclib\limits.h
+del %ICONV%\srclib\malloc.o
+del %ICONV%\srclib\malloca.o
+del %ICONV%\srclib\progname.o
+del %ICONV%\srclib\raise.o
+del %ICONV%\srclib\readlink.o
+del %ICONV%\srclib\safe-read.o
+del %ICONV%\srclib\signal.h
+del %ICONV%\srclib\sigprocmask.o
+del %ICONV%\srclib\stat-time.o
+del %ICONV%\srclib\stdint.h
+del %ICONV%\srclib\stdio-write.o
+del %ICONV%\srclib\stdio.h
+del %ICONV%\srclib\stdlib.h
+del %ICONV%\srclib\strerror-override.o
+del %ICONV%\srclib\strerror.o
+del %ICONV%\srclib\string.h
+del %ICONV%\srclib\stripslash.o
+del %ICONV%\srclib\time.h
+del %ICONV%\srclib\unistd.h
+del %ICONV%\srclib\unistd.o
+del %ICONV%\srclib\unitypes.h
+del %ICONV%\srclib\uniwidth.h
+del %ICONV%\srclib\uniwidth\.dirstamp
+del %ICONV%\srclib\uniwidth\width.o
+del %ICONV%\srclib\xmalloc.o
+del %ICONV%\srclib\xreadlink.o
+del %ICONV%\srclib\xstrdup.o
+del %ICONV%\srclib\stat-w32.o
+del %ICONV%\srclib\stat.o
+del %ICONV%\src\iconv.res
+del %ICONV%\lib\iconv-exports.lo
+del %ICONV%\lib\libcharset.dll.a
+del %ICONV%\lib\libiconv.res.lo
+del %ICONV%\lib\charset.dll
+del %ICONV%\lib\iconv-exports.o
+del %ICONV%\lib\iconv.o
+del %ICONV%\lib\libiconv.res.o
+del %ICONV%\lib\localcharset.o
+del %ICONV%\lib\relocatable.o
+del %ICONV%\src\iconv.exe
+del %ICONV%\lib\libiconv.def
+del %ICONV%\libcharset\lib\libcharset.def
+del %ICONV%\confdefs.h
+del %ICONV%\conftest.c
+del %ICONV%\conftest.err
+del %ICONV%\lib\libiconv.dll.a
+del %ICONV%\libcharset\lib\libcharset.dll.a
+rmdir /S/Q %ICONV%\bin
+rmdir /S/Q %ICONV%\libcharset\lib\.libs
+rmdir /S/Q %ICONV%\srclib\sys
+rmdir /S/Q %ICONV%\lib\.libs
+rmdir /S/Q %ICONV%\src\.libs
+rmdir /S/Q %ICONV%\conftest*
 
 if not "%1" == "" goto next
 

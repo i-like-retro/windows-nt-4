@@ -281,7 +281,7 @@ $0: the script under such a shell if you do have one."
 fi
 fi
 fi
-SHELL=${CONFIG_SHELL-/bin/sh}
+SHELL=${CONFIG_SHELL-sh}
 export SHELL
 # Unset more variables known to interfere with behavior of common tools.
 CLICOLOR_FORCE= GREP_OPTIONS=
@@ -561,7 +561,7 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
 
-SHELL=${CONFIG_SHELL-/bin/sh}
+SHELL=${CONFIG_SHELL-sh}
 
 
 test -n "$DJDIR" || exec 7<&0 </dev/null
@@ -2221,7 +2221,7 @@ if eval \${ac_cv_prog_make_${ac_make}_set+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   cat >conftest.make <<\_ACEOF
-SHELL = /bin/sh
+SHELL = sh
 all:
 	@echo '@@@%%%=$(MAKE)=@@@%%%'
 _ACEOF
@@ -4369,7 +4369,7 @@ else
       for i in 1 2 3 4 5 6 7 8; do
         teststring=$teststring$teststring
       done
-      SHELL=${SHELL-${CONFIG_SHELL-/bin/sh}}
+      SHELL=${SHELL-${CONFIG_SHELL-sh}}
       # If test is not a shell built-in, we'll probably end up computing a
       # maximum length that is only half of the actual maximum length, but
       # we can't tell.
@@ -8285,6 +8285,8 @@ else
 fi
 
 fi
+lt_prog_compiler_pic=
+lt_prog_compiler_can_build_shared=yes
 
 
 
@@ -8649,7 +8651,7 @@ _LT_EOF
       exclude_expsyms='[_]+GLOBAL_OFFSET_TABLE_|[_]+GLOBAL__[FID]_.*|[_]+head_[A-Za-z0-9_]+_dll|[A-Za-z0-9_]+_dll_iname'
 
       if $LD --help 2>&1 | $GREP 'auto-import' > /dev/null; then
-        archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+        archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base'
 	# If the export-symbols file already is a .def file, use it as
 	# is; otherwise, prepend EXPORTS...
 	archive_expsym_cmds='if   test DEF = "`$SED -n     -e '\''s/^[	 ]*//'\''     -e '\''/^\(;.*\)*$/d'\''     -e '\''s/^\(EXPORTS\|LIBRARY\)\([	 ].*\)*$/DEF/p'\''     -e q     $export_symbols`" ; then
@@ -8658,7 +8660,7 @@ _LT_EOF
           echo EXPORTS > $output_objdir/$soname.def;
           cat $export_symbols >> $output_objdir/$soname.def;
         fi~
-        $CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+        $CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base'
       else
 	ld_shlibs=no
       fi
@@ -9139,7 +9141,7 @@ fi
 	    # Exported symbols can be pulled into shared objects from archives
 	    whole_archive_flag_spec='$convenience'
 	  fi
-	  archive_cmds_need_lc=yes
+	  archive_cmds_need_lc=no
 	  archive_expsym_cmds='$RM -r $output_objdir/$realname.d~$MKDIR $output_objdir/$realname.d'
 	  # -brtl affects multiple linker settings, -berok does not and is overridden later
 	  compiler_flags_filtered='`func_echo_all "$compiler_flags " | $SED -e "s%-brtl\\([, ]\\)%-berok\\1%g"`'
@@ -9825,6 +9827,8 @@ $as_echo "$lt_cv_archive_cmds_need_lc" >&6; }
   fi
   ;;
 esac
+lt_cv_archive_cmds_need_lc=no
+archive_cmds_need_lc=no
 
 
 
@@ -10246,7 +10250,9 @@ cygwin* | mingw* | pw32* | cegcc*)
       ;;
     mingw* | cegcc*)
       # MinGW DLLs use traditional 'lib' prefix
-      soname_spec='$libname`echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
+      #soname_spec='$libname`echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
+      library_names_spec='`echo $libname | sed -e 's/^lib//'`$shared_ext'
+      soname_spec='`echo $libname | sed -e 's/^lib//'`$shared_ext'
       ;;
     pw32*)
       # pw32 DLLs use 'pw' prefix rather than 'lib'
@@ -11790,7 +11796,7 @@ if ${acl_cv_libpath+:} false; then :
 else
 
     LD="$LD" \
-    ${CONFIG_SHELL-/bin/sh} "$ac_aux_dir/config.libpath" "$host" > conftest.sh
+    ${CONFIG_SHELL-sh} "$ac_aux_dir/config.libpath" "$host" > conftest.sh
     . ./conftest.sh
     rm -f ./conftest.sh
     acl_cv_libpath=${acl_cv_shlibpath_var:-none}

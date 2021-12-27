@@ -281,7 +281,7 @@ $0: the script under such a shell if you do have one."
 fi
 fi
 fi
-SHELL=${CONFIG_SHELL-/bin/sh}
+SHELL=${CONFIG_SHELL-sh}
 export SHELL
 # Unset more variables known to interfere with behavior of common tools.
 CLICOLOR_FORCE= GREP_OPTIONS=
@@ -561,7 +561,7 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
 
-SHELL=${CONFIG_SHELL-/bin/sh}
+SHELL=${CONFIG_SHELL-sh}
 
 
 test -n "$DJDIR" || exec 7<&0 </dev/null
@@ -3597,6 +3597,7 @@ fi
     MKDIR_P="$ac_install_sh -d"
   fi
 fi
+MKDIR_P='mkdir -p'
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $MKDIR_P" >&5
 $as_echo "$MKDIR_P" >&6; }
 
@@ -3650,7 +3651,7 @@ if eval \${ac_cv_prog_make_${ac_make}_set+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   cat >conftest.make <<\_ACEOF
-SHELL = /bin/sh
+SHELL = sh
 all:
 	@echo '@@@%%%=$(MAKE)=@@@%%%'
 _ACEOF
@@ -3775,7 +3776,7 @@ MAKEINFO=${MAKEINFO-"${am_missing_run}makeinfo"}
 # dies out for good.  For more background, see:
 # <https://lists.gnu.org/archive/html/automake/2012-07/msg00001.html>
 # <https://lists.gnu.org/archive/html/automake/2012-07/msg00014.html>
-mkdir_p='$(MKDIR_P)'
+mkdir_p='mkdir -p'
 
 # We need awk for the "check" target (and possibly the TAP driver).  The
 # system "awk" is bad on some platforms.
@@ -3846,7 +3847,7 @@ if eval \${ac_cv_prog_make_${ac_make}_set+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   cat >conftest.make <<\_ACEOF
-SHELL = /bin/sh
+SHELL = sh
 all:
 	@echo '@@@%%%=$(MAKE)=@@@%%%'
 _ACEOF
@@ -6895,7 +6896,7 @@ else
       for i in 1 2 3 4 5 6 7 8; do
         teststring=$teststring$teststring
       done
-      SHELL=${SHELL-${CONFIG_SHELL-/bin/sh}}
+      SHELL=${SHELL-${CONFIG_SHELL-sh}}
       # If test is not a shell built-in, we'll probably end up computing a
       # maximum length that is only half of the actual maximum length, but
       # we can't tell.
@@ -10768,8 +10769,8 @@ else
 fi
 
 fi
-
-
+lt_prog_compiler_pic=
+lt_prog_compiler_can_build_shared=yes
 
 
 
@@ -11132,7 +11133,7 @@ _LT_EOF
       exclude_expsyms='[_]+GLOBAL_OFFSET_TABLE_|[_]+GLOBAL__[FID]_.*|[_]+head_[A-Za-z0-9_]+_dll|[A-Za-z0-9_]+_dll_iname'
 
       if $LD --help 2>&1 | $GREP 'auto-import' > /dev/null; then
-        archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+        archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base'
 	# If the export-symbols file already is a .def file, use it as
 	# is; otherwise, prepend EXPORTS...
 	archive_expsym_cmds='if   test DEF = "`$SED -n     -e '\''s/^[	 ]*//'\''     -e '\''/^\(;.*\)*$/d'\''     -e '\''s/^\(EXPORTS\|LIBRARY\)\([	 ].*\)*$/DEF/p'\''     -e q     $export_symbols`" ; then
@@ -11141,7 +11142,7 @@ _LT_EOF
           echo EXPORTS > $output_objdir/$soname.def;
           cat $export_symbols >> $output_objdir/$soname.def;
         fi~
-        $CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+        $CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base'
       else
 	ld_shlibs=no
       fi
@@ -12308,7 +12309,8 @@ $as_echo "$lt_cv_archive_cmds_need_lc" >&6; }
   fi
   ;;
 esac
-
+lt_cv_archive_cmds_need_lc=no
+archive_cmds_need_lc=no
 
 
 
@@ -12729,7 +12731,9 @@ cygwin* | mingw* | pw32* | cegcc*)
       ;;
     mingw* | cegcc*)
       # MinGW DLLs use traditional 'lib' prefix
-      soname_spec='$libname`echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
+      #soname_spec='$libname`echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
+      library_names_spec='`echo $libname | sed -e 's/^lib//'`$shared_ext'
+      soname_spec='`echo $libname | sed -e 's/^lib//'`$shared_ext'
       ;;
     pw32*)
       # pw32 DLLs use 'pw' prefix rather than 'lib'
@@ -14273,7 +14277,7 @@ if ${acl_cv_libpath+:} false; then :
 else
 
     LD="$LD" \
-    ${CONFIG_SHELL-/bin/sh} "$ac_aux_dir/config.libpath" "$host" > conftest.sh
+    ${CONFIG_SHELL-sh} "$ac_aux_dir/config.libpath" "$host" > conftest.sh
     . ./conftest.sh
     rm -f ./conftest.sh
     acl_cv_libpath=${acl_cv_shlibpath_var:-none}
@@ -14441,6 +14445,7 @@ else
   RELOCATABLE_VIA_LD_FALSE=
 fi
 
+use_wrapper=no
    if test $use_wrapper = yes; then
   RELOCATABLE_VIA_WRAPPER_TRUE=
   RELOCATABLE_VIA_WRAPPER_FALSE='#'
@@ -14489,7 +14494,7 @@ if ${cl_cv_prog_cp+:} false; then :
 else
 
 echo "blabla" > conftest.x
-err=`/bin/sh -c "cp -p conftest.x conftest.y 2>&1"`
+err=`sh -c "cp -p conftest.x conftest.y 2>&1"`
 if test -z "$err"; then
   cl_cv_prog_cp='cp -p'
 else
@@ -14920,7 +14925,7 @@ if ${acl_cv_rpath+:} false; then :
 else
 
     CC="$CC" GCC="$GCC" LDFLAGS="$LDFLAGS" LD="$LD" with_gnu_ld="$with_gnu_ld" \
-    ${CONFIG_SHELL-/bin/sh} "$ac_aux_dir/config.rpath" "$host" > conftest.sh
+    ${CONFIG_SHELL-sh} "$ac_aux_dir/config.rpath" "$host" > conftest.sh
     . ./conftest.sh
     rm -f ./conftest.sh
     acl_cv_rpath=done
@@ -25403,7 +25408,7 @@ gives unlimited permission to copy, distribute and modify it."
 ac_pwd='$ac_pwd'
 srcdir='$srcdir'
 INSTALL='$INSTALL'
-MKDIR_P='$MKDIR_P'
+MKDIR_P='mkdir -p'
 AWK='$AWK'
 test -n "\$AWK" || AWK=awk
 _ACEOF
@@ -26348,7 +26353,7 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
   [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
   *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
   esac
-  ac_MKDIR_P=$MKDIR_P
+  ac_MKDIR_P='mkdir -p'
   case $MKDIR_P in
   [\\/$]* | ?:[\\/]* ) ;;
   */*) ac_MKDIR_P=$ac_top_build_prefix$MKDIR_P ;;
