@@ -4,7 +4,9 @@
 /ncurses-6.3/conf*.src
 /ncurses-6.3/conftest.c
 /ncurses-6.3/conftest.err
+/ncurses-6.3/conftest.er1
 /ncurses-6.3/conftest.exe
+/ncurses-6.3/conftest*
 /ncurses-6.3/Makefile
 /ncurses-6.3/c++/Makefile
 /ncurses-6.3/config.log

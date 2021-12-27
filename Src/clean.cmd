@@ -1646,7 +1646,9 @@ if not "%1" == "" goto next
 del %NCURSES%\conf*.src
 del %NCURSES%\conftest.c
 del %NCURSES%\conftest.err
+del %NCURSES%\conftest.er1
 del %NCURSES%\conftest.exe
+del %NCURSES%\conftest*
 del %NCURSES%\Makefile
 del %NCURSES%\c++\Makefile
 del %NCURSES%\config.log
