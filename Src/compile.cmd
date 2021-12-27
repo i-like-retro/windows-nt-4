@@ -225,8 +225,8 @@ if errorlevel 1 goto error
 
 sh configure ^
     MAKE=mingw32-make ^
-    CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -I%PCRE%2/src" ^
-    LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%BUILD%/pcre2" ^
+    CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -I%PCRE2%/src" ^
+    LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%BUILD:\=/%/pcre2" ^
     --without-ada ^
     --without-manpages ^
     --without-debug ^
@@ -255,10 +255,10 @@ cd %LESS%
 if errorlevel 1 goto error
 
 sh configure ^
-    CFLAGS="-march=i586 -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -I%NCURSES%/include -I%BUILD%/pcre2 -I%~dp0termios" ^
+    CFLAGS="-march=i586 -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -I%NCURSES%/include -I%BUILD%/pcre2" ^
     LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%NCURSES%/lib -Wl,-L%BUILD%/pcre2" ^
 if errorlevel 1 goto error
-mingw32-make
+mingw32-make -j 4
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

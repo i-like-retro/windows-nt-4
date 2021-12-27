@@ -498,7 +498,7 @@ Try \`$0 --help' for more information." >&2
 
   *)
     # FIXME: should be removed in autoconf 3.0.
-    echo "$as_me: WARNING: you should use --build, --host, --target" >&2
+    echo "$as_me: WARNING: ($ac_option) you should use --build, --host, --target" >&2
     expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/dev/null &&
       echo "$as_me: WARNING: invalid host type: $ac_option" >&2
     : "${build_alias=$ac_option}" "${host_alias=$ac_option}" "${target_alias=$ac_option}"
@@ -8995,7 +8995,7 @@ XTERM_KBS=$with_xterm_kbs
 
 MAKE_TERMINFO=
 if test "$use_database" = no ; then
-	TERMINFO="${datadir}/terminfo"
+	TERMINFO="_terminfo_"
 	MAKE_TERMINFO="#"
 else
 
@@ -9007,7 +9007,7 @@ if test "${with_terminfo_dirs+set}" = set; then
   withval="$with_terminfo_dirs"
 
 else
-  withval=${TERMINFO_DIRS:-${datadir}/terminfo}
+  withval=${TERMINFO_DIRS:-_terminfo_}
 fi;
 IFS="${IFS:- 	}"; ac_save_ifs="$IFS"; IFS="${PATH_SEPARATOR}"
 cf_dst_path=
@@ -9039,9 +9039,9 @@ case ".$cf_src_path" in
 	cf_src_path=`echo "$cf_src_path" | sed -e s%NONE%$cf_path_syntax%`
 	;;
 (*)
-	{ { echo "$as_me:9040: error: expected a pathname, not \"$cf_src_path\"" >&5
-echo "$as_me: error: expected a pathname, not \"$cf_src_path\"" >&2;}
-   { (exit 1); exit 1; }; }
+	#{ { echo "$as_me:9040: error: expected a pathname, not \"$cf_src_path\"" >&5
+#echo "$as_me: error: expected a pathname, not \"$cf_src_path\"" >&2;}
+   #{ (exit 1); exit 1; }; }
 	;;
 esac
 
@@ -9066,7 +9066,7 @@ echo "$as_me:9063: result: $TERMINFO_DIRS" >&5
 echo "${ECHO_T}$TERMINFO_DIRS" >&6
 test -n "$TERMINFO_DIRS" &&
 cat >>confdefs.h <<EOF
-#define TERMINFO_DIRS "$TERMINFO_DIRS"
+#define TERMINFO_DIRS "C:/Program Files/GNU/share/terminfo"
 EOF
 
 case "x$TERMINFO" in
@@ -9085,8 +9085,8 @@ if test "${with_default_terminfo_dir+set}" = set; then
   withval="$with_default_terminfo_dir"
 
 else
-  withval="${TERMINFO:-${datadir}/terminfo}"
-fi; if test -n "${datadir}/terminfo" ; then
+  withval="${TERMINFO:-_terminfo_}"
+fi; if test -n "_terminfo_" ; then
 
 if test "x$prefix" != xNONE; then
 	cf_path_syntax="$prefix"
@@ -9113,20 +9113,20 @@ case ".$withval" in
 	withval=`echo "$withval" | sed -e s%NONE%$cf_path_syntax%`
 	;;
 (*)
-	{ { echo "$as_me:9114: error: expected a pathname, not \"$withval\"" >&5
-echo "$as_me: error: expected a pathname, not \"$withval\"" >&2;}
-   { (exit 1); exit 1; }; }
+	#{ { echo "$as_me:9114: error: expected a pathname, not \"$withval\"" >&5
+#echo "$as_me: error: expected a pathname, not \"$withval\"" >&2;}
+   #{ (exit 1); exit 1; }; }
 	;;
 esac
 
 fi
-eval TERMINFO="$withval"
+eval TERMINFO="_terminfo_"
 
 echo "$as_me:9123: result: $TERMINFO" >&5
 echo "${ECHO_T}$TERMINFO" >&6
 
 cat >>confdefs.h <<EOF
-#define TERMINFO "$TERMINFO"
+#define TERMINFO "C:/Program Files/GNU/share/terminfo"
 EOF
 
 fi
@@ -9264,7 +9264,7 @@ if test "${with_termpath+set}" = set; then
   withval="$with_termpath"
 
 else
-  withval=${TERMPATH:-/etc/termcap:/usr/share/misc/termcap}
+  withval=${TERMPATH:-_termcap_}
 fi;
 IFS="${IFS:- 	}"; ac_save_ifs="$IFS"; IFS="${PATH_SEPARATOR}"
 cf_dst_path=
@@ -9296,9 +9296,9 @@ case ".$cf_src_path" in
 	cf_src_path=`echo "$cf_src_path" | sed -e s%NONE%$cf_path_syntax%`
 	;;
 (*)
-	{ { echo "$as_me:9297: error: expected a pathname, not \"$cf_src_path\"" >&5
-echo "$as_me: error: expected a pathname, not \"$cf_src_path\"" >&2;}
-   { (exit 1); exit 1; }; }
+	#{ { echo "$as_me:9297: error: expected a pathname, not \"$cf_src_path\"" >&5
+#echo "$as_me: error: expected a pathname, not \"$cf_src_path\"" >&2;}
+   #{ (exit 1); exit 1; }; }
 	;;
 esac
 
@@ -9323,7 +9323,7 @@ esac
 echo "${ECHO_T}$TERMPATH" >&6
 	test -n "$TERMPATH" &&
 cat >>confdefs.h <<EOF
-#define TERMPATH "$TERMPATH"
+#define TERMPATH "C:/Program Files/GNU/share/misc/termcap"
 EOF
 
 	###	use option --enable-getcap to use a hacked getcap for reading termcaps
@@ -14727,7 +14727,7 @@ NCURSES_MINOR="$NCURSES_MINOR"
 NCURSES_PATCH="$NCURSES_PATCH"
 
 NCURSES_OSPEED="$NCURSES_OSPEED"
-TERMINFO="$TERMINFO"
+TERMINFO="_terminfo_"
 
 INSTALL="$INSTALL"
 INSTALL_DATA="$INSTALL_DATA"
@@ -19790,6 +19790,7 @@ fi
 
 fi
 
+cf_regex_func="yes"
 if test "$cf_regex_func" = no ; then
 	{ echo "$as_me:19792: WARNING: cannot find regular expression library" >&5
 echo "$as_me: WARNING: cannot find regular expression library" >&2;}
@@ -19804,7 +19805,7 @@ else
 cf_cv_regex_hdrs=no
 case "$cf_regex_func" in
 (compile)
-	for cf_regex_hdr in regexp.h regexpr.h
+	for cf_regex_hdr in regexp.h regexpr.h pcre2posix.h
 	do
 		cat >"conftest.$ac_ext" <<_ACEOF
 #line 19808 "configure"
@@ -19847,7 +19848,7 @@ rm -f "conftest.$ac_objext" "conftest$ac_exeext" "conftest.$ac_ext"
 	done
 	;;
 (*)
-	for cf_regex_hdr in regex.h
+	for cf_regex_hdr in pcre2posix.h regex.h
 	do
 		cat >"conftest.$ac_ext" <<_ACEOF
 #line 19851 "configure"
@@ -30103,8 +30104,7 @@ eval cf_libname="\$${cf_map_lib_basename}_NAME"
 					cf_cygsuf=`echo "$cf_suffix" | sed -e 's/\.dll/\${ABI_VERSION}.dll/'`
 					cf_add_lib="../lib/cyg${cf_libname}${cf_cygsuf}"
 					;;
-				(msysdll)
-				(mingw)
+				(mingw|msysdll)
 					if test "$cf_libname" = ncurses ; then
 						cf_cygsuf=`echo "$cf_suffix" | sed -e 's/\.dll/\${ABI_VERSION}.dll/'`
 						cf_add_lib="../lib/${cf_libname}${cf_cygsuf}"

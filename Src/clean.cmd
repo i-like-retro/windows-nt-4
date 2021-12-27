@@ -1643,6 +1643,10 @@ if not "%1" == "" goto next
 
 :ncurses
 
+del %NCURSES%\conf*.src
+del %NCURSES%\conftest.c
+del %NCURSES%\conftest.err
+del %NCURSES%\conftest.exe
 del %NCURSES%\Makefile
 del %NCURSES%\c++\Makefile
 del %NCURSES%\config.log
@@ -1793,6 +1797,9 @@ del %NCURSES%\test\testscanw.exe
 del %NCURSES%\test\view.exe
 del %NCURSES%\test\worm.exe
 del %NCURSES%\test\xmas.exe
+rmdir /S/Q %NCURSES%\misc\tabset\_tabset_
+rmdir /S/Q %NCURSES%\misc\_terminfo_
+rmdir /S/Q %NCURSES%\misc\_tabset_
 rmdir /S/Q %NCURSES%\lib
 rmdir /S/Q %NCURSES%\obj_g
 rmdir /S/Q %NCURSES%\objects

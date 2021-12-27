@@ -190,6 +190,10 @@ SectionGroup /e "!Core"
         File "..\ncurses-6.3\lib\libmenu6.dll"
         File "..\ncurses-6.3\lib\libpane6.dll"
         File "..\ncurses-6.3\lib\ncurses6.dll"
+        SetOutPath "$INSTDIR\share\terminfo"
+        File /r "..\ncurses-6.3\misc\_terminfo_\*"
+        SetOutPath "$INSTDIR\share\tabset"
+        File /r "..\ncurses-6.3\misc\tabset\_tabset_\*"
     SectionEnd
     Section "libncurses-6.3-devel" NCURSES_DEVEL
         SectionIn 2

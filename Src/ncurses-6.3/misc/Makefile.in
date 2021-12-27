@@ -63,7 +63,7 @@ includesubdir	= @includesubdir@
 
 INCLUDEDIR	= $(DESTDIR)$(includedir)$(includesubdir)
 
-tabsetdir	= $(datadir)/tabset
+tabsetdir	= _tabset_
 ticdir		= @TERMINFO@
 ticfile		= $(ticdir).db
 source		= @TERMINFO_SRC@

@@ -903,7 +903,7 @@ main(int argc, char *argv[])
     } else {
 	if (infodump == TRUE) {
 	    /* captoinfo's no-argument case */
-	    source_file = "/etc/termcap";
+	    source_file = "_termcap_";
 	    if ((termcap = getenv("TERMCAP")) != 0
 		&& (namelst = make_namelist(getenv("TERM"))) != 0) {
 		if (access(termcap, F_OK) == 0) {

@@ -47,12 +47,12 @@ linux_dft=linux2.2
 
 # If we're not installing into /usr/share/, we'll have to adjust the location
 # of the tabset files in terminfo.src (which are in a parallel directory).
-TABSET=${datadir}/tabset
-if test "x$TABSET" != "x/usr/share/tabset" ; then
-cat <<EOF
-s%/usr/share/tabset%$TABSET%g
-EOF
-fi
+TABSET=_tabset_
+#if test "x$TABSET" != "x/usr/share/tabset" ; then
+#cat <<EOF
+#s%/usr/share/tabset%$TABSET%g
+#EOF
+#fi
 
 if test "$WHICH_XTERM" != "xterm-new" ; then
 echo "** using $WHICH_XTERM terminal description for XTerm entry" >&2

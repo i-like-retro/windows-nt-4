@@ -53,7 +53,7 @@ exec_prefix	= @exec_prefix@
 datarootdir	= @datarootdir@
 
 bindir		= @bindir@
-ticdir		= @TERMINFO@
+ticdir		= _terminfo_
 includedir	= @includedir@
 includesubdir	= @includesubdir@
 libdir		= @libdir@

@@ -222,7 +222,7 @@ _nc_tic_dir(const char *path)
 	    }
 	}
     }
-    return TicDirectory ? TicDirectory : TERMINFO;
+    return TicDirectory ? TicDirectory : "C:/Program Files/GNU/usr/share/terminfo";//TERMINFO;
 }
 
 /*
@@ -305,15 +305,15 @@ _nc_first_db(DBDIRS * state, int *offset)
 
 #if NCURSES_USE_DATABASE
 #ifdef TERMINFO_DIRS
-	values[dbdCfgList] = TERMINFO_DIRS;
+	values[dbdCfgList] = "C:/Program Files/GNU/usr/share/terminfo";//TERMINFO_DIRS;
 #endif
 #ifdef TERMINFO
-	values[dbdCfgOnce] = TERMINFO;
+	values[dbdCfgOnce] = "C:/Program Files/GNU/usr/share/terminfo";//TERMINFO;
 #endif
 #endif
 
 #if NCURSES_USE_TERMCAP
-	values[dbdCfgList2] = TERMPATH;
+	values[dbdCfgList2] = "C:/Program Files/GNU/usr/share/misc/termcap";//TERMPATH;
 #endif
 
 	if (use_terminfo_vars()) {
@@ -376,7 +376,7 @@ _nc_first_db(DBDIRS * state, int *offset)
 		for (j = 0; my_list[j] != 0; ++j) {
 #ifdef TERMINFO
 		    if (*my_list[j] == '\0')
-			my_list[j] = strdup(TERMINFO);
+			my_list[j] = strdup("C:/Program Files/GNU/usr/share/terminfo");//TERMINFO);
 #endif
 		    trim_formatting(my_list[j]);
 		    for (k = 0; k < j; ++k) {

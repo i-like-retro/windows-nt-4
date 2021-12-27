@@ -37,6 +37,9 @@
 
 MODULE_ID("$Id: fty_regex.c,v 1.33 2021/08/14 15:01:52 tom Exp $")
 
+#undef HAVE_REGEX_H_FUNCS
+#define HAVE_REGEX_H_FUNCS 1
+
 #if HAVE_REGEX_H_FUNCS || HAVE_LIB_PCRE2	/* We prefer POSIX regex */
 
 #if HAVE_PCRE2POSIX_H
