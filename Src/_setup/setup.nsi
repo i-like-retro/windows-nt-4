@@ -215,6 +215,25 @@ SectionGroup /e "!Core"
         File "..\ncurses-6.3\panel\panel.h"
         File "..\ncurses-6.3\form\form.h"
     SectionEnd
+    Section "libpcre2-10.39" LIBPCRE2
+        SectionIn 2
+        SetOutPath "$INSTDIR\bin"
+        File "..\_build\pcre2\pcre2.dll"
+        File "..\_build\pcre2\pcre2x.dll"
+    SectionEnd
+    Section "libpcre2-10.39-devel" LIBPCRE2_DEVEL
+        SectionIn 2
+        SetOutPath "$INSTDIR\lib"
+        File /oname=libpcre2.a "..\_build\pcre2\libpcre2.dll.a"
+        File /oname=libpcre2-static.a "..\_build\pcre2\libpcre2-8.a"
+        File /oname=libpcre2.def "..\_build\pcre2\pcre2.def"
+        File /oname=libpcre2-posix.a "..\_build\pcre2\libpcre2x.dll.a"
+        File /oname=libpcre2-posix-static.a "..\_build\pcre2\libpcre2-posix.a"
+        File /oname=libpcre2-posix.def "..\_build\pcre2\pcre2x.def"
+        SetOutPath "$INSTDIR\include"
+        File "..\_build\pcre2\pcre2.h"
+        File "..\pcre2-10.39\src\pcre2posix.h"
+    SectionEnd
     Section "libssh2-1.10.0" LIBSSH2
         SectionIn 1 2
         SetOutPath "$INSTDIR\bin"
@@ -284,6 +303,8 @@ Var EXPAT
 Var EXPAT_DEVEL
 Var NCURSES
 Var NCURSES_DEVEL
+Var LIBPCRE2
+Var LIBPCRE2_DEVEL
 Var LIBSSH2
 Var LIBSSH2_DEVEL
 Var OPENSSL
@@ -323,6 +344,8 @@ Function .onSelChange
     StrCpy $EXPAT_DEVEL         "NO"
     StrCpy $NCURSES             "NO"
     StrCpy $NCURSES_DEVEL       "NO"
+    StrCpy $LIBPCRE2            "NO"
+    StrCpy $LIBPCRE2_DEVEL      "NO"
     StrCpy $LIBSSH2             "NO"
     StrCpy $LIBSSH2_DEVEL       "NO"
     StrCpy $OPENSSL             "NO"
@@ -333,6 +356,7 @@ Function .onSelChange
     !insertmacro Depends        ${CURL_DEVEL}       $CURL_DEVEL         $CURL
     !insertmacro Depends        ${EXPAT_DEVEL}      $EXPAT_DEVEL        $EXPAT
     !insertmacro Depends        ${NCURSES_DEVEL}    $NCURSES_DEVEL      $NCURSES
+    !insertmacro Depends        ${LIBPCRE2_DEVEL}   $LIBPCRE2_DEVEL     $LIBPCRE2
     !insertmacro Depends        ${LIBSSH2_DEVEL}    $LIBSSH2_DEVEL      $LIBSSH2
     !insertmacro Depends        ${OPENSSL_DEVEL}    $OPENSSL_DEVEL      $OPENSSL
     !insertmacro Depends        ${ZLIB_DEVEL}       $ZLIB_DEVEL         $ZLIB
@@ -349,6 +373,8 @@ Function .onSelChange
     !insertmacro MaybeNeeded    ${EXPAT_DEVEL}      $EXPAT_DEVEL
     !insertmacro MaybeNeeded    ${NCURSES}          $NCURSES
     !insertmacro MaybeNeeded    ${NCURSES_DEVEL}    $NCURSES_DEVEL
+    !insertmacro MaybeNeeded    ${LIBPCRE2}         $LIBPCRE2
+    !insertmacro MaybeNeeded    ${LIBPCRE2_DEVEL}   $LIBPCRE2_DEVEL
     !insertmacro MaybeNeeded    ${LIBSSH2}          $LIBSSH2
     !insertmacro MaybeNeeded    ${LIBSSH2_DEVEL}    $LIBSSH2_DEVEL
     !insertmacro MaybeNeeded    ${OPENSSL}          $OPENSSL

@@ -114,6 +114,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
 # on the command line.
 # SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s")
+
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
@@ -703,7 +706,9 @@ IF(PCRE2_BUILD_PCRE2_8)
       MACHO_CURRENT_VERSION "${LIBPCRE2_8_MACHO_CURRENT_VERSION}"
       VERSION ${LIBPCRE2_8_VERSION}
       SOVERSION ${LIBPCRE2_8_SOVERSION}
-      OUTPUT_NAME pcre2-8)
+      LINK_FLAGS "-Wl,--output-def,pcre2.def"
+      PREFIX ""
+      OUTPUT_NAME pcre2)
     SET(targets ${targets} pcre2-8-shared)
     ADD_LIBRARY(pcre2-posix-shared SHARED ${PCRE2POSIX_HEADERS} ${PCRE2POSIX_SOURCES})
     SET_TARGET_PROPERTIES(pcre2-posix-shared PROPERTIES
@@ -712,7 +717,9 @@ IF(PCRE2_BUILD_PCRE2_8)
       MACHO_CURRENT_VERSION "${LIBPCRE2_POSIX_MACHO_CURRENT_VERSION}"
       VERSION ${LIBPCRE2_POSIX_VERSION}
       SOVERSION ${LIBPCRE2_POSIX_SOVERSION}
-      OUTPUT_NAME pcre2-posix)
+      LINK_FLAGS "-Wl,--output-def,pcre2x.def"
+      PREFIX ""
+      OUTPUT_NAME pcre2x)
     TARGET_LINK_LIBRARIES(pcre2-posix-shared pcre2-8-shared)
     SET(targets ${targets} pcre2-posix-shared)
 

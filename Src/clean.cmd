@@ -1793,6 +1793,12 @@ rmdir /S/Q %NCURSES%\objects
 
 if not "%1" == "" goto next
 
+:pcre2
+
+rmdir /S/Q %BUILD%\pcre2
+
+if not "%1" == "" goto next
+
 :less
 
 del %LESS%\conf1454.dir

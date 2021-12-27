@@ -9,6 +9,7 @@ set LIBSSH2=%BASEDIR%libssh2-1.10.0
 set CURL=%BASEDIR%curl-7.80.0
 set EXPAT=%BASEDIR%expat-2.4.2
 set NCURSES=%BASEDIR%ncurses-6.3
+set PCRE2=%BASEDIR%pcre2-10.39
 set LESS=%BASEDIR%less-590
 set GIT=%BASEDIR%git-2.34.1
 
@@ -210,6 +211,35 @@ sh configure ^
     --without-tests
 if errorlevel 1 goto error
 mingw32-make -j 4
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem =======
+rem  PCRE2
+rem =======
+:pcre2
+
+if not exist %BUILD%\pcre2 mkdir %BUILD%\pcre2
+if errorlevel 1 goto error
+cd %BUILD%\pcre2
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+    -Wno-dev ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DBUILD_SHARED_LIBS=ON ^
+    -DBUILD_STATIC_LIBS=ON ^
+    -DPCRE2_NEWLINE=ANYCRLF ^
+    -DPCRE2_BUILD_PCRE2GREP=OFF ^
+    -DPCRE2_BUILD_TESTS=OFF ^
+    -DZLIB_INCLUDE_DIR:PATH=%ZLIB%;%BUILD%\zlib ^
+    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
+    -DZLIB_FOUND:BOOL=TRUE ^
+    %PCRE2%
+if errorlevel 1 goto error
+mingw32-make
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next
