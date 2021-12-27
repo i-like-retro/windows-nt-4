@@ -52,6 +52,7 @@ cmake_minimum_required(VERSION 3.14)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -w -std=c99 -march=i586")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../pcre2-10.39/src")
 
 #set the source directory to root of git
 set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../..)
@@ -483,22 +484,23 @@ if(NOT FREAD_READS_DIRECTORIES_NO)
 	list(APPEND compat_SOURCES compat/fopen.c)
 endif()
 
-check_c_source_compiles("
-#include <regex.h>
-#ifndef REG_STARTEND
-#error oops we dont have it
-#endif
-
-int main(void)
-{
-	return 0;
-}"
-HAVE_REGEX)
-if(NOT HAVE_REGEX)
-	include_directories(${CMAKE_SOURCE_DIR}/compat/regex)
-	list(APPEND compat_SOURCES compat/regex/regex.c )
-	add_compile_definitions(NO_REGEX NO_MBSUPPORT GAWK)
-endif()
+#check_c_source_compiles("
+##include <regex.h>
+##ifndef REG_STARTEND
+##error oops we dont have it
+##endif
+#
+#int main(void)
+#{
+#	return 0;
+#}"
+#HAVE_REGEX)
+#if(NOT HAVE_REGEX)
+#	include_directories(${CMAKE_SOURCE_DIR}/compat/regex)
+#	list(APPEND compat_SOURCES compat/regex/regex.c )
+#	add_compile_definitions(NO_REGEX NO_MBSUPPORT GAWK)
+#endif()
+set(HAVE_REGEX TRUE)
 
 
 check_c_source_compiles("
@@ -682,7 +684,7 @@ if(Iconv_FOUND)
 	target_link_libraries(common-main ${Iconv_LIBRARIES})
 endif()
 if(WIN32)
-	target_link_libraries(common-main ws2_32 ntdll ${CMAKE_BINARY_DIR}/git.res)
+	target_link_libraries(common-main ws2_32 ntdll ${CMAKE_BINARY_DIR}/git.res "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/pcre2/libpcre2x.dll.a")
 	add_dependencies(common-main git-rc)
 	if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 		#target_link_options(common-main PUBLIC -municode -Wl,--nxcompat -Wl,--dynamicbase -Wl,--pic-executable,-e,mainCRTStartup)

@@ -189,7 +189,8 @@
 #include <time.h>
 #include <signal.h>
 #include <assert.h>
-#include <regex.h>
+//#include <regex.h>
+#include <pcre2posix.h>
 #include <utime.h>
 #include <syslog.h>
 #if !defined(NO_POLL_H)
