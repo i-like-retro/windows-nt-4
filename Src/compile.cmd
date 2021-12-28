@@ -112,9 +112,10 @@ perl Configure mingw ^
     zlib ^
     "--openssldir=C:\Program Files\GNU" ^
     --with-zlib-include=%ZLIB% ^
-    --with-zlib-lib=%BUILD%\zlib\libzlib.dll.a ^
+    --with-zlib-lib=%BUILD%\zlib ^
     -I%BUILD%\zlib ^
-    -L%BUILD%\zlib ^
+    -I%BASEDIR%_ntcompat ^
+    -L%BASEDIR%_ntcompat ^
     -fno-ident ^
     -fno-stack-protector ^
     -fno-unwind-tables ^

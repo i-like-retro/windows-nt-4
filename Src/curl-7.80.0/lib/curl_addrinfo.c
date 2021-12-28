@@ -40,8 +40,6 @@
 #  include <sys/un.h>
 #endif
 
-#include "wspiapi.h"
-
 #ifdef __VMS
 #  include <in.h>
 #  include <inet.h>
@@ -61,6 +59,8 @@
 #include "curl_printf.h"
 #include "curl_memory.h"
 #include "memdebug.h"
+
+#include <windows/ntcompat.h>
 
 /*
  * Curl_freeaddrinfo()

@@ -145,6 +145,11 @@ Section "Base"
     File "licenses.txt"
     SetOutPath "$INSTDIR\bin"
     File "..\_build\libgcc_s_dw2-1.dll"
+    File "..\_ntcompat\ntcompat.dll"
+    SetOutPath "$INSTDIR\include\windows"
+    File "..\_ntcompat\windows\ntcompat.h"
+    SetOutPath "$INSTDIR\lib"
+    File "..\_ntcompat\libcompat.dll.a"
 SectionEnd
 
 SectionGroup /e "!Core"

@@ -56,6 +56,7 @@ endif()
 
 transform_makefile_inc("Makefile.inc" "${CMAKE_CURRENT_BINARY_DIR}/Makefile.inc.cmake")
 include(${CMAKE_CURRENT_BINARY_DIR}/Makefile.inc.cmake)
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../_ntcompat)
 
 if(MSVC)
   list(APPEND CURL_FILES curl.rc)
