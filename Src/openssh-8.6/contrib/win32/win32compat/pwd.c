@@ -47,6 +47,26 @@
 #include "misc_internal.h"
 #include "debug.h"
 
+#ifndef ENOENT
+#define ENOENT 2
+#endif
+
+#ifndef ENOMEM
+#define ENOMEM 12
+#endif
+
+#ifndef EOTHER
+#define EOTHER 131
+#endif
+
+#ifndef SECURITY_MAX_SID_SIZE
+#define SECURITY_MAX_SID_SIZE 68
+#endif
+
+#ifndef _countof
+#define _countof(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 static struct passwd pw;
 static char* pw_shellpath = NULL;
 char* shell_command_option = NULL;
@@ -58,8 +78,8 @@ static int
 set_defaultshell()
 {
 	HKEY reg_key = 0;
-	int tmp_len, ret = -1;
-	REGSAM mask = STANDARD_RIGHTS_READ | KEY_QUERY_VALUE | KEY_WOW64_64KEY;
+	int /*tmp_len,*/ ret = -1;
+	REGSAM mask = STANDARD_RIGHTS_READ | KEY_QUERY_VALUE/* | KEY_WOW64_64KEY*/;
 	wchar_t path_buf[PATH_MAX], option_buf[32], arg_buf[PATH_MAX];
 	char *pw_shellpath_local = NULL, *command_option_local = NULL, *shell_arguments_local = NULL;
 
@@ -73,7 +93,7 @@ set_defaultshell()
 	option_buf[0] = L'\0';
 	arg_buf[0] = L'\0';
 
-	tmp_len = _countof(path_buf);
+	DWORD tmp_len = _countof(path_buf);
 	if ((RegOpenKeyExW(HKEY_LOCAL_MACHINE, SSH_REGISTRY_ROOT, 0, mask, &reg_key) == ERROR_SUCCESS) &&
 	    (RegQueryValueExW(reg_key, L"DefaultShell", 0, NULL, (LPBYTE)path_buf, &tmp_len) == ERROR_SUCCESS) &&
 	    (path_buf[0] != L'\0')) {
@@ -95,8 +115,7 @@ set_defaultshell()
 			errno = GetLastError();
 			goto cleanup;
 		}
-		if (wcscat_s(path_buf, _countof(path_buf), L"\\cmd.exe") != 0)
-			goto cleanup;
+		wcscat(path_buf, L"\\cmd.exe");
 	}
 
 	if ((pw_shellpath_local = utf16_to_utf8(path_buf)) == NULL)
@@ -173,6 +192,7 @@ reset_pw()
 	return 0;
 }
 
+#if 0
 static struct passwd*
 get_passwd(const wchar_t * user_utf16, PSID sid)
 {
@@ -184,7 +204,7 @@ get_passwd(const wchar_t * user_utf16, PSID sid)
 	HKEY reg_key = 0;	
 	
 	BYTE binary_sid[SECURITY_MAX_SID_SIZE];
-	DWORD sid_size = ARRAYSIZE(binary_sid);
+	DWORD sid_size = /*ARRAYSIZE*/_countof(binary_sid);
 	WCHAR domain_name[DNLEN + 1] = L"";
 	DWORD domain_name_size = DNLEN + 1;
 	SID_NAME_USE account_type = 0;
@@ -256,15 +276,15 @@ get_passwd(const wchar_t * user_utf16, PSID sid)
 	if ((_wcsicmp(domain_name, computer_name) == 0) ||
 		((memcmp(&nt_authority, GetSidIdentifierAuthority((PSID)binary_sid), sizeof(SID_IDENTIFIER_AUTHORITY)) == 0) &&
 		 (((SID*)binary_sid)->SubAuthority[0] == SECURITY_LOCAL_SYSTEM_RID))) {
-		wcscpy_s(user_resolved, ARRAYSIZE(user_resolved), user_name);
+		wcscpy(user_resolved, user_name);
 	}
 
 	/* put any other format in sam compatible format */
 	else
-		swprintf_s(user_resolved, ARRAYSIZE(user_resolved), L"%s\\%s", domain_name, user_name);
+		swprintf(user_resolved, L"%s\\%s", domain_name, user_name);
 
 	/* if one of below fails, set profile path to Windows directory */
-	if (swprintf_s(reg_path, PATH_MAX, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\%ls", sid_string) == -1 ||
+	if (swprintf(reg_path, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\%ls", sid_string) == -1 ||
 	    RegOpenKeyExW(HKEY_LOCAL_MACHINE, reg_path, 0, STANDARD_RIGHTS_READ | KEY_QUERY_VALUE | KEY_WOW64_64KEY, &reg_key) != 0 ||
 	    RegQueryValueExW(reg_key, L"ProfileImagePath", 0, NULL, (LPBYTE)profile_home, &reg_path_len) != 0 ||
 	    ExpandEnvironmentStringsW(profile_home, NULL, 0) > PATH_MAX ||
@@ -295,6 +315,7 @@ cleanup:
 
 	return ret;
 }
+#endif
 
 static struct passwd*
 getpwnam_placeholder(const char* user) {
@@ -330,12 +351,14 @@ cleanup:
 	return ret;
 }
 
+
 struct passwd*
 w32_getpwnam(const char *user_utf8)
 {
 	struct passwd* ret = NULL;
 	wchar_t * user_utf16 = NULL;
 
+	#if 0
 	user_utf16 = utf8_to_utf16(user_utf8);
 	if (user_utf16 == NULL) {
 		errno = ENOMEM;
@@ -345,9 +368,10 @@ w32_getpwnam(const char *user_utf8)
 	ret = get_passwd(user_utf16, NULL);
 	if (ret != NULL)
 		goto done;
+	#endif
 
 	/* for unpriviliged user account, create placeholder and return*/
-	if (_stricmp(user_utf8, "sshd") == 0) {
+	if (strcasecmp(user_utf8, "sshd") == 0) {
 		ret = getpwnam_placeholder(user_utf8);
 		goto done;
 	}
@@ -362,6 +386,7 @@ done:
 	return ret;
 }
 
+#if 0
 struct passwd*
 w32_getpwuid(uid_t uid)
 {
@@ -379,6 +404,7 @@ cleanup:
 
 	return ret;
 }
+#endif
 
 char *
 group_from_gid(gid_t gid, int nogroup)

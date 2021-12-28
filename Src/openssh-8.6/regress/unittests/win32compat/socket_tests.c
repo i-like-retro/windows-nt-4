@@ -158,7 +158,7 @@ socket_fd_tests()
 		ASSERT_INT_EQ(errno, EBADF);
 		ASSERT_INT_EQ(fstat(11, NULL), -1);
 		ASSERT_INT_EQ(errno, EBADF);
-		ASSERT_INT_EQ(isatty(12), 0);
+		ASSERT_INT_EQ(w32_isatty(12), 0);
 		ASSERT_INT_EQ(errno, EBADF);
 		ASSERT_PTR_EQ(fdopen(13, NULL), NULL);
 		ASSERT_INT_EQ(errno, EBADF);

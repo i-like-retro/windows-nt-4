@@ -23,6 +23,8 @@
 #define WRITE_PERMISSIONS (FILE_WRITE_DATA | FILE_APPEND_DATA | FILE_WRITE_ATTRIBUTES | FILE_WRITE_EA)
 #define EXECUTE_PERMISSIONS (READ_PERMISSIONS | FILE_EXECUTE)
 
+struct w32_stat;
+
 int w32_fstat(int fd, struct w32_stat *buf);
 #define fstat(a,b)	w32_fstat((a), (b))
 

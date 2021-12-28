@@ -42,7 +42,7 @@
 #include <Sddl.h>
 #include <Aclapi.h>
 #include <security.h>
-#include <ntstatus.h>
+//#include <ntstatus.h>
 #include <malloc.h>
 
 #include "inc\unistd.h"
@@ -61,16 +61,58 @@
 #include "inc\string.h"
 #include "inc\time.h"
 
+#include <ctype.h>
 #include <wchar.h>
 
+#ifndef _countof
+#define _countof(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
+#ifndef ENOENT
+#define ENOENT 2
+#endif
+
+#ifndef EBADF
+#define EBADF 9
+#endif
+
+#ifndef ENOMEM
+#define ENOMEM 12
+#endif
+
+#ifndef EACCES
+#define EACCES 13
+#endif
+
+#ifndef EFAULT
+#define EFAULT 14
+#endif
+
+#ifndef ERANGE
+#define ERANGE 34
+#endif
+
+#ifndef ENOTSUP
+#define ENOTSUP 129
+#endif
+
+#ifndef EOTHER
+#define EOTHER 131
+#endif
+
+struct rrsetinfo;
+
 static char* s_programdir = NULL;
+
+size_t strlcat(char *dst, const char *src, size_t size);
+size_t strlcpy(char *dst, const char *src, size_t size);
 
 /* Maximum reparse buffer info size. The max user defined reparse
  * data is 16KB, plus there's a header. 
  */
 #define MAX_REPARSE_SIZE 17000 
 #define IO_REPARSE_TAG_SYMBOLIC_LINK IO_REPARSE_TAG_RESERVED_ZERO 
-#define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L) /* winnt ntifs */
+//#define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L) /* winnt ntifs */
 #define IO_REPARSE_TAG_HSM (0xC0000004L) /* winnt ntifs */
 #define IO_REPARSE_TAG_SIS (0x80000007L) /* winnt ntifs */
 #define REPARSE_MOUNTPOINT_HEADER_SIZE 8
@@ -150,6 +192,7 @@ timespec_to_nsec(const struct timespec *req)
 }
 
 
+#if 0
 int
 nanosleep(const struct timespec *req, struct timespec *rem)
 {
@@ -185,6 +228,7 @@ nanosleep(const struct timespec *req, struct timespec *rem)
 		return -1;
 	}
 }
+#endif
 
 /* This routine is contributed by  * Author: NoMachine <developers@nomachine.com>
  * Copyright (c) 2009, 2010 NoMachine
@@ -215,7 +259,8 @@ gettimeofday(struct timeval *tv, void *tz)
 void
 explicit_bzero(void *b, size_t len)
 {
-	SecureZeroMemory(b, len);
+	//SecureZeroMemory(b, len);
+	ZeroMemory(b, len);
 }
 
 static DWORD last_dlerror = ERROR_SUCCESS;
@@ -301,7 +346,7 @@ w32_fopen_utf8(const char *input_path, const char *mode)
 	char utf8_bom[] = { 0xEF,0xBB,0xBF };
 	char first3_bytes[3];
 	int status = 1;
-	errno_t r = 0;
+	//errno_t r = 0;
 	int nonfs_dev = 0; /* opening a non file system device */
 
 	if (mode == NULL || mode[1] != '\0') {
@@ -328,7 +373,8 @@ w32_fopen_utf8(const char *input_path, const char *mode)
 	if (wpath == NULL || wmode == NULL)
 		goto cleanup;
 
-	if ((_wfopen_s(&f, wpath, wmode) != 0) || (f == NULL)) {
+	f = _wfopen(wpath, wmode);
+	if (f == NULL) {
 		debug3("Failed to open file:%S error:%d", wpath, errno);
 		goto cleanup;
 	}	
@@ -382,11 +428,13 @@ char*
  w32_fgets(char *str, int n, FILE *stream) {
 	if (!str || !n || !stream) return NULL;
 
+	char* ret;
+	#if 0
 	HANDLE h = (HANDLE)_get_osfhandle(_fileno(stream));
 	wchar_t* str_w = NULL;
 	char *ret = NULL, *str_tmp = NULL, *cp = NULL;
 	int actual_read = 0;
-	errno_t r = 0;
+	/*errno_t*/int r = 0;
 
 	if (h != NULL && h != INVALID_HANDLE_VALUE
 	    && GetFileType(h) == FILE_TYPE_CHAR) {
@@ -417,10 +465,11 @@ char*
 			
 			if((actual_read + (int)strlen(str_tmp)) >= n)
 				break;
-			if ((r = memcpy_s(cp, n - actual_read, str_tmp, strlen(str_tmp))) != 0) {
+			if (/*(r = memcpy_s(cp, n - actual_read, str_tmp, strlen(str_tmp))) != 0*/strlen(str_tmp) > n - actual_read) {
 				debug3("memcpy_s failed with error: %d.", r);
 				goto cleanup;
 			}
+			memcpy(cp, str_tmp, strlen(str_tmp));
 			actual_read += (int)strlen(str_tmp);
 			cp += strlen(str_tmp);
 			
@@ -436,12 +485,13 @@ char*
 		ret = str;
 	}
 	else
+	#endif
 		ret = fgets(str, n, stream);
 cleanup:
-	if (str_w)
-		free(str_w);
-	if (str_tmp)
-		free(str_tmp);
+	//if (str_w)
+	//	free(str_w);
+	//if (str_tmp)
+	//	free(str_tmp);
 	return ret;
 }
 
@@ -580,7 +630,7 @@ int
 w32_chown(const char *pathname, unsigned int owner, unsigned int group)
 {
 	/* TODO - implement this */
-	errno = EOPNOTSUPP;
+	errno = WSAEOPNOTSUPP;
 	return -1;
 }
 
@@ -588,7 +638,7 @@ int
 w32_fchown( int fd, unsigned int owner, unsigned int group)
 {
 	/* TODO - implement this */
-	errno = EOPNOTSUPP;
+	errno = WSAEOPNOTSUPP;
 	return -1;
 }
 
@@ -611,6 +661,10 @@ file_time_to_unix_time(const LPFILETIME pft, time_t * winTime)
 	*winTime -= EPOCH_DELTA;
 	*winTime /= RATE_DIFF;		 /* Nano to seconds resolution */
 }
+
+#ifndef __ascii_iswalpha
+#define __ascii_iswalpha(c)  ( ('A' <= (c) && (c) <= 'Z') || ( 'a' <= (c) && (c) <= 'z'))
+#endif
 
 static BOOL
 is_root_or_empty(wchar_t * path)
@@ -837,7 +891,7 @@ w32_getcwd(char *buffer, int maxlen)
 		return NULL;
 	}
 
-	if (strcpy_s(buffer, maxlen, putf8))
+	if (strlcpy(buffer, putf8, maxlen))
 		return NULL;
 	free(putf8);
 
@@ -861,7 +915,10 @@ w32_getcwd(char *buffer, int maxlen)
 		}
 		else {
 			char *tail = buffer + chroot_path_len;
-			memmove_s(buffer, maxlen, tail, strlen(tail) + 1);
+			size_t len = strlen(tail + 1);
+			if (len > maxlen)
+				len = maxlen;
+			memmove(buffer, tail, len);
 		}
 	} 
 
@@ -882,9 +939,8 @@ w32_mkdir(const char *path_utf8, unsigned short mode)
 		return -1;
 	}
 
-	errno_t error = _umask_s(0, &curmask);
-	if(!error)
-		_umask_s(curmask, &curmask);
+	curmask = _umask(0);
+	_umask(curmask);
 
 	returnStatus = _wchmod(path_utf16, mode & ~curmask & (_S_IREAD | _S_IWRITE));
 	free(path_utf16);
@@ -970,11 +1026,14 @@ realpath(const char *inputpath, char * resolved)
 		is_win_path = 0;
 
 	if (is_win_path) {
-		if (_strnicmp(inputpath, PROGRAM_DATA, strlen(PROGRAM_DATA)) == 0) {
-			strcpy_s(path, PATH_MAX, __progdata);
-			strcat_s(path, PATH_MAX, &inputpath[strlen(PROGRAM_DATA)]);
+		if (strnicmp(inputpath, PROGRAM_DATA, strlen(PROGRAM_DATA)) == 0) {
+			strlcpy(path, __progdata, PATH_MAX);
+			strlcat(path, &inputpath[strlen(PROGRAM_DATA)], PATH_MAX);
 		} else {
-			memcpy_s(path, PATH_MAX, inputpath, strlen(inputpath));
+			size_t len = strlen(inputpath);
+			if (len > PATH_MAX-1)
+				len = PATH_MAX-1;
+			memcpy(path, inputpath, len);
 		}
 	}
 
@@ -996,7 +1055,7 @@ realpath(const char *inputpath, char * resolved)
 	/* "cd .." from within a drive root */
 	if (path_len == 6 && !chroot_path) {
 		char *tmplate = "/x:/..";
-		strcat_s(resolved, PATH_MAX, path);
+		strlcat(resolved, path, PATH_MAX);
 		resolved[1] = 'x';
 		if (strcmp(tmplate, resolved) == 0) {
 			resolved[0] = '/';
@@ -1008,29 +1067,31 @@ realpath(const char *inputpath, char * resolved)
 
 	if (chroot_path) {
 		resolved[0] = '\0';
-		strcat_s(resolved, PATH_MAX, chroot_path);
+		strlcat(resolved, chroot_path, PATH_MAX);
 		/* if path is relative, add cwd within chroot */
 		if (path[0] != '/' && path[0] != '\\') {
 			w32_getcwd(resolved + chroot_path_len, PATH_MAX - chroot_path_len);
-			strcat_s(resolved, PATH_MAX, "/");
+			strlcat(resolved, "/", PATH_MAX);
 		}
 		/* TODO - This logic will fail if the chroot_path is more than PATH_MAX/2.
 		 * resolved variable is of PATH_MAX.
 		 * We first copy chroot_path to resolved variable then incoming path (which can be again chroot_path).
 		 * In this case strcat_s will thrown a run time insufficient buffer exception.
 		 */
-		strcat_s(resolved, PATH_MAX, path);
+		strlcat(resolved, path, PATH_MAX);
 	}
 	else if ((path_len >= 2) && (path[0] == '/') && path[1] && (path[2] == ':')) {
-		if((errno = strncpy_s(resolved, PATH_MAX, path + 1, path_len)) != 0 ) /* skip the first '/' */ {
+		if(path_len >= sizeof(resolved)) {
 			debug3("memcpy_s failed with error: %d.", errno);
 			goto done;
 		}
+		memcpy(resolved, path + 1, path_len); /* skip the first '/' */ 
 	}
-	else if(( errno = strncpy_s(resolved, PATH_MAX, path, path_len + 1)) != 0) {
+	else { if(path_len + 1 >= sizeof(resolved)) {
 		debug3("memcpy_s failed with error: %d.", errno);
 		goto done;
 	}
+	memcpy(resolved, path, path_len + 1); }
 
 	if ((resolved[0]) && (resolved[1] == ':') && (resolved[2] == '\0')) { /* make "x:" as "x:\\" */
 		resolved[2] = '\\';
@@ -1059,9 +1120,9 @@ realpath(const char *inputpath, char * resolved)
 		
 		if (strlen(tempPath) == strlen(chroot_path))
 			/* realpath is the same as chroot_path */
-			strcat_s(resolved, PATH_MAX, "\\");
+			strlcat(resolved, "\\", PATH_MAX);
 		else
-			strcat_s(resolved, PATH_MAX, tempPath + strlen(chroot_path));
+			strlcat(resolved, tempPath + strlen(chroot_path), PATH_MAX);
 
 		if (resolved[0] != '\\') {
 			errno = EACCES;
@@ -1075,10 +1136,11 @@ realpath(const char *inputpath, char * resolved)
 	else {
 		convertToForwardslash(tempPath);
 		resolved[0] = '/'; /* will be our first slash in /x:/users/test1 format */
-		if ((errno = strncpy_s(resolved + 1, PATH_MAX - 1, tempPath, sizeof(tempPath) - 1)) != 0) {
+		if (strlen(tempPath) >= sizeof(resolved) - 1) {
 			debug3("memcpy_s failed with error: %d.", errno);
 			goto done;
 		}
+		strcpy(resolved + 1, tempPath);
 		ret = resolved;
 		goto done;
 	}
@@ -1123,8 +1185,8 @@ resolved_path_utf16(const char *input_path)
 
 	if (chroot_path) {
 		char actual_path[PATH_MAX] = { 0 };
-		strcat_s(actual_path, _countof(actual_path), chroot_path);
-		strcat_s(actual_path, _countof(actual_path), real_path);
+		strlcat(actual_path, chroot_path, _countof(actual_path));
+		strlcat(actual_path, real_path, _countof(actual_path));
 		resolved_path = utf8_to_utf16(actual_path);
 	} else {
 		if ((strlen(real_path) == 1) && (real_path[0] == '/'))
@@ -1189,8 +1251,8 @@ fstatvfs(int fd, struct statvfs *buf)
 char *
 w32_strerror(int errnum)
 {
-	if (errnum >= EADDRINUSE  && errnum <= EWOULDBLOCK)
-		return _sys_errlist_ext[errnum - EADDRINUSE];
+	if (errnum >= WSAEADDRINUSE  && errnum <= WSAEWOULDBLOCK)
+		return _sys_errlist_ext[errnum - WSAEADDRINUSE];
 	
 	strerror_s(errorBuf, ERROR_MSG_MAXLEN, errnum);
 	return errorBuf;
@@ -1210,27 +1272,27 @@ readpassphrase(const char *prompt, char *outBuf, size_t outBufLen, int flags)
 		return NULL;
 	}
 
-	while (_kbhit()) _getwch();
+	while (_kbhit()) getch();
 
 	wtmp = utf8_to_utf16(prompt);
 	if (wtmp == NULL)
 		fatal("unable to alloc memory");
 
-	_cputws(wtmp);
+	wprintf(L"%s", wtmp);
 	free(wtmp);
 
 	while (current_index < (int)outBufLen - 1) {
-		ch = _getwch();
+		ch = getch();
 		
 		if (ch == L'\r') {
-			if (_kbhit()) _getwch(); /* read linefeed if its there */
+			if (_kbhit()) getch(); /* read linefeed if its there */
 			break;
 		} else if (ch == L'\n') {
 			break;
 		} else if (ch == L'\b') { /* backspace */
 			if (current_index > 0) {
 				if (flags & RPP_ECHO_ON)
-					wprintf_s(L"%c \b", ch);
+					wprintf(L"%c \b", ch);
 
 				/* overwrite last character - remove any utf8 extended chars */
 				while (current_index > 0 && (outBuf[current_index - 1] & 0xC0) == 0x80)
@@ -1264,7 +1326,7 @@ readpassphrase(const char *prompt, char *outBuf, size_t outBufLen, int flags)
 			current_index += utf8_read;
 
 			if(flags & RPP_ECHO_ON)
-				wprintf_s(L"%c", ch);
+				wprintf(L"%c", ch);
 		}
 	}
 
@@ -1363,9 +1425,9 @@ get_others_file_permissions(wchar_t * file_name, int isReadOnlyFile)
 			current_access_mask = pDeniedAce->Mask;
 		} else continue;
 		
-		if (!(IsWellKnownSid(current_trustee_sid, WinWorldSid) || 
+		/*if (!(IsWellKnownSid(current_trustee_sid, WinWorldSid) || 
 		    IsWellKnownSid(current_trustee_sid, WinAuthenticatedUserSid)))
-			continue;
+			continue;*/
 		
 		if ((current_access_mask & READ_PERMISSIONS) == READ_PERMISSIONS)
 			mode_tmp |= S_IROTH;
@@ -1376,7 +1438,7 @@ get_others_file_permissions(wchar_t * file_name, int isReadOnlyFile)
 		if ((current_access_mask & EXECUTE_PERMISSIONS) == EXECUTE_PERMISSIONS)
 			mode_tmp |= S_IXOTH;
 
-		if (IsWellKnownSid(current_trustee_sid, WinWorldSid)) {
+		/*if (IsWellKnownSid(current_trustee_sid, WinWorldSid)) {
 			if(current_aceHeader->AceType == ACCESS_ALLOWED_ACE_TYPE)
 				allow_mode_world |= mode_tmp;
 			else
@@ -1386,7 +1448,7 @@ get_others_file_permissions(wchar_t * file_name, int isReadOnlyFile)
 				allow_mode_auth_users |= mode_tmp;
 			else
 				deny_mode_auth_users |= mode_tmp;
-		}
+		}*/
 	}
 	
 	allow_mode_world = get_final_mode(allow_mode_world, deny_mode_world);
@@ -1419,6 +1481,7 @@ int
 create_directory_withsddl(wchar_t *path_w, wchar_t *sddl_w)
 {
 	if (GetFileAttributesW(path_w) == INVALID_FILE_ATTRIBUTES) {
+		/*
 		PSECURITY_DESCRIPTOR pSD = NULL;
 		SECURITY_ATTRIBUTES sa;
 		memset(&sa, 0, sizeof(SECURITY_ATTRIBUTES));
@@ -1436,7 +1499,8 @@ create_directory_withsddl(wchar_t *path_w, wchar_t *sddl_w)
 		}
 
 		sa.lpSecurityDescriptor = pSD;
-		if (!CreateDirectoryW(path_w, &sa)) {
+		*/
+		if (!CreateDirectoryW(path_w, /*&sa*/NULL)) {
 			error("Failed to create directory:%ls error:%d", path_w, GetLastError());
 			return -1;
 		}
@@ -1477,7 +1541,11 @@ copy_file(char *source, char *destination)
 struct tm *
 localtime_r(const time_t *timep, struct tm *result)
 {
-	return localtime_s(result, timep) == 0 ? result : NULL;
+	struct tm* tm = localtime(timep);
+	if (!tm)
+		return NULL;
+	memcpy(result, tm, sizeof(struct tm));
+	return result;
 }
 
 void
@@ -1492,19 +1560,27 @@ freezero(void *ptr, size_t sz)
 int 
 setenv(const char *name, const char *value, int rewrite)
 {
-	errno_t result = 0;
+	/*errno_t*/int result = 0;
 
 	/* If rewrite is 0, then set only if the variable name doesn't already exist in environment */
 	if (!rewrite) {
 		char *envValue = NULL;
+		#if 0
 		size_t len = 0;
 		_dupenv_s(&envValue, &len, name);
+		#endif
+		envValue = getenv(name);
 
 		if (envValue)
 			return result; /* return success (as per setenv manpage) */
 	}
 
-	if (!(result = _putenv_s(name, value)))
+
+	char buf[1024];
+	snprintf(buf, sizeof(buf), "%s=%s", name, value);
+	// The string pointed to by string becomes part of the environment, so altering the
+	// string changes the environment.    WTF ??? !!!   => strdup and leak :(
+	if (putenv(strdup(buf)) == 0) 
 		return 0;
 	else {
 		error("failed to set the environment variable:%s to value:%s, error:%d", name, value, result);
@@ -1551,7 +1627,10 @@ chroot(const char *path)
 
 	/* TODO - set the env variable just in time in a posix_spawn_chroot like API */
 #define POSIX_CHROOTW L"c28fc6f98a2c44abbbd89d6a3037d0d9_POSIX_CHROOT"
-	_wputenv_s(POSIX_CHROOTW, chroot_pathw);
+wchar_t* buf = (wchar_t*)malloc(1024 * sizeof(wchar_t));
+if (!buf) { errno = ENOMEM; return -1; }
+wsprintfW(buf, L"%ls=%ls", POSIX_CHROOTW, chroot_pathw);
+	_wputenv(buf);
 
 	return 0;
 }
@@ -1563,15 +1642,15 @@ chroot(const char *path)
 int 
 am_system()
 {
-	HANDLE proc_token = NULL;
-	DWORD info_len;
-	TOKEN_USER* info = NULL;
+	//HANDLE proc_token = NULL;
+	//DWORD info_len;
+	//TOKEN_USER* info = NULL;
 	static int running_as_system = -1;
 
 	if (running_as_system != -1)
 		return running_as_system;
 
-	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &proc_token) == FALSE ||
+	/*if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &proc_token) == FALSE ||
 		GetTokenInformation(proc_token, TokenUser, NULL, 0, &info_len) == TRUE ||
 		(info = (TOKEN_USER*)malloc(info_len)) == NULL ||
 		GetTokenInformation(proc_token, TokenUser, info, info_len, &info_len) == FALSE)
@@ -1579,11 +1658,11 @@ am_system()
 
 	if (IsWellKnownSid(info->User.Sid, WinLocalSystemSid))
 		running_as_system = 1;
-	else
+	else*/
 		running_as_system = 0;
 
-	CloseHandle(proc_token);
-	free(info);
+	//CloseHandle(proc_token);
+	//free(info);
 	return running_as_system;
 }
 
@@ -1593,6 +1672,7 @@ am_system()
  * Sets psid_len (if non-NULL) to the actual SID size.
  * Caller should free() return value if psid argument was NULL.
  */
+#if 0
 PSID
 lookup_sid(const wchar_t* name_utf16, PSID psid, DWORD * psid_len)
 {
@@ -1606,7 +1686,7 @@ lookup_sid(const wchar_t* name_utf16, PSID psid, DWORD * psid_len)
 
 	LookupAccountNameW(NULL, name_utf16, NULL, &sid_len, dom, &dom_len, &n_use);
 
-	if (sid_len == 0 && _wcsicmp(name_utf16, L"administrators") == 0) {
+	if (sid_len == 0 && wcsicmp(name_utf16, L"administrators") == 0) {
 		CreateWellKnownSid(WinBuiltinAdministratorsSid, NULL, NULL, &sid_len);
 		resolveAsAdminsSid = 1;
 		debug3_f("resolveAsAdminsSid:%d", resolveAsAdminsSid);
@@ -1682,6 +1762,7 @@ cleanup:
 
 	return ret;
 }
+#endif
 
 /* 
  * returns SID of user/group or current user if (user = NULL) 
@@ -1790,15 +1871,15 @@ build_exec_command(const char * command)
 	}
 	memset(cmd_sp, '\0', len);
 	if (command_type == CMD_SCP) {
-		strcpy_s(cmd_sp, len, "scp.exe");
-		strcat_s(cmd_sp, len, command_args);
+		strlcpy(cmd_sp, "scp.exe", len);
+		strlcat(cmd_sp, command_args, len);
 	}
 	else if (command_type == CMD_SFTP) {
-		strcpy_s(cmd_sp, len, "sftp-server.exe");
-		strcat_s(cmd_sp, len, command_args);
+		strlcpy(cmd_sp, "sftp-server.exe", len);
+		strlcat(cmd_sp, command_args, len);
 	}
 	else
-		strcpy_s(cmd_sp, len, command);
+		strlcpy(cmd_sp, command, len);
 	return cmd_sp;
 }
 
@@ -1987,15 +2068,15 @@ BOOL
 is_bash_test_env()
 {
 	char *envValue = NULL;
-	size_t len = 0;
+	//size_t len = 0;
 	BOOL retVal = FALSE;
-	_dupenv_s(&envValue, &len, "SSH_TEST_ENVIRONMENT");
+	envValue = getenv("SSH_TEST_ENVIRONMENT");
 
 	if ((NULL != envValue) && atoi(envValue))
 		retVal = TRUE;
 
-	if (envValue)
-		free(envValue);
+	//if (envValue)
+	//	free(envValue);
 
 	return retVal;
 }
@@ -2006,13 +2087,13 @@ bash_to_win_path(const char *in, char *out, const size_t out_len)
 	int retVal = 0;
 	const size_t cygwin_path_prefix_len = strlen(CYGWIN_PATH_PREFIX);
 	memset(out, 0, out_len);
-	if (_strnicmp(in, CYGWIN_PATH_PREFIX, cygwin_path_prefix_len) == 0) {
+	if (strncasecmp(in, CYGWIN_PATH_PREFIX, cygwin_path_prefix_len) == 0) {
 		out[0] = in[cygwin_path_prefix_len];
 		out[1] = ':';
-		strcat_s(out, out_len, &in[cygwin_path_prefix_len + 1]);
+		strlcat(out, &in[cygwin_path_prefix_len + 1], out_len);
 		retVal = 1;
 	} else
-		strcpy_s(out, out_len, in);
+		strlcpy(out, in, out_len);
 
 	return retVal;
 }

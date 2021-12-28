@@ -149,6 +149,9 @@ int socketio_send(struct w32_io* pio, const void *buf, size_t len, int flags);
 int socketio_shutdown(struct w32_io* pio, int how);
 int socketio_close(struct w32_io* pio);
 
+struct stat;
+#define _stat64 stat
+
 /*POSIX mimic'ing file API and file helper API*/
 BOOL fileio_is_io_available(struct w32_io* pio, BOOL rd);
 void fileio_on_select(struct w32_io* pio, BOOL rd);

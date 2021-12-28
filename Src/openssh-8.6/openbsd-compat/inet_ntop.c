@@ -65,7 +65,7 @@ inet_ntop(int af, const void *src, char *dst, socklen_t size)
 	case AF_INET6:
 		return (inet_ntop6(src, dst, (size_t)size));
 	default:
-		errno = EAFNOSUPPORT;
+		errno = EPFNOSUPPORT; //EAFNOSUPPORT;
 		return (NULL);
 	}
 	/* NOTREACHED */

@@ -1368,7 +1368,7 @@ main(int ac, char **av)
 	    (muxclient_command && muxclient_command != SSHMUX_COMMAND_PROXY))
 		tty_flag = 0;
 	/* Do not allocate a tty if stdin is not a tty. */
-	if ((!isatty(fileno(stdin)) || stdin_null_flag) &&
+	if ((!w32_isatty(fileno(stdin)) || stdin_null_flag) &&
 	    options.request_tty != REQUEST_TTY_FORCE) {
 		if (tty_flag)
 			logit("Pseudo-terminal will not be allocated because "
@@ -2092,11 +2092,11 @@ ssh_session2_open(struct ssh *ssh)
 		fatal("dup() in/out/err failed");
 
 	/* enable nonblocking unless tty */
-	if (!isatty(in))
+	if (!w32_isatty(in))
 		set_nonblock(in);
-	if (!isatty(out))
+	if (!w32_isatty(out))
 		set_nonblock(out);
-	if (!isatty(err))
+	if (!w32_isatty(err))
 		set_nonblock(err);
 
 	window = CHAN_SES_WINDOW_DEFAULT;

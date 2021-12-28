@@ -1,9 +1,9 @@
-#define __STDC__ 1
+//#define __STDC__ 1
 #include "..\crtheaders.h"
 #include SYS_TYPES_H
 
-typedef _dev_t dev_t;
-typedef long long off_t;
+//typedef _dev_t dev_t;
+//typedef long long off_t;
 typedef unsigned int uid_t;
 typedef unsigned int gid_t;
 
@@ -15,6 +15,7 @@ typedef int pid_t;
 typedef unsigned int	nfds_t;
 
 /* copied from Windows SDK corecrt_wstdio.h to accomodate FILE definition via types.h in Unix */
+/*
 #ifndef _FILE_DEFINED
 #define _FILE_DEFINED
 typedef struct _iobuf
@@ -22,3 +23,4 @@ typedef struct _iobuf
 	void* _Placeholder;
 } FILE;
 #endif
+*/

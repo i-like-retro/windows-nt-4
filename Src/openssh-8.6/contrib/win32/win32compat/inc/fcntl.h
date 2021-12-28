@@ -14,9 +14,9 @@
 
 
 int w32_fcntl(int fd, int cmd, ... /* arg */);
-#define fcntl(a,b,...)		w32_fcntl((a), (b),  __VA_ARGS__)
+#define fcntl(a,b,...)		w32_fcntl((a), (b),  ##__VA_ARGS__)
 
-#define open(a,b,...) w32_open((a), (b),  __VA_ARGS__)
+#define open(a,b,...) w32_open((a), (b),  ##__VA_ARGS__)
 int w32_open(const char *pathname, int flags, ... /* arg */);
 
 void* w32_fd_to_handle(int fd);
@@ -35,7 +35,7 @@ void* w32_fd_to_handle(int fd);
 #define O_NOINHERIT  _O_NOINHERIT
 #define O_SEQUENTIAL _O_SEQUENTIAL
 #define O_RANDOM     _O_RANDOM
-#define O_U16TEXT     _O_U16TEXT
+//#define O_U16TEXT     _O_U16TEXT
 
 /*
 * open() POSIX specific modes and flags.
@@ -43,19 +43,19 @@ void* w32_fd_to_handle(int fd);
 * - cross check conflict with common macros in Windows headers
 * - Ex. #define O_APPEND    0x8
 */
-#define O_ACCMODE			0x0003
+//#define O_ACCMODE			0x0003
 #define O_NONBLOCK			0x0004  /*io operations wont block*/
-# define S_IXUSR			0000100	/* execute/search permission, */
+//# define S_IXUSR			0000100	/* execute/search permission, */
 # define S_IXGRP			0000010	/* execute/search permission, */
 # define S_IXOTH			0000001	/* execute/search permission, */
-# define _S_IWUSR			0000200	/* write permission, */
+//# define _S_IWUSR			0000200	/* write permission, */
 # define S_IWUSR			_S_IWUSR	/* write permission, owner */
 # define S_IWGRP			0000020	/* write permission, group */
 # define S_IWOTH			0000002	/* write permission, other */
-# define S_IRUSR			0000400	/* read permission, owner */
+//# define S_IRUSR			0000400	/* read permission, owner */
 # define S_IRGRP			0000040	/* read permission, group */
 # define S_IROTH			0000004	/* read permission, other */
-# define S_IRWXU			0000700	/* read, write, execute */
+//# define S_IRWXU			0000700	/* read, write, execute */
 # define S_IRWXG			0000070	/* read, write, execute */
 # define S_IRWXO			0000007	/* read, write, execute */
 

@@ -2164,7 +2164,7 @@ interactive_loop(struct sftp_conn *conn, char *file1, char *file2)
 	extern char *__progname;
 	struct complete_ctx complete_ctx;
 
-	if (!batchmode && isatty(STDIN_FILENO)) {
+	if (!batchmode && w32_isatty(STDIN_FILENO)) {
 		if ((el = el_init(__progname, stdin, stdout, stderr)) == NULL)
 			fatal("Couldn't initialise editline");
 		if ((hl = history_init()) == NULL)
@@ -2236,7 +2236,7 @@ interactive_loop(struct sftp_conn *conn, char *file1, char *file2)
 	setvbuf(stdout, NULL, _IOLBF, 0);
 	setvbuf(infile, NULL, _IOLBF, 0);
 
-	interactive = !batchmode && isatty(STDIN_FILENO);
+	interactive = !batchmode && w32_isatty(STDIN_FILENO);
 	err = 0;
 	for (;;) {
 		ssh_signal(SIGINT, SIG_IGN);
@@ -2532,7 +2532,7 @@ main(int argc, char **argv)
 	/* Do this last because we want the user to be able to override it */
 	addargs(&args, "-oForwardAgent no");
 
-	if (!isatty(STDERR_FILENO))
+	if (!w32_isatty(STDERR_FILENO))
 		showprogress = 0;
 
 	if (noisy)

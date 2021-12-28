@@ -176,7 +176,7 @@ read_passphrase(const char *prompt, int flags)
 	else if (flags & RP_USE_ASKPASS)
 		use_askpass = 1;
 	else if (flags & RP_ALLOW_STDIN) {
-		if (!isatty(STDIN_FILENO)) {
+		if (!w32_isatty(STDIN_FILENO)) {
 			debug("read_passphrase: stdin is not a tty");
 			use_askpass = 1;
 		}
@@ -290,10 +290,11 @@ notify_start(int force_askpass, const char *fmt, ...)
 
 	if (fflush(NULL) != 0)
 		error_f("fflush: %s", strerror(errno));
-	if (!force_askpass && isatty(STDERR_FILENO)) {
+	if (!force_askpass && w32_isatty(STDERR_FILENO)) {
 		writemsg(prompt);
 		goto out_ctx;
 	}
+    #if 0
 	if ((askpass = getenv("SSH_ASKPASS")) == NULL)
 		askpass = _PATH_SSH_ASKPASS_DEFAULT;
 	if (*askpass == '\0') {
@@ -323,6 +324,9 @@ notify_start(int force_askpass, const char *fmt, ...)
 		_exit(1);
 		/* NOTREACHED */
 	}
+    #endif
+		debug3_f("cannot notify: fork() not supported.");
+		goto out;
  out_ctx:
 	if ((ret = calloc(1, sizeof(*ret))) == NULL) {
 		kill(pid, SIGTERM);

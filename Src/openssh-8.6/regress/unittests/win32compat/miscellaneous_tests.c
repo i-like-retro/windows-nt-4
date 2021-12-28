@@ -14,7 +14,7 @@ int retValue;
 void 
 test_ioctl()
 {
-	if(!isatty(fileno(stdin))) return;
+	if(!w32_isatty(fileno(stdin))) return;
 
 	TEST_START("ioctl");
 

@@ -1,5 +1,6 @@
 #pragma once
-#include <VersionHelpers.h>
+//#include <VersionHelpers.h>
+#include <stdint.h>
 
 #define SSH_REGISTRY_ROOT L"SOFTWARE\\OpenSSH"
 #define GOTO_CLEANUP_IF(_cond_,_err_) do {  \

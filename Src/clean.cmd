@@ -2018,6 +2018,12 @@ del %LESS%\xbuf.o
 
 if not "%1" == "" goto next
 
+:openssh
+
+rmdir /S/Q %BUILD%\openssh
+
+if not "%1" == "" goto next
+
 :git
 
 del %GIT%\GIT-VERSION-FILE

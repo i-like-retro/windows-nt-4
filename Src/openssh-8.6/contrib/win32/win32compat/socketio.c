@@ -32,16 +32,46 @@
 #include <ws2tcpip.h>
 #include <mswsock.h>
 #include <errno.h>
-#include <VersionHelpers.h>
+//#include <VersionHelpers.h>
 #include <stddef.h>
 #include "w32fd.h"
 #include "inc\utf.h"
 #include "misc_internal.h"
 #include "debug.h"
 
+#ifndef ENOTSUP
+#define ENOTSUP 129
+#endif
+
+#ifndef EOTHER
+#define EOTHER 131
+#endif
+
+#ifndef WSAID_ACCEPTEX
+#define WSAID_ACCEPTEX {0xb5367df1,0xcbac,0x11cf,{0x95,0xca,0x00,0x80,0x5f,0x48,0xa1,0x92}}
+#endif
+#ifndef WSAID_CONNECTEX
+#define WSAID_CONNECTEX {0x25a207b9,0xddf3,0x4660,{0x8e,0xe9,0x76,0xe5,0x8c,0x74,0x06,0x3e}}
+#endif
+#ifndef WSAID_GETACCEPTEXSOCKADDRS
+#define WSAID_GETACCEPTEXSOCKADDRS {0xb5367df2,0xcbac,0x11cf,{0x95,0xca,0x00,0x80,0x5f,0x48,0xa1,0x92}}
+#endif
+
+#ifndef SO_UPDATE_CONNECT_CONTEXT
+#define SO_UPDATE_CONNECT_CONTEXT 0x7010
+#endif
+
 #define INTERNAL_SEND_BUFFER_SIZE 70*1024 //70KB
 #define INTERNAL_RECV_BUFFER_SIZE 70*1024 //70KB
 #define errno_from_WSALastError() errno_from_WSAError(WSAGetLastError())
+
+#undef getaddrinfo
+#undef freeaddrinfo
+#include "wspiapi.h"
+
+typedef BOOL (APIENTRY* LPFN_ACCEPTEX)(SOCKET,SOCKET,PVOID,DWORD,DWORD,DWORD,LPDWORD,LPOVERLAPPED);
+typedef BOOL (APIENTRY* LPFN_CONNECTEX)(SOCKET,const struct sockaddr*,int,PVOID,DWORD,LPDWORD,LPOVERLAPPED);
+typedef VOID (APIENTRY* LPFN_GETACCEPTEXSOCKADDRS)(PVOID,DWORD,DWORD,DWORD,struct sockaddr**,LPINT,struct sockaddr**,LPINT);
 
 /* state info that needs to be persisted for an inprocess acceptEx call*/
 struct acceptEx_context {
@@ -65,19 +95,19 @@ errno_from_WSAError(int wsaerrno)
 	case WSAEINVAL:
 		return EINVAL;
 	case WSAECONNABORTED:
-		return ECONNABORTED;
+		return WSAECONNABORTED;
 	case WSAETIMEDOUT:
-		return ETIMEDOUT;
+		return WSAETIMEDOUT;
 	case WSAECONNREFUSED:
-		return ECONNREFUSED;
+		return WSAECONNREFUSED;
 	case WSAEINPROGRESS:
-		return EINPROGRESS;
+		return WSAEINPROGRESS;
 	case WSAESHUTDOWN:
-		return ECONNRESET;
+		return WSAECONNRESET;
 	case WSAENOTCONN:
-		return ENOTCONN;
+		return WSAENOTCONN;
 	case WSAECONNRESET:
-		return ECONNRESET;
+		return WSAECONNRESET;
 	default:
 		return wsaerrno - 10000;
 	}
@@ -258,7 +288,7 @@ int
 socketio_setsockopt(struct w32_io* pio, int level, int optname, const char* optval, int optlen)
 {
 	if ((optname == SO_KEEPALIVE) || (optname == SO_REUSEADDR) ||
-	    (optname == TCP_NODELAY) || (optname == IPV6_V6ONLY))
+	    (optname == TCP_NODELAY)/* || (optname == IPV6_V6ONLY)*/)
 		SET_ERRNO_ON_ERROR(setsockopt(pio->sock, level, optname, optval, optlen));
 	else {
 		debug3("setsockop - ERROR: unsupported optname:%d io:%p", optname, pio);
@@ -363,7 +393,7 @@ int
 socketio_recv(struct w32_io* pio, void *buf, size_t len, int flags)
 {
 	BOOL completed = FALSE;
-	errno_t r = 0;
+	/*errno_t*/int r = 0;
 	debug5("recv - io:%p state:%d", pio, pio->internal.state);
 
 	if ((buf == NULL) || (len == 0)) {
@@ -398,11 +428,11 @@ socketio_recv(struct w32_io* pio, void *buf, size_t len, int flags)
 	/* if we have some buffer copy it and return #bytes copied */
 	if (pio->read_details.remaining) {
 		int num_bytes_copied = min((int)len, pio->read_details.remaining);
-		if ((r = memcpy_s(buf, len, pio->read_details.buf + pio->read_details.completed,
-			num_bytes_copied)) != 0) {
+		if (num_bytes_copied > len) {
 			debug4("memcpy_s failed with error: %d.", r);
 			return -1;
 		}
+		memcpy(buf, pio->read_details.buf + pio->read_details.completed, num_bytes_copied);
 		pio->read_details.remaining -= num_bytes_copied;
 		pio->read_details.completed += num_bytes_copied;
 		debug5("recv - returning %d bytes from prior completed IO, remaining:%d, io:%p",
@@ -473,10 +503,11 @@ socketio_recv(struct w32_io* pio, void *buf, size_t len, int flags)
 
 	if (pio->read_details.remaining) {
 		int num_bytes_copied = min((int)len, pio->read_details.remaining);
-		if ((r = memcpy_s(buf, len, pio->read_details.buf, num_bytes_copied)) != 0) {
+		if (num_bytes_copied > len) {
 			debug3("memcpy_s failed with error: %d.", r);
 			return -1;
 		}
+		memcpy(buf, pio->read_details.buf, num_bytes_copied);
 		pio->read_details.remaining -= num_bytes_copied;
 		pio->read_details.completed = num_bytes_copied;
 		debug4("recv - (2) returning %d bytes from completed IO, remaining:%d, io:%p",
@@ -517,7 +548,7 @@ socketio_send(struct w32_io* pio, const void *buf, size_t len, int flags)
 {
 	int ret = 0;
 	WSABUF wsabuf;
-	errno_t r = 0;
+	/*errno_t*/int r = 0;
 		
 	debug5("send - io:%p state:%d", pio, pio->internal.state);
 
@@ -570,10 +601,7 @@ socketio_send(struct w32_io* pio, const void *buf, size_t len, int flags)
 		wsabuf.buf = pio->write_details.buf;
 
 	wsabuf.len = min(wsabuf.len, (int)len);
-	if ((r = memcpy_s(wsabuf.buf, wsabuf.len, buf, wsabuf.len)) != 0) {
-		debug3("memcpy_s failed with error: %d.", r);
-		return -1;
-	}
+	memcpy(wsabuf.buf, buf, wsabuf.len);
 
 	/* TODO - implement flags support if needed */
 	ret = WSASend(pio->sock, &wsabuf, 1, NULL, 0, &pio->write_overlapped, &WSASendCompletionRoutine);
@@ -673,7 +701,7 @@ socketio_accept(struct w32_io* pio, struct sockaddr* addr, int* addrlen)
 	struct acceptEx_context* context;
 	struct sockaddr *local_address, *remote_address;
 	int local_address_len, remote_address_len;
-	errno_t r = 0;
+	/*errno_t*/int r = 0;
 
 	debug5("accept - io:%p", pio);
 	/* start io if not already started */
@@ -734,10 +762,7 @@ socketio_accept(struct w32_io* pio, struct sockaddr* addr, int* addrlen)
 			sizeof(SOCKADDR_STORAGE) + 16, &local_address,
 			&local_address_len, &remote_address, &remote_address_len);
 		if (remote_address_len) {
-			if((r = memcpy_s(addr, remote_address_len, remote_address, remote_address_len)) != 0) {
-				debug3("memcpy_s failed with error: %d.", r);
-				goto on_error;
-			}
+			memcpy(addr, remote_address, remote_address_len);
 			*addrlen = remote_address_len;
 		}
 	}
@@ -846,7 +871,7 @@ socketio_connect(struct w32_io* pio, const struct sockaddr* name, int namelen)
 	} else {
 		/* if i/o is not ready */
 		if (FALSE == socketio_is_io_available(pio, TRUE)) {
-			errno = EINPROGRESS;
+			errno = WSAEINPROGRESS;
 			debug4("connect - in progress, io:%p", pio);
 			return -1;
 		}
@@ -971,7 +996,7 @@ w32_gethostname(char *name_utf8, size_t len)
 {
 	char* tmp_name_utf8 = NULL;
 
-	if (IsWindows8OrGreater()) {
+	/*if (IsWindows8OrGreater())*/ {
 		/* TODO - GetHostNameW not present in Win7, do GetProcAddr on Win8+*/
 	        /*
 		wchar_t name_utf16[256];
@@ -990,13 +1015,15 @@ w32_gethostname(char *name_utf8, size_t len)
 	        free(tmp_name_utf8);
 	        return 0; */
 		return gethostname(name_utf8, (int)len);
-	} else
-		return gethostname(name_utf8, (int)len);
+	} /*else
+		return gethostname(name_utf8, (int)len);*/
 }
 
 void
 w32_freeaddrinfo(struct addrinfo *ai)
 {
+	freeaddrinfo(ai);
+#if 0
 	struct addrinfo *cur;
 	while (ai) {
 		cur = ai;
@@ -1007,12 +1034,15 @@ w32_freeaddrinfo(struct addrinfo *ai)
 			free(cur->ai_canonname);
 		free(cur);
 	}
+#endif
 }
 
 int
 w32_getaddrinfo(const char *node_utf8, const char *service_utf8,
 		const struct addrinfo *hints, struct addrinfo **res)
 {
+	return getaddrinfo(node_utf8, service_utf8, hints, res);
+#if 0
 	int ret = 0;
 	wchar_t *node_utf16 = NULL, *service_utf16 = NULL;
 	struct addrinfoW *info_w = NULL;
@@ -1070,4 +1100,5 @@ done:
 		*res = NULL;
 	}
 	return ret;
+#endif
 }

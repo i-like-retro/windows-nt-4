@@ -3132,7 +3132,7 @@ sshkey_cert_check_authority(const struct sshkey *k,
 
 #ifdef WINDOWS
 			char cert_principal_name_copy[UNLEN + DNLEN + 1 + 1] = { 0, };
-			strcpy_s(cert_principal_name_copy, _countof(cert_principal_name_copy), k->cert->principals[i]);
+			strlcpy(cert_principal_name_copy, k->cert->principals[i], _countof(cert_principal_name_copy));
 
 			/*
 			* For domain user we need special handling.

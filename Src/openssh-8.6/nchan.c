@@ -406,7 +406,7 @@ chan_shutdown_read(struct ssh *ssh, Channel *c)
 		 * write side has been closed already. (bug on Linux)
 		 * HP-UX may return ENOTCONN also.
 		 */
-		if (shutdown(c->sock, SHUT_RD) == -1 && errno != ENOTCONN) {
+		if (shutdown(c->sock, SHUT_RD) == -1 && errno != WSAENOTCONN) {
 			error_f("channel %d: shutdown() failed for "
 			    "fd %d [i%d o%d]: %.100s", c->self, c->sock,
 			    c->istate, c->ostate, strerror(errno));

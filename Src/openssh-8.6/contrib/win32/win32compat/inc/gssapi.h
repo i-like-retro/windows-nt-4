@@ -173,6 +173,45 @@ gss_channel_bindings_desc, *gss_channel_bindings_t;
  * Function Prototypes 
  */
 
+#ifndef _In_
+#define _In_
+#endif
+
+#ifndef _Out_
+#define _Out_
+#endif
+
+#ifndef _In_opt_
+#define _In_opt_
+#endif
+
+#ifndef _Inout_
+#define _Inout_
+#endif
+
+#ifndef _Inout_opt_
+#define _Inout_opt_
+#endif
+
+#ifndef _Out_opt_
+#define _Out_opt_
+#endif
+
+#ifndef _Outptr_
+#define _Outptr_
+#endif
+
+#ifndef _Outptr_opt_
+#define _Outptr_opt_
+#endif
+
+OM_uint32 
+gss_init_sec_context(
+	_Out_ OM_uint32 * minor_status, _In_ gss_cred_id_t claimant_cred_handle, _In_ gss_ctx_id_t * context_handle,
+	_In_ gss_name_t target_name, _In_ gss_OID mech_type, _In_ OM_uint32 req_flags, _In_ OM_uint32 time_req, _In_ gss_channel_bindings_t input_chan_bindings,
+	_In_ gss_buffer_t input_token, _Inout_ gss_OID * actual_mech_type, _Inout_ gss_buffer_t output_token, _Out_ OM_uint32 * ret_flags,
+	_Out_ OM_uint32 * time_rec);
+
 OM_uint32 
 gss_accept_sec_context(_Out_ OM_uint32 * minor_status, _Inout_opt_ gss_ctx_id_t * context_handle,
 	_In_opt_ gss_cred_id_t acceptor_cred_handle, _In_ gss_buffer_t input_token_buffer, 

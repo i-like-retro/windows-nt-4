@@ -22,6 +22,7 @@
 #ifdef HAVE_SYS_SELECT_H
 # include <sys/select.h>
 #endif
+#include "../contrib/win32/win32compat/inc/poll.h"
 
 #include <errno.h>
 #include <stdlib.h>

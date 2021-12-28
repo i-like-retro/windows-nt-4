@@ -83,6 +83,8 @@
 #include "sshfileperm.h"
 #endif // WINDOWS
 
+int is_absolute_path(const char *);
+
 /* import */
 extern ServerOptions options;
 extern struct include_list includes;

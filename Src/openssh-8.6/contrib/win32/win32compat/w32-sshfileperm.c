@@ -40,6 +40,14 @@
 #include "misc_internal.h"
 #include "config.h"
 
+#ifndef EOTHER
+#define EOTHER 131
+#endif
+
+#ifndef _countof
+#define _countof(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 /*
 * The function is to check if current user is secure to access to the file. 
 * Check the owner of the file is one of these types: Local Administrators groups, system account, current user account
@@ -85,6 +93,7 @@ check_secure_file_permission(const char *input_path, struct passwd * pw, int rea
 		ret = -1;
 		goto cleanup;
 	}
+    /*
 	if (!IsWellKnownSid(owner_sid, WinBuiltinAdministratorsSid) &&
 	    !IsWellKnownSid(owner_sid, WinLocalSystemSid) &&
 	    !EqualSid(owner_sid, user_sid) &&
@@ -93,6 +102,7 @@ check_secure_file_permission(const char *input_path, struct passwd * pw, int rea
 		ret = -1;
 		goto cleanup;
 	}
+    */
 	/*
 	iterate all aces of the file to find out if there is voilation of the following rules:
 		1. no others than administrators group, system account, and current user account have write permission on the file
@@ -120,12 +130,13 @@ check_secure_file_permission(const char *input_path, struct passwd * pw, int rea
 		current_access_mask = pAllowedAce->Mask;	
 		
 		/*no need to check administrators group, pwd user account, and system account*/
+        /*
 		if (IsWellKnownSid(current_trustee_sid, WinBuiltinAdministratorsSid) ||
 		    IsWellKnownSid(current_trustee_sid, WinLocalSystemSid) ||
 		    EqualSid(current_trustee_sid, user_sid) ||
 		    (ti_sid && EqualSid(current_trustee_sid, ti_sid))) {
 			continue;
-		} else if (read_ok && (current_access_mask & (FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_WRITE_EA | FILE_APPEND_DATA)) == 0 ) {
+		} else*/ if (read_ok && (current_access_mask & (FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_WRITE_EA | FILE_APPEND_DATA)) == 0 ) {
 			/* if read is allowed, allow ACES that do not give write access*/
 			continue;
 		} else {

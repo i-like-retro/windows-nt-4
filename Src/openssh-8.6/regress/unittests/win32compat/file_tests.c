@@ -185,7 +185,7 @@ void file_simple_fileio()
 		retValue = read(f, small_read_buf, SMALL_RECV_BUF_SIZE);
 		ASSERT_INT_EQ(retValue, truncate_len);
 
-		retValue = isatty(f);
+		retValue = w32_isatty(f);
 		ASSERT_INT_EQ(retValue, 0);
 		ASSERT_INT_EQ(errno, EINVAL);
 

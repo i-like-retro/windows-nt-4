@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include <openssl/evp.h>
+#include <crypto/evp.h>
 
 #include "xmalloc.h"
 #include "log.h"

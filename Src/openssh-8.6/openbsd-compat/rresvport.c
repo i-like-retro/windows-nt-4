@@ -89,7 +89,7 @@ rresvport_af(int *alport, sa_family_t af)
 	if (*alport < IPPORT_RESERVED - 1) {
 		if (bind(s, sa, salen) >= 0)
 			return (s);
-		if (errno != EADDRINUSE) {
+		if (errno != WSAEADDRINUSE) {
 			(void)close(s);
 			return (-1);
 		}

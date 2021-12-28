@@ -975,7 +975,7 @@ kex_choose_conf(struct ssh *ssh)
 			authlen == 0 ? newkeys->mac.name : "<implicit>", 
 			newkeys->comp.name, 
 			kex->hostkey_alg ? kex->hostkey_alg : "(no match)", 
-			my, peer);
+			(const char**)my, (const char**)peer);
 #endif
 	}
 	need = dh_need = 0;
@@ -1245,7 +1245,7 @@ kex_exchange_identification(struct ssh *ssh, int timeout_ms,
 			if (timeout_ms > 0) {
 				r = waitrfd(ssh_packet_get_connection_in(ssh),
 				    &timeout_ms);
-				if (r == -1 && errno == ETIMEDOUT) {
+				if (r == -1 && errno == WSAETIMEDOUT) {
 					send_error(ssh, "Timed out waiting "
 					    "for SSH identification string.");
 					error("Connection timed out during "

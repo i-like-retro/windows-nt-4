@@ -1858,7 +1858,7 @@ sshpkt_vfatal(struct ssh *ssh, int r, const char *fmt, va_list ap)
 		ssh_packet_clear_keys(ssh);
 		logdie("Disconnected from %s", remote_id);
 	case SSH_ERR_SYSTEM_ERROR:
-		if (errno == ECONNRESET) {
+		if (errno == WSAECONNRESET) {
 			ssh_packet_clear_keys(ssh);
 			logdie("Connection reset by %s", remote_id);
 		}

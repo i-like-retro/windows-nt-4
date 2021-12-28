@@ -176,4 +176,8 @@
 
 #include "entropy.h"
 
+#ifndef _countof
+#define _countof(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 #endif /* INCLUDES_H */

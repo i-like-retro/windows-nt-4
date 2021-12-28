@@ -69,6 +69,10 @@
 #include "ssherr.h"
 #include "platform.h"
 
+#include "sshfileperm.h"
+
+int is_absolute_path(const char *);
+
 /* remove newline at end of string */
 char *
 chop(char *s)
@@ -313,7 +317,7 @@ waitfd(int fd, int *timeoutp, short events)
 			break;
 	}
 	/* timeout */
-	errno = ETIMEDOUT;
+	errno = WSAETIMEDOUT;
 	return -1;
 }
 
@@ -353,7 +357,7 @@ timeout_connect(int sockfd, const struct sockaddr *serv_addr,
 			return 0;
 		} else if (errno == EINTR)
 			continue;
-		else if (errno != EINPROGRESS)
+		else if (errno != WSAEINPROGRESS)
 			return -1;
 		break;
 	}
@@ -2644,7 +2648,7 @@ subprocess(const char *tag, const char *command,
 			posix_spawn_file_actions_adddup2(&actions, p[1], STDOUT_FILENO) != 0)
 			fatal("posix_spawn initialization failed");
 		else {
-#ifdef WINDOWS
+#if 0//def WINDOWS
 			extern PSID get_sid(const char*);
 			/* If the user's SID is the System SID and sshd is running as system,
 			 * launch as a child process.

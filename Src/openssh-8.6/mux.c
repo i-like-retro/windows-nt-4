@@ -453,11 +453,11 @@ mux_master_process_new_session(struct ssh *ssh, u_int rid,
 		error_f("tcgetattr: %s", strerror(errno));
 
 	/* enable nonblocking unless tty */
-	if (!isatty(new_fd[0]))
+	if (!w32_isatty(new_fd[0]))
 		set_nonblock(new_fd[0]);
-	if (!isatty(new_fd[1]))
+	if (!w32_isatty(new_fd[1]))
 		set_nonblock(new_fd[1]);
-	if (!isatty(new_fd[2]))
+	if (!w32_isatty(new_fd[2]))
 		set_nonblock(new_fd[2]);
 
 	window = CHAN_SES_WINDOW_DEFAULT;
@@ -1026,9 +1026,9 @@ mux_master_process_stdio_fwd(struct ssh *ssh, u_int rid,
 	}
 
 	/* enable nonblocking unless tty */
-	if (!isatty(new_fd[0]))
+	if (!w32_isatty(new_fd[0]))
 		set_nonblock(new_fd[0]);
-	if (!isatty(new_fd[1]))
+	if (!w32_isatty(new_fd[1]))
 		set_nonblock(new_fd[1]);
 
 	nc = channel_connect_stdio_fwd(ssh, chost, cport, new_fd[0], new_fd[1]);

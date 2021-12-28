@@ -185,7 +185,8 @@ choose_dh(int min, int wantbits, int max)
 		extern char* __progdir;
 		if (__progdir) {
 			char moduli_path[PATH_MAX] = { 0 };
-			_snprintf_s(moduli_path, PATH_MAX, _TRUNCATE, "%s\\moduli", __progdir);
+			//_snprintf_s(moduli_path, PATH_MAX, _TRUNCATE, "%s\\moduli", __progdir);
+			snprintf(moduli_path, PATH_MAX, "%s\\moduli", __progdir);
 
 			if ((f = fopen(moduli_path, "r")) == NULL) {
 				debug3("Could not open %s (%s)", moduli_path, strerror(errno));

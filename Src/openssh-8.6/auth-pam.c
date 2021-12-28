@@ -1125,7 +1125,7 @@ sshpam_tty_conv(int n, sshpam_const struct pam_message **msg,
 
 	*resp = NULL;
 
-	if (n <= 0 || n > PAM_MAX_NUM_MSG || !isatty(STDIN_FILENO))
+	if (n <= 0 || n > PAM_MAX_NUM_MSG || !w32_isatty(STDIN_FILENO))
 		return (PAM_CONV_ERR);
 
 	if ((reply = calloc(n, sizeof(*reply))) == NULL)

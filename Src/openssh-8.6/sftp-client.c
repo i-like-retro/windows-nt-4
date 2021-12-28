@@ -58,6 +58,8 @@
 #include "sftp-common.h"
 #include "sftp-client.h"
 
+int is_absolute_path(const char *);
+
 extern volatile sig_atomic_t interrupted;
 extern int showprogress;
 

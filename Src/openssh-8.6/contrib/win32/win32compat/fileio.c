@@ -38,6 +38,7 @@
 #include <errno.h>
 #include <stddef.h>
 #include <direct.h>
+#include <wctype.h>
 
 #include "w32fd.h"
 #include "inc\utf.h"
@@ -46,6 +47,14 @@
 #include "misc_internal.h"
 #include "debug.h"
 #include <Sddl.h>
+
+#ifndef EOTHER
+#define EOTHER 131
+#endif
+
+#ifndef ENOTSUP
+#define ENOTSUP 129
+#endif
 
 /* internal read buffer size */
 #define READ_BUFFER_SIZE 100*1024
@@ -100,7 +109,7 @@ errno_from_Win32Error(int win32_error)
 		return ENOENT;
 	case ERROR_INVALID_FUNCTION:
 	case ERROR_NOT_SUPPORTED:
-		return EOPNOTSUPP;
+		return WSAEOPNOTSUPP;
 	default:
 		return win32_error;
 	}
@@ -201,7 +210,7 @@ fileio_pipe(struct w32_io* pio[2], int duplex)
 	}
 
 	/* create name for named pipe */
-	if (-1 == sprintf_s(pipe_name, PATH_MAX, "\\\\.\\Pipe\\W32PosixPipe.%08x.%08x",
+	if (-1 == snprintf(pipe_name, PATH_MAX, "\\\\.\\Pipe\\W32PosixPipe.%08x.%08x",
 		GetCurrentProcessId(), pipe_counter++)) {
 		errno = EOTHER;
 		debug3("pipe - ERROR sprintf_s %d", errno);
@@ -279,7 +288,7 @@ st_mode_to_file_att(int mode, wchar_t * attributes)
 	DWORD att = 0;
 	switch (mode) {
 	case S_IRWXO:
-		swprintf_s(attributes, MAX_ATTRIBUTE_LENGTH, L"FA");
+		wcscpy(attributes, L"FA");
 		break;
 	default:
 		if((mode & S_IROTH) != 0)
@@ -288,7 +297,7 @@ st_mode_to_file_att(int mode, wchar_t * attributes)
 			att |= (FILE_GENERIC_WRITE | DELETE);
 		if ((mode & S_IXOTH) != 0)
 			att |= FILE_GENERIC_EXECUTE;
-		swprintf_s(attributes, MAX_ATTRIBUTE_LENGTH, L"%#lx", att);
+		swprintf(attributes, L"%#lx", att);
 		break;		
 	}
 	return 0;
@@ -357,6 +366,7 @@ createFile_flags_setup(int flags, mode_t mode, struct createFile_flags* cf_flags
 	cf_flags->dwFlagsAndAttributes = FILE_FLAG_OVERLAPPED | FILE_FLAG_BACKUP_SEMANTICS;
 
 	// If the mode is USHRT_MAX then we will inherit the permissions from the parent folder.
+	#if 0
 	if (mode != USHRT_MAX) {
 		/*validate mode*/
 		/*
@@ -401,6 +411,7 @@ createFile_flags_setup(int flags, mode_t mode, struct createFile_flags* cf_flags
 			goto cleanup;
 		}
 	}
+	#endif
 
 	cf_flags->securityAttributes.lpSecurityDescriptor = pSD;
 	cf_flags->securityAttributes.bInheritHandle = TRUE;
@@ -517,7 +528,7 @@ cleanup:
 }
 
 VOID CALLBACK 
-ReadCompletionRoutine(_In_ DWORD dwErrorCode, _In_ DWORD dwNumberOfBytesTransfered, _Inout_ LPOVERLAPPED lpOverlapped)
+ReadCompletionRoutine(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered, LPOVERLAPPED lpOverlapped)
 {
 	struct w32_io* pio = (struct w32_io*)((char*)lpOverlapped - offsetof(struct w32_io, read_overlapped));
 	debug4("ReadCB pio:%p, pending_state:%d, error:%d, received:%d",
@@ -567,7 +578,7 @@ int
 fileio_read(struct w32_io* pio, void *dst, size_t max_bytes)
 {
 	int bytes_copied;
-	errno_t r = 0;
+	/*errno_t*/int r = 0;
 
 	debug5("read - io:%p remaining:%d", pio, pio->read_details.remaining);
 
@@ -641,10 +652,11 @@ fileio_read(struct w32_io* pio, void *dst, size_t max_bytes)
 	}
 
 	bytes_copied = min((DWORD)max_bytes, pio->read_details.remaining);
-	if ((r = memcpy_s(dst, max_bytes, pio->read_details.buf + pio->read_details.completed, bytes_copied)) != 0) {
+	if (bytes_copied > max_bytes) {
 		debug3("memcpy_s failed with error: %d.", r);
 		return -1;
 	}
+	memcpy(dst, pio->read_details.buf + pio->read_details.completed, bytes_copied);
 	pio->read_details.remaining -= bytes_copied;
 	pio->read_details.completed += bytes_copied;
 	debug4("read - io:%p read: %d remaining: %d", pio, bytes_copied,
@@ -653,9 +665,9 @@ fileio_read(struct w32_io* pio, void *dst, size_t max_bytes)
 }
 
 VOID CALLBACK 
-WriteCompletionRoutine(_In_ DWORD dwErrorCode,
-			_In_ DWORD dwNumberOfBytesTransfered,
-			_Inout_ LPOVERLAPPED lpOverlapped)
+WriteCompletionRoutine(DWORD dwErrorCode,
+			DWORD dwNumberOfBytesTransfered,
+			LPOVERLAPPED lpOverlapped)
 {
 	struct w32_io* pio =
 		(struct w32_io*)((char*)lpOverlapped - offsetof(struct w32_io, write_overlapped));
@@ -711,7 +723,7 @@ fileio_write(struct w32_io* pio, const void *buf, size_t max_bytes)
 {
 	int bytes_copied;
 	DWORD pipe_flags = 0, pipe_instances = 0;
-	errno_t r = 0;
+	/*errno_t*/int r = 0;
 
 	debug4("write - io:%p", pio);
 	if (pio->write_details.pending) {
@@ -749,10 +761,11 @@ fileio_write(struct w32_io* pio, const void *buf, size_t max_bytes)
 	}
 
 	bytes_copied = min((int)max_bytes, pio->write_details.buf_size);
-	if((r = memcpy_s(pio->write_details.buf, max_bytes, buf, bytes_copied)) != 0) {
+	if(bytes_copied > max_bytes) {
 		debug3("memcpy_s failed with error: %d.", r);
 		return -1;
 	}
+	memcpy(pio->write_details.buf, buf, bytes_copied);
 
 	if (pio->type == NONSOCK_SYNC_FD || FILETYPE(pio) == FILE_TYPE_CHAR) {
 		if (syncio_initiate_write(pio, bytes_copied) == 0) {
@@ -821,10 +834,14 @@ fileio_fstat(struct w32_io* pio, struct _stat64 *buf)
 		return -1;
 	}
 
-	int res = _fstat64(fd, buf);
+	int res = _fstati64(fd, buf);
 	_close(fd);
 	return res;
 }
+
+#ifndef __ascii_iswalpha
+#define __ascii_iswalpha(c)  ( ('A' <= (c) && (c) <= 'Z') || ( 'a' <= (c) && (c) <= 'z'))
+#endif
 
 int
 fileio_stat_or_lstat_internal(const char *path, struct _stat64 *buf, int do_lstat)
@@ -841,7 +858,7 @@ fileio_stat_or_lstat_internal(const char *path, struct _stat64 *buf, int do_lsta
 	/* Detect root dir */
 	if (path && strcmp(path, "/") == 0) {
 		buf->st_mode = _S_IFDIR | _S_IREAD | 0xFF;
-		buf->st_dev = USHRT_MAX;   // rootdir flag
+		buf->st_dev = /*USHRT_MAX*/(unsigned short)-1;   // rootdir flag
 		return 0;
 	}
 
@@ -1143,6 +1160,10 @@ fileio_readlink(const char *path, char *buf, size_t bufsiz)
 	 * for more info: https://msdn.microsoft.com/en-us/library/cc232006.aspx
 	 */
 
+	errno = ENOTSUP;
+	return -1;
+
+#if 0
 	typedef struct _REPARSE_DATA_BUFFER_SYMLINK {
 		ULONG ReparseTag;
 		USHORT ReparseDataLength;
@@ -1164,7 +1185,7 @@ fileio_readlink(const char *path, char *buf, size_t bufsiz)
 	PREPARSE_DATA_BUFFER_SYMLINK reparse_buffer = NULL;
 
 	/* sanity check */
-	if (path == NULL || buf == NULL || bufsiz == 0) {
+	//if (path == NULL || buf == NULL || bufsiz == 0) {
 		errno = EINVAL;
 		goto cleanup;
 	}
@@ -1216,7 +1237,7 @@ fileio_readlink(const char *path, char *buf, size_t bufsiz)
 	}
 
 	/* copy the data out of the reparse buffer and add null terminator */
-	memcpy_s(linkpath, symlink_nonnull_size + sizeof(wchar_t), symlink_nonnull, symlink_nonnull_size);
+	memcpy(linkpath, symlink_nonnull, symlink_nonnull_size);
 	linkpath[symlink_nonnull_size / sizeof(wchar_t)] = L'\0';
 
 	/* convert link path to utf8 */
@@ -1252,11 +1273,16 @@ cleanup:
 		free(output);
 
 	return (ssize_t)ret;
+#endif
 }
 
 int
 fileio_symlink(const char *target, const char *linkpath)
 {
+	errno = ENOTSUP;
+	return -1;
+
+#if 0
 	DWORD ret = -1;
 	char target_modified[PATH_MAX] = { 0 };
 	char *linkpath_resolved = NULL, *target_resolved = NULL;
@@ -1343,6 +1369,7 @@ cleanup:
 		free(target_resolved);
 
 	return ret;
+#endif
 }
 
 int 

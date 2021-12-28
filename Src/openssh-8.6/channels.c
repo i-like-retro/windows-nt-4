@@ -329,7 +329,7 @@ channel_register_fds(struct ssh *ssh, Channel *c, int rfd, int wfd, int efd,
 		debug2("channel %d: rfd %d isatty", c->self, c->rfd);
 #ifdef _AIX
 	/* XXX: Later AIX versions can't push as much data to tty */
-	c->wfd_isatty = is_tty || isatty(c->wfd);
+	c->wfd_isatty = is_tty || w32_isatty(c->wfd);
 #endif
 
 	/* enable nonblocking mode */
@@ -1655,7 +1655,7 @@ channel_post_x11_listener(struct ssh *ssh, Channel *c,
 	}
 	if (newsock == -1) {
 		if (errno != EINTR && errno != EWOULDBLOCK &&
-		    errno != ECONNABORTED)
+		    errno != WSAECONNABORTED)
 			error("accept: %.100s", strerror(errno));
 		if (errno == EMFILE || errno == ENFILE)
 			c->notbefore = monotime() + 1;
@@ -1785,7 +1785,7 @@ channel_post_port_listener(struct ssh *ssh, Channel *c,
 	newsock = accept(c->sock, (struct sockaddr *)&addr, &addrlen);
 	if (newsock == -1) {
 		if (errno != EINTR && errno != EWOULDBLOCK &&
-		    errno != ECONNABORTED)
+		    errno != WSAECONNABORTED)
 			error("accept: %.100s", strerror(errno));
 		if (errno == EMFILE || errno == ENFILE)
 			c->notbefore = monotime() + 1;
@@ -4145,7 +4145,7 @@ connect_next(struct channel_connect *cctx)
 		if (set_nonblock(sock) == -1)
 			fatal_f("set_nonblock(%d)", sock);
 		if (connect(sock, cctx->ai->ai_addr,
-		    cctx->ai->ai_addrlen) == -1 && errno != EINPROGRESS) {
+		    cctx->ai->ai_addrlen) == -1 && errno != WSAEINPROGRESS) {
 			debug("connect_next: host %.100s ([%.100s]:%s): "
 			    "%.100s", cctx->host, ntop, strport,
 			    strerror(errno));
@@ -4558,7 +4558,7 @@ x11_create_display_inet(struct ssh *ssh, int x11_display_offset,
 			sock = socket(ai->ai_family, ai->ai_socktype,
 			    ai->ai_protocol);
 			if (sock == -1) {
-				if ((errno != EINVAL) && (errno != EAFNOSUPPORT)
+				if ((errno != EINVAL)// && (errno != EAFNOSUPPORT)
 #ifdef EPFNOSUPPORT
 				    && (errno != EPFNOSUPPORT)
 #endif 
