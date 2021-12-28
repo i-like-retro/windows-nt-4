@@ -137,7 +137,7 @@ RAR4 archives.
 Drivers
 -------
 
-* [USB 1.x driver](CD/SOFTWARE/DRIVERS/R62200.EXE): set of USB drivers,
+* [USB support](CD/SOFTWARE/DRIVERS/R62200.EXE): set of USB drivers,
 developed by Inside Out Networks and provided by DELL for its computers.
 Also works with other computers as well. **NOTE**: there is an information
 on the Internet that this driver may cause problems with a PS/2 keyboard.
@@ -182,6 +182,13 @@ applications. This is the latest version of NSIS 2.x. Actually
 and works perfectly on Windows NT 4, but it seems to be unable to parse
 scripts used by CMake. For this reason it is recommended to install NSIS 2.x
 if you plan to use it together with CMake.
+
+Utility
+-------
+
+* [FAR Manager 1.70](CD/SOFTWARE/UTILITY/FAR170) `2006-03-29`: freeware and
+open source orthodox file manager (for more information see
+https://farmanager.com).
 
 Useful links
 ============
