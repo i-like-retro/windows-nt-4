@@ -309,6 +309,8 @@ SectionGroup /e "!Core"
     Section "openssl-1.1.1m-devel" OPENSSL_DEVEL
         SectionIn 2
         SetOutPath "$INSTDIR\lib"
+        File "..\openssl-1.1.1m\libssl.def"
+        File "..\openssl-1.1.1m\libcrypto.def"
         File /oname=libcrypto-static.a "..\openssl-1.1.1m\libcrypto.a"
         File /oname=libcrypto.a "..\openssl-1.1.1m\libcrypto.dll.a"
         File /oname=libssl-static.a "..\openssl-1.1.1m\libssl.a"

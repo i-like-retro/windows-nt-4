@@ -13,10 +13,10 @@
  */
 
 #include "less.h"
-#if MSDOS_COMPILER==WIN32C
+//#if MSDOS_COMPILER==WIN32C
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#endif
+//#endif
 
 public char *   every_first_cmd = NULL;
 public int      new_file;
@@ -50,7 +50,7 @@ extern int      jump_sline;
 #endif
 
 #ifdef WIN32
-//static char consoleTitle[256];
+static char consoleTitle[256];
 #endif
 
 public int      one_screen;
@@ -110,7 +110,7 @@ main(argc, argv)
 			putenv(env);
 		}
 	}
-	//GetConsoleTitle(consoleTitle, sizeof(consoleTitle)/sizeof(char));
+	GetConsoleTitle(consoleTitle, sizeof(consoleTitle)/sizeof(char));
 #endif /* WIN32 */
 
 	/*
@@ -426,7 +426,7 @@ quit(status)
 	close(2);
 #endif
 #ifdef WIN32
-	//SetConsoleTitle(consoleTitle);
+	SetConsoleTitle(consoleTitle);
 #endif
 	close_getchr();
 	exit(status);
