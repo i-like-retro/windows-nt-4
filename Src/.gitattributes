@@ -1,0 +1,3 @@
+/bzip2-1.0.8/sample1.ref -text -crlf
+/bzip2-1.0.8/sample2.ref -text -crlf
+/bzip2-1.0.8/sample3.ref -text -crlf

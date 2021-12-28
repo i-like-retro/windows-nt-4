@@ -7,7 +7,7 @@ set ZLIB=%BASEDIR%zlib-1.2.11
 set BZIP2=%BASEDIR%bzip2-1.0.8
 set OPENSSL=%BASEDIR%openssl-1.1.1m
 set LIBSSH2=%BASEDIR%libssh2-1.10.0
-set ICONV=libiconv-1.16
+set ICONV=%BASEDIR%libiconv-1.16
 set CURL=%BASEDIR%curl-7.80.0
 set EXPAT=%BASEDIR%expat-2.4.2
 set NCURSES=%BASEDIR%ncurses-6.3
@@ -347,6 +347,9 @@ cmake -G "MinGW Makefiles" ^
     -DEXPAT_INCLUDE_DIR:PATH=%EXPAT%\lib ^
     -DEXPAT_LIBRARY:PATH=%BUILD%\expat\libexpat.dll.a ^
     -DEXPAT_FOUND:BOOL=TRUE ^
+    -DIconv_INCLUDE_DIR:PATH=%ICONV%\include ^
+    -DIconv_LIBRARY:PATH=%ICONV%\lib\libiconv.dll.a ^
+    -DIconv_FOUND:BOOL=TRUE ^
     -DNO_GETTEXT=YES ^
     -DBUILD_TESTING=NO ^
     %GIT%\contrib\buildsystems
