@@ -137,15 +137,15 @@ RAR4 archives.
 Drivers
 -------
 
+* [CardWare](CD/SOFTWARE/DRIVERS/CARDWARE): total software solution for
+PC Cards and PCMCIA for Windows NT.
+
 * [USB support](CD/SOFTWARE/DRIVERS/R62200.EXE): set of USB drivers,
 developed by Inside Out Networks and provided by DELL for its computers.
 Also works with other computers as well. **NOTE**: there is an information
 on the Internet that this driver may cause problems with a PS/2 keyboard.
 **NOTE**: installer claims that the driver does not support multiprocessor
 systems.
-
-* [CardWare 6.0](CD/SOFTWARE/DRIVERS/CARDWARE): total software solution for
-PC Cards and PCMCIA for Windows NT.
 
 Multimedia
 ----------

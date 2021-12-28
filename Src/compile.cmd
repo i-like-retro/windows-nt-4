@@ -42,6 +42,25 @@ strip %BUILD%\libgcc_s_dw2-1.dll
 if errorlevel 1 goto error
 :haslibgcc
 
+rem =========
+rem  AUTORUN
+rem =========
+:autorun
+
+if not exist %BUILD%\autorun mkdir %BUILD%\autorun
+if errorlevel 1 goto error
+cd %BUILD%\autorun
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    %BASEDIR%_autorun
+if errorlevel 1 goto error
+mingw32-make -j 4
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
 rem ======
 rem  ZLIB
 rem ======

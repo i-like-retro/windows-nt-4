@@ -1,0 +1,102 @@
+
+>> Service Pack 6a
+START /WAIT %sSOFTWARE\UPDATES\SP6AI386.EXE -u -n
+!
+
+>> Service Rollup Release
+START /WAIT %sSOFTWARE\UPDATES\Q299444I.EXE -n -m
+!
+
+>> Post-SRP Security Fixes
+START /WAIT %sSOFTWARE\UPDATES\Q810833.EXE -n -z -m
+START /WAIT %sSOFTWARE\UPDATES\Q817606.EXE -n -z -m
+START /WAIT %sSOFTWARE\UPDATES\KB828035.EXE -n -z -m
+START /WAIT %sSOFTWARE\UPDATES\KB828741.EXE -n -z -m
+START /WAIT %sSOFTWARE\UPDATES\KB835732.EXE -n -z -m
+START /WAIT %sSOFTWARE\UPDATES\KB839645.EXE -n -z -m
+START /WAIT %sSOFTWARE\UPDATES\KB841872.EXE -n -z -m
+START /WAIT %sSOFTWARE\UPDATES\QCHAIN.EXE
+%sSOFTWARE\UTILITY\SHUTDOWN /L /Y /R /T:0
+!
+
+>> KB841356 fix
+START /WAIT %sSOFTWARE\UPDATES\KB841356.EXE
+%sSOFTWARE\UTILITY\SHUTDOWN /L /Y /R /T:0
+!
+
+>> IE4 + Desktop Update
+START /WAIT %sSOFTWARE\UPDATES\IE4\IE4SETUP.EXE
+!
+
+>> Internet Explorer 6 SP1
+START /WAIT %sSOFTWARE\UPDATES\IE6SP1NT\IE6SETUP.EXE
+!
+
+>> Microsoft Installer 2.0
+START /WAIT %sSOFTWARE\UPDATES\INSTMSIW.EXE
+
+>> MS Data Access Components
+START /WAIT %sSOFTWARE\UPDATES\MDAC_TYP.EXE
+
+>> MS JET Database Engine
+START /WAIT %sSOFTWARE\UPDATES\JETSETUP.EXE
+
+>> .NET Framework 1.0
+START /WAIT %sSOFTWARE\UPDATES\DOTNETFX.EXE
+
+>> .NET Framework 1.1
+START /WAIT %sSOFTWARE\UPDATES\DOTNET11.EXE
+
+>> Install MSIMG32.DLL
+COPY /B %sSOFTWARE\UPDATES\DLLS\MSIMG32.DLL %%SystemRoot%%\System32
+
+------------------------------------------------------------------------------
+
+>> CardWare (PCMCIA support)
+START %sSOFTWARE\DRIVERS\CARDWARE\SETUP.EXE
+
+>> USB support (experimental)
+START /WAIT %sSOFTWARE\DRIVERS\R62200.EXE
+
+------------------------------------------------------------------------------
+
+>> FAR Manager 1.7
+%sSOFTWARE\UTILITY\FAR170\INSTALL.BAT
+
+------------------------------------------------------------------------------
+
+>> 7-zip 21.06
+START /WAIT %sSOFTWARE\COMPRESS\7Z2106.EXE
+
+>> WinRAR 3.93
+START /WAIT %sSOFTWARE\COMPRESS\WRAR393.EXE
+
+------------------------------------------------------------------------------
+
+>> WinAMP 5.094
+START /WAIT %sSOFTWARE\MULTIMED\WAMP5094.EXE
+
+>> WinAMP 3.0
+START /WAIT %sSOFTWARE\MULTIMED\WAMP3.EXE
+
+>> WinAMP 2.95
+START /WAIT %sSOFTWARE\MULTIMED\WAMP295.EXE
+
+------------------------------------------------------------------------------
+
+>> CMake 3.5.2
+START /WAIT %sSOFTWARE\DEVEL\CMAKE352.EXE
+
+>> HxD 1.7.7.0
+START /WAIT %sSOFTWARE\DEVEL\HXD1770.EXE
+
+>> NSIS 2.51
+START /WAIT %sSOFTWARE\DEVEL\NSIS251.EXE
+
+>> NSIS 3.08
+START /WAIT %sSOFTWARE\DEVEL\NSIS308.EXE
+
+------------------------------------------------------------------------------
+
+>> GNU Software
+START /WAIT %sSOFTWARE\GNU-NT4.EXE

@@ -16,6 +16,13 @@ if not "%1" == "" goto :%1
 
 del %BUILD%\libgcc_s_dw2-1.dll
 
+:autorun
+
+del %~dp0..\CD\AUTORUN.EXE
+rmdir /S/Q %BUILD%\autorun
+
+if not "%1" == "" goto next
+
 :zlib
 
 rmdir /S/Q %BUILD%\zlib
