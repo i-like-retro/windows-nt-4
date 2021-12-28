@@ -139,8 +139,10 @@ Drivers
 
 * [USB 1.x driver](CD/SOFTWARE/DRIVERS/R62200.EXE): set of USB drivers,
 developed by Inside Out Networks and provided by DELL for its computers.
-Also works with other computers as well. **NOTE**: installer claims that the
-driver does not support multiprocessor systems.
+Also works with other computers as well. **NOTE**: there is an information
+on the Internet that this driver may cause problems with a PS/2 keyboard.
+**NOTE**: installer claims that the driver does not support multiprocessor
+systems.
 
 * [CardWare 6.0](CD/SOFTWARE/DRIVERS/CARDWARE): total software solution for
 PC Cards and PCMCIA for Windows NT.
@@ -185,3 +187,4 @@ Useful links
 ============
 
 * [Windows NT 4.0 Service Pack and Hotfixes Reference](https://nt4ref.zcm.com.au/patch.htm)
+* [1996 Windows NT 4.0 Workstation Certification Series](https://www.youtube.com/watch?v=nvFkASRpPIo)
