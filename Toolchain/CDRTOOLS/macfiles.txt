@@ -1,0 +1,66 @@
+# Mac file extension map table for mkisofs
+# Copyright (c) 2004-2006 Ross Smith II (http://smithii.com). All rights reserved.
+# 
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of version 2 of the GNU General Public License 
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# $Id$
+
+# simple example:
+# mkisofs -hfs -map ../macfiles.txt -o ex.iso .
+# for a complete example, and instructions, see:
+# http://research.silmaril.ie/autoruncd/
+
+# Example filename mapping file used by mkhybrid for hfs
+#
+# EXTN   XLate   CREATOR   TYPE     Comment
+
+# EXTN   XLate   CREATOR   TYPE     Comment
+*        Ascii   'ttxt'    'TEXT'   "Text file"
+.au      Raw     'TVOD'    'ULAW'   "Audio file"
+.bin     Raw     'SITx'    'BINA'   "Mac Binary"
+.c       Ascii   'CWIE'    'TEXT'   "C source file"
+.cp      Ascii   'CWIE'    'TEXT'   "C++ source file"
+.cpp     Ascii   'CWIE'    'TEXT'   "C++ source file"
+.css     Ascii   'R*ch'    'TEXT'   "CSS file"
+.doc     Raw     'MSWD'    'WDBN'   "Word file"
+.dtd     Ascii   'R*ch'    'TEXT'   "DTD file"
+.exp     Ascii   'CWIE'    'TEXT'   "Symbol export file"
+.gif     Raw     'ogle'    'GIFf'   "GIF file"
+.gz      Raw     'SITx'    'ZIP '   "gzip file" 
+.h       Ascii   'CWIE'    'TEXT'   "C/C++ header file"
+.hqx     Ascii   'SITx'    'TEXT'   "BinHex file"
+.htm     Ascii   'MOSS'    'HTML'   "HTML file"
+.html    Ascii   'MOSS'    'HTML'   "HTML file"
+.jpeg    Raw     'ogle'    'JPEG'   "JPEG file"
+.jpg     Raw     'ogle'    'JPEG'   "JPEG file"
+.js      Ascii   'R*ch'    'TEXT'   "JavaScript file"
+.mcp     Raw     'CWIE'    'MMPr'   "CodeWarrior project file"
+.mov     Raw     'TVOD'    'MooV'   "QuickTime Movie"
+.mp3     Raw     'TVOD'    'MPG3'   "MPEG file"
+.mpeg    Raw     'TVOD'    'MPEG'   "MPEG file"
+.mpg     Raw     'TVOD'    'MPEG'   "MPEG file"
+.pdf     Raw     'CARO'    'PDFf'   "PDF file in Acrobat"
+.pl      Ascii   'McPL'    'TEXT'   "Perl file"
+.pm      Ascii   'McPL'    'TEXT'   "Perl module file"
+.png     Raw     'ogle'    'PNG '   "PNG file"
+.r       Ascii   'MPS '    'TEXT'   "Rez file"
+.tar     Raw     'SITx'    'TARF'   "tar file" 
+.tgz     Raw     'SITx'    'ZIP '   "tar.gz gzip file" 
+.tif     Raw     '8BIM'    'TIFF'   "TIFF image"
+.txt     Ascii   'MOSS'    'TEXT'   "text file"
+.xbl     Ascii   'R*ch'    'TEXT'   "XBL file"
+.xls     Raw     'XCEL'    'XLS '   "Excel file"
+.xml     Ascii   'R*ch'    'TEXT'   "XML file"
+.xul     Ascii   'R*ch'    'TEXT'   "XUL file"
+.zip     Raw     'SITx'    'ZIP '   "Zip file"
+CHANGES  Ascii   'MOSS'    'TEXT'   "text file"
+INSTALL  Ascii   'MOSS'    'TEXT'   "text file"
+LICENSE  Ascii   'MOSS'    'TEXT'   "text file"
+README   Ascii   'MOSS'    'TEXT'   "text file"

@@ -1,0 +1,10 @@
+CDR_DEVICE=1,0,0
+sony=1,0,0 -1 -1
+liteon=1,1,0 -1	-1
+dvd=1,0,0 -1 -1
+cd=1,1,0 -1 -1
+# file should be in unix format, and only contain line feed (ASCII 10) characters
+# if it contains carriage return (ASCII 13) characters, cdrecord will not understand it
+# to use, create a directory called 
+# %SystemDrive%\etc\default 
+# and copy this file into it
