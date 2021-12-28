@@ -34,11 +34,28 @@ typedef int pthread_mutexattr_t;
 
 #define pthread_cond_t CONDITION_VARIABLE
 
-#define pthread_cond_init(a,b) InitializeConditionVariable((a))
-#define pthread_cond_destroy(a) do {} while (0)
-#define pthread_cond_wait(a,b) return_0(SleepConditionVariableCS((a), (b), INFINITE))
-#define pthread_cond_signal WakeConditionVariable
-#define pthread_cond_broadcast WakeAllConditionVariable
+//#define pthread_cond_init(a,b) InitializeConditionVariable((a))
+//#define pthread_cond_destroy(a) do {} while (0)
+//#define pthread_cond_wait(a,b) return_0(SleepConditionVariableCS((a), (b), INFINITE))
+//#define pthread_cond_signal WakeConditionVariable
+//#define pthread_cond_broadcast WakeAllConditionVariable
+
+typedef struct {
+    CRITICAL_SECTION mutex;
+    volatile LONG numWaiters;
+    HANDLE semaphore;
+    HANDLE wakeEvent;
+} CONDITION_VARIABLE;
+
+
+void pthread_cond_init_(CONDITION_VARIABLE* cvar);
+void pthread_cond_destroy(CONDITION_VARIABLE* cvar);
+BOOL pthread_cond_wait_(CONDITION_VARIABLE* cvar, CRITICAL_SECTION* cs, DWORD dwMilliseconds);
+void pthread_cond_signal(CONDITION_VARIABLE* cvar);
+void pthread_cond_broadcast(CONDITION_VARIABLE* cvar);
+
+#define pthread_cond_init(a,b) pthread_cond_init_((a))
+#define pthread_cond_wait(a,b) return_0(pthread_cond_wait_((a), (b), INFINITE))
 
 /*
  * Simple thread creation implementation using pthread API
