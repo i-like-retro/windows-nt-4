@@ -134,6 +134,14 @@ version of the popular commercial compression tool. This is the latest version
 that works under Windows NT 4. NOTE: due to its age it doesn't support RAR4
 archives.
 
+Drivers
+-------
+
+* [USB 1.x driver](CD/SOFTWARE/DRIVERS/R62200.EXE): set of USB drivers,
+developed by Inside Out Networks and provided by DELL for its computers.
+Also works with other computers as well. NOTE: installer claims that the
+driver does not support multiprocessor systems.
+
 Multimedia
 ----------
 
