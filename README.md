@@ -142,10 +142,10 @@ PC Cards and PCMCIA for Windows NT.
 
 * [USB support](CD/SOFTWARE/DRIVERS/R62200.EXE): set of USB drivers,
 developed by Inside Out Networks and provided by DELL for its computers.
-Also works with other computers as well. **NOTE**: there is an information
-on the Internet that this driver may cause problems with a PS/2 keyboard.
-**NOTE**: installer claims that the driver does not support multiprocessor
-systems.
+It is reported to work with non-DELL computers as well. **NOTE**: there
+is an information on the Internet that this driver may cause problems with a
+PS/2 keyboard. **NOTE**: installer claims that the driver does not support
+multiprocessor systems.
 
 Multimedia
 ----------
@@ -165,7 +165,7 @@ Network
 --------------------
 
 * [PuTTY 0.76](CD/SOFTWARE/NETWORK/PUTTY076.EXE) `2021-07-17`: is an SSH and telnet
-client.
+client. PuTTY has been compiled for Windows NT from [source code](Src/putty-0.76).
 
 Software Development
 --------------------
@@ -192,7 +192,7 @@ if you plan to use it together with CMake.
 Utility
 -------
 
-* [FAR Manager 1.70](CD/SOFTWARE/UTILITY/FAR170) `2006-03-29`: freeware and
+* [FAR Manager 1.70](CD/SOFTWARE/UTILITY/FAR170/FAR170.EXE) `2006-03-29`: freeware and
 open source orthodox file manager (for more information see
 https://farmanager.com).
 
