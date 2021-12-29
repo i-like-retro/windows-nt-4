@@ -373,7 +373,16 @@ rem =======
 
 cd %PUTTY%\windows
 if errorlevel 1 goto error
+
+if exist %BASEDIR%..\CD\SOFTWARE\NETWORK\PUTTY076.EXE del %BASEDIR%..\CD\SOFTWARE\NETWORK\PUTTY076.EXE
+
 mingw32-make -f Makefile.mgw -j 4
+if errorlevel 1 goto error
+
+cd %BASEDIR%_setup\putty
+if errorlevel 1 goto error
+
+makensis setup.nsi
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next
@@ -420,7 +429,7 @@ rem ==========================================================================
 cd %BASEDIR%_setup
 if errorlevel 1 goto error
 
-if exist %BASEDIR%..\..\CD\SOFTWARE\GNU-NT4.EXE del %BASEDIR%..\..\CD\SOFTWARE\GNU-NT4.EXE
+if exist %BASEDIR%..\CD\SOFTWARE\GNU-NT4.EXE del %BASEDIR%..\CD\SOFTWARE\GNU-NT4.EXE
 if errorlevel 1 goto error
 
 makensis setup.nsi

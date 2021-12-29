@@ -161,6 +161,12 @@ latest one that starts on Windows NT 4 (in my tests the latest version to be
 able to start was 5.35), but later versions display various errors and seem
 to only provide partial functionality.
 
+Network
+--------------------
+
+* [PuTTY](CD/SOFTWARE/NETWORK/PUTTY076.EXE) `2021-07-17`: is an SSH and telnet
+client.
+
 Software Development
 --------------------
 

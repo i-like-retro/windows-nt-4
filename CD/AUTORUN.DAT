@@ -84,6 +84,11 @@ START /WAIT %sSOFTWARE\MULTIMED\WAMP295.EXE
 
 ------------------------------------------------------------------------------
 
+>> PuTTY 0.76
+START /WAIT %sSOFTWARE\NETWORK\PUTTY076.EXE
+
+------------------------------------------------------------------------------
+
 >> CMake 3.5.2
 START /WAIT %sSOFTWARE\DEVEL\CMAKE352.EXE
 
