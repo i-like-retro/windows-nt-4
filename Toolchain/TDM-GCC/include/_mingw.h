@@ -410,8 +410,8 @@ allow GCC to optimize away some EH unwind code, at least in DW2 case.  */
  * compiler's command line options, (e.g. -posix, -ansi, or -std=c...),
  * which cause _POSIX_SOURCE, or __STRICT_ANSI__ to be defined.
  */
-# warning "Direct definition of __USE_MINGW_ANSI_STDIO is deprecated."
-# pragma message "See <_mingw.h> for preferred feature activation methods."
+//# warning "Direct definition of __USE_MINGW_ANSI_STDIO is deprecated."
+//# pragma message "See <_mingw.h> for preferred feature activation methods."
 
 #else	/* ! defined __USE_MINGW_ANSI_STDIO */
 /* We must check this BEFORE we specifiy any implicit _POSIX_C_SOURCE,

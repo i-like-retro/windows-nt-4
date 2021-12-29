@@ -13,6 +13,7 @@ set EXPAT=%BASEDIR%expat-2.4.2
 set NCURSES=%BASEDIR%ncurses-6.3
 set PCRE2=%BASEDIR%pcre2-10.39
 set LESS=%BASEDIR%less-590
+set PUTTY=%BASEDIR%putty-0.76
 set OPENSSH=%BASEDIR%openssh-8.6
 set GIT=%BASEDIR%git-2.34.1
 
@@ -361,6 +362,18 @@ cmake -G "MinGW Makefiles" ^
     %OPENSSH%
 if errorlevel 1 goto error
 mingw32-make
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem =======
+rem  PUTTY
+rem =======
+:putty
+
+cd %PUTTY%\windows
+if errorlevel 1 goto error
+mingw32-make -f Makefile.mgw -j 4
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

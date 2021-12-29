@@ -19,6 +19,7 @@
 #include "ssh.h"
 
 #include <ws2tcpip.h>
+#include <ntcompat/ntcompat.h>
 
 #ifndef NO_IPV6
 #ifdef __clang__

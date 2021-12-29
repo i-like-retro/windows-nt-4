@@ -18,6 +18,7 @@ void init_help(void) { }
 void shutdown_help(void) { }
 void launch_help(HWND hwnd, const char *topic) { }
 void quit_help(HWND hwnd) { }
+int has_embedded_chm(void) { return 0; }
 
 #else
 

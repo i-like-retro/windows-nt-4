@@ -193,7 +193,7 @@ typedef VOID (APIENTRY* PFNGETACCEPTEXSOCKADDRSPROC)
 #define LPFN_GETACCEPTEXSOCKADDRS PFNGETACCEPTEXSOCKADDRSPROC
 #endif
 
-#if defined(_MSC_VER) && _MSC_VER == 1200
+#ifdef NTCOMPAT_NEED_STRUCT_ADDINFO
 typedef int socklen_t;
 struct addrinfo
 {
@@ -206,6 +206,23 @@ struct addrinfo
     struct sockaddr* ai_addr;
     struct addrinfo* ai_next;
 };
+#endif
+
+#ifdef NTCOMPAT_NEED_EXTENDED_NAME_FORMAT
+typedef enum {
+    NameUnknown,
+    NameFullyQualifiedDN,
+    NameSamCompatible,
+    NameDisplay,
+    NameUniqueId,
+    NameCanonical,
+    NameUserPrincipal,
+    NameCanonicalEx,
+    NameServicePrincipal,
+    NameDnsDomain,
+    NameGivenName,
+    NameSurname
+} EXTENDED_NAME_FORMAT, *PEXTENDED_NAME_FORMAT;
 #endif
 
 #ifndef _countof

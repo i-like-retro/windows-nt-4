@@ -15,6 +15,10 @@
 
 #include "winsecur.h"
 
+#ifndef FILE_FLAG_FIRST_PIPE_INSTANCE
+#define FILE_FLAG_FIRST_PIPE_INSTANCE 0x00080000
+#endif
+
 typedef struct NamedPipeServerSocket {
     /* Parameters for (repeated) creation of named pipe objects */
     PSECURITY_DESCRIPTOR psd;

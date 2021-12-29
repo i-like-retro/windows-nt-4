@@ -11,6 +11,12 @@
 #endif
 #include <security.h>
 
+#define NTCOMPAT_NEED_EXTENDED_NAME_FORMAT
+#include <ntcompat/ntcompat.h>
+
+BOOLEAN APIENTRY GetUserNameExA(EXTENDED_NAME_FORMAT NameFormat, LPSTR lpNameBuffer, PULONG nSize);
+BOOL APIENTRY SetDefaultDllDirectories(DWORD DirectoryFlags);
+
 DWORD osMajorVersion, osMinorVersion, osPlatformId;
 
 char *platform_get_x_display(void) {

@@ -16,7 +16,7 @@
 #include <stdio.h>                     /* for __MINGW_PRINTF_FORMAT */
 #include <stdbool.h>
 
-#if defined _MSC_VER && _MSC_VER < 1800
+#if 1//defined _MSC_VER && _MSC_VER < 1800
 /* Work around lack of inttypes.h and strtoumax in older MSVC */
 #define PRIx32 "x"
 #define PRIu32 "u"

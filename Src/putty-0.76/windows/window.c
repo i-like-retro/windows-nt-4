@@ -202,10 +202,15 @@ static LPLOGPALETTE logpal;
 bool tried_pal = false;
 COLORREF colorref_modifier = 0;
 
+#define MONITOR_DEFAULTTONULL    0x00000000
+#define MONITOR_DEFAULTTOPRIMARY 0x00000001
+#define MONITOR_DEFAULTTONEAREST 0x00000002
+
 enum MONITOR_DPI_TYPE { MDT_EFFECTIVE_DPI, MDT_ANGULAR_DPI, MDT_RAW_DPI, MDT_DEFAULT };
 DECL_WINDOWS_FUNCTION(static, HRESULT, GetDpiForMonitor, (HMONITOR hmonitor, enum MONITOR_DPI_TYPE dpiType, UINT *dpiX, UINT *dpiY));
 DECL_WINDOWS_FUNCTION(static, HRESULT, GetSystemMetricsForDpi, (int nIndex, UINT dpi));
 DECL_WINDOWS_FUNCTION(static, HRESULT, AdjustWindowRectExForDpi, (LPRECT lpRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle, UINT dpi));
+DECL_WINDOWS_FUNCTION(static, HMONITOR, MonitorFromWindow, (HWND hWnd, DWORD dwFlags));
 
 static struct _dpi_info {
     POINT cur_dpi;
@@ -1365,9 +1370,9 @@ static int get_font_width(HDC hdc, const TEXTMETRIC *tm)
 static void init_dpi_info(void)
 {
     if (dpi_info.cur_dpi.x == 0 || dpi_info.cur_dpi.y == 0) {
-        if (p_GetDpiForMonitor) {
+        if (p_GetDpiForMonitor && p_MonitorFromWindow) {
             UINT dpiX, dpiY;
-            HMONITOR currentMonitor = MonitorFromWindow(
+            HMONITOR currentMonitor = p_MonitorFromWindow(
                 wgs.term_hwnd, MONITOR_DEFAULTTOPRIMARY);
             if (p_GetDpiForMonitor(currentMonitor, MDT_EFFECTIVE_DPI,
                                    &dpiX, &dpiY) == S_OK) {
@@ -4106,8 +4111,22 @@ static int wintw_char_width(TermWin *tw, int uc)
     return ibuf;
 }
 
+typedef struct {
+  UINT  cbSize;
+  HWND  hwnd;
+  DWORD dwFlags;
+  UINT  uCount;
+  DWORD dwTimeout;
+} FLASHWINFO, *PFLASHWINFO;
+
+#define FLASHW_STOP 0
+#define FLASHW_ALL 3
+#define FLASHW_TIMER 4
+
+BOOL APIENTRY FlashWindowEx(PFLASHWINFO pfwi);
+
 DECL_WINDOWS_FUNCTION(static, BOOL, FlashWindowEx, (PFLASHWINFO));
-DECL_WINDOWS_FUNCTION(static, BOOL, ToUnicodeEx,
+DECL_WINDOWS_FUNCTION(static, int, ToUnicodeEx,
                       (UINT, UINT, const BYTE *, LPWSTR, int, UINT, HKL));
 DECL_WINDOWS_FUNCTION(static, BOOL, PlaySound, (LPCTSTR, HMODULE, DWORD));
 
@@ -4122,6 +4141,7 @@ static void init_winfuncs(void)
     GET_WINDOWS_FUNCTION_NO_TYPECHECK(shcore_module, GetDpiForMonitor);
     GET_WINDOWS_FUNCTION_NO_TYPECHECK(user32_module, GetSystemMetricsForDpi);
     GET_WINDOWS_FUNCTION_NO_TYPECHECK(user32_module, AdjustWindowRectExForDpi);
+    GET_WINDOWS_FUNCTION_NO_TYPECHECK(user32_module, MonitorFromWindow);
 }
 
 /*

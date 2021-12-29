@@ -11,6 +11,16 @@
 
 #include "wincapi.h"
 
+#ifndef CRYPTPROTECTMEMORY_BLOCK_SIZE
+#define CRYPTPROTECTMEMORY_BLOCK_SIZE 16
+#endif
+
+#ifndef CRYPTPROTECTMEMORY_CROSS_PROCESS
+#define CRYPTPROTECTMEMORY_CROSS_PROCESS 0x01
+#endif
+
+WINAPI BOOL CryptProtectMemory(LPVOID pDataIn, DWORD cbDataIn, DWORD dwFlags);
+
 DEF_WINDOWS_FUNCTION(CryptProtectMemory);
 
 bool got_crypt(void)
