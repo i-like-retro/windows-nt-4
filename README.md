@@ -164,7 +164,7 @@ to only provide partial functionality.
 Network
 --------------------
 
-* [PuTTY](CD/SOFTWARE/NETWORK/PUTTY076.EXE) `2021-07-17`: is an SSH and telnet
+* [PuTTY 0.76](CD/SOFTWARE/NETWORK/PUTTY076.EXE) `2021-07-17`: is an SSH and telnet
 client.
 
 Software Development
