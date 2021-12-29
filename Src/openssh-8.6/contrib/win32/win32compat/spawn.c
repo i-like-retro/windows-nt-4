@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include "inc\spawn.h"
 #include "inc\unistd.h"
+#include <ntcompat/ntcompat.h>
 
 int
 posix_spawn_file_actions_init(posix_spawn_file_actions_t *file_actions)

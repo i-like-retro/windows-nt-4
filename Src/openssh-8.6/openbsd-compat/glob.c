@@ -149,17 +149,17 @@ struct glob_lim {
 
 struct glob_path_stat {
 	char		*gps_path;
-	struct stat	*gps_stat;
+	struct _stati64	*gps_stat;
 };
 
 static int	 compare(const void *, const void *);
 static int	 compare_gps(const void *, const void *);
 static int	 g_Ctoc(const Char *, char *, size_t);
-static int	 g_lstat(Char *, struct stat *, glob_t *);
+static int	 g_lstat(Char *, struct _stati64 *, glob_t *);
 static DIR	*g_opendir(Char *, glob_t *);
 static Char	*g_strchr(const Char *, int);
 static int	 g_strncmp(const Char *, const char *, size_t);
-static int	 g_stat(Char *, struct stat *, glob_t *);
+static int	 g_stat(Char *, struct _stati64 *, glob_t *);
 static int	 glob0(const Char *, glob_t *, struct glob_lim *);
 static int	 glob1(Char *, Char *, glob_t *, struct glob_lim *);
 static int	 glob2(Char *, Char *, Char *, Char *, Char *, Char *,
@@ -167,7 +167,7 @@ static int	 glob2(Char *, Char *, Char *, Char *, Char *, Char *,
 static int	 glob3(Char *, Char *, Char *, Char *, Char *,
 		    Char *, Char *, glob_t *, struct glob_lim *);
 static int	 globextend(const Char *, glob_t *, struct glob_lim *,
-		    struct stat *);
+		    struct _stati64 *);
 static const Char *
 		 globtilde(const Char *, Char *, size_t, glob_t *);
 static int	 globexp1(const Char *, glob_t *, struct glob_lim *);
@@ -632,7 +632,7 @@ static int
 glob2(Char *pathbuf, Char *pathbuf_last, Char *pathend, Char *pathend_last,
     Char *pattern, Char *pattern_last, glob_t *pglob, struct glob_lim *limitp)
 {
-	struct stat sb;
+	struct _stati64 sb;
 	Char *p, *q;
 	int anymeta;
 
@@ -798,13 +798,13 @@ glob3(Char *pathbuf, Char *pathbuf_last, Char *pathend, Char *pathend_last,
  */
 static int
 globextend(const Char *path, glob_t *pglob, struct glob_lim *limitp,
-    struct stat *sb)
+    struct _stati64 *sb)
 {
 	char **pathv;
 	size_t i, newn, len;
 	char *copy = NULL;
 	const Char *p;
-	struct stat **statv;
+	struct _stati64 **statv;
 
 	newn = 2 + pglob->gl_pathc + pglob->gl_offs;
 	if (pglob->gl_offs >= SSIZE_MAX ||
@@ -1012,7 +1012,7 @@ g_opendir(Char *str, glob_t *pglob)
 }
 
 static int
-g_lstat(Char *fn, struct stat *sb, glob_t *pglob)
+g_lstat(Char *fn, struct _stati64 *sb, glob_t *pglob)
 {
 	char buf[PATH_MAX];
 
@@ -1020,11 +1020,11 @@ g_lstat(Char *fn, struct stat *sb, glob_t *pglob)
 		return(-1);
 	if (pglob->gl_flags & GLOB_ALTDIRFUNC)
 		return((*pglob->gl_lstat)(buf, sb));
-	return(lstat(buf, sb));
+	return(_lstati64(buf, sb));
 }
 
 static int
-g_stat(Char *fn, struct stat *sb, glob_t *pglob)
+g_stat(Char *fn, struct _stati64 *sb, glob_t *pglob)
 {
 	char buf[PATH_MAX];
 
@@ -1032,7 +1032,7 @@ g_stat(Char *fn, struct stat *sb, glob_t *pglob)
 		return(-1);
 	if (pglob->gl_flags & GLOB_ALTDIRFUNC)
 		return((*pglob->gl_stat)(buf, sb));
-	return(stat(buf, sb));
+	return(_stati64(buf, sb));
 }
 
 static Char *

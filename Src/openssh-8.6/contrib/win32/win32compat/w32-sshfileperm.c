@@ -39,14 +39,7 @@
 #include "debug.h"
 #include "misc_internal.h"
 #include "config.h"
-
-#ifndef EOTHER
-#define EOTHER 131
-#endif
-
-#ifndef _countof
-#define _countof(array) (sizeof(array) / sizeof(array[0]))
-#endif
+#include <ntcompat/ntcompat.h>
 
 /*
 * The function is to check if current user is secure to access to the file. 

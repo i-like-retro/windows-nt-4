@@ -31,6 +31,7 @@
 #include "inc\utf.h"
 #include "inc\pwd.h"
 #include "debug.h"
+#include <ntcompat/ntcompat.h>
 #include "inc\gssapi.h"
 
  /*

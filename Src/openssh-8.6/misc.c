@@ -70,6 +70,7 @@
 #include "platform.h"
 
 #include "sshfileperm.h"
+#include <ntcompat/ntcompat.h>
 
 int is_absolute_path(const char *);
 
@@ -317,7 +318,7 @@ waitfd(int fd, int *timeoutp, short events)
 			break;
 	}
 	/* timeout */
-	errno = WSAETIMEDOUT;
+	errno = ETIMEDOUT;
 	return -1;
 }
 
@@ -357,7 +358,7 @@ timeout_connect(int sockfd, const struct sockaddr *serv_addr,
 			return 0;
 		} else if (errno == EINTR)
 			continue;
-		else if (errno != WSAEINPROGRESS)
+		else if (errno != EINPROGRESS)
 			return -1;
 		break;
 	}
@@ -2118,13 +2119,13 @@ exited_cleanly(pid_t pid, const char *tag, const char *cmd, int quiet)
  * Returns 0 on success and -1 on failure
  */
 int
-safe_path(const char *name, struct stat *stp, const char *pw_dir,
+safe_path(const char *name, struct _stati64 *stp, const char *pw_dir,
     uid_t uid, char *err, size_t errlen)
 {
 	char buf[PATH_MAX], homedir[PATH_MAX];
 	char *cp;
 	int comparehome = 0;
-	struct stat st;
+	struct _stati64 st;
 
 	if (realpath(name, buf) == NULL) {
 		snprintf(err, errlen, "realpath %s failed: %s", name,
@@ -2153,7 +2154,7 @@ safe_path(const char *name, struct stat *stp, const char *pw_dir,
 		}
 		strlcpy(buf, cp, sizeof(buf));
 
-		if (stat(buf, &st) == -1 ||
+		if (_stati64(buf, &st) == -1 ||
 		    (!platform_sys_dir_uid(st.st_uid) && st.st_uid != uid) ||
 		    (st.st_mode & 022) != 0) {
 			snprintf(err, errlen,
@@ -2185,7 +2186,7 @@ int
 safe_path_fd(int fd, const char *file, struct passwd *pw,
     char *err, size_t errlen)
 {
-	struct stat st;
+	struct _stati64 st;
 
 	/* check the open file to avoid races */
 	if (fstat(fd, &st) == -1) {
@@ -2568,7 +2569,7 @@ subprocess(const char *tag, const char *command,
     struct passwd *pw, privdrop_fn *drop_privs, privrestore_fn *restore_privs)
 {
 	FILE *f = NULL;
-	struct stat st;
+	struct _stati64 st;
 	int fd, devnull, p[2], i;
 	pid_t pid;
 	char *cp, errmsg[512];

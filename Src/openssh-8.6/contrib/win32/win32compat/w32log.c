@@ -36,7 +36,7 @@
 #include "inc\syslog.h"
 #include "misc_internal.h"
 #include "inc\utf.h"
-#include "openssh-events.h"
+//#include "openssh-events.h"
 
 #define MSGBUFSIZ 1024
 static int logfd = -1;
@@ -46,12 +46,13 @@ int log_facility = 0;
 
 void openlog_etw()
 {
-	EventRegisterOpenSSH();
+	//EventRegisterOpenSSH();
 }
 
 void
 syslog_etw(int priority, const char *format, const char *formatBuffer)
 {
+#if 0
 	wchar_t *w_identity = NULL, *w_payload = NULL;
 	w_identity = utf8_to_utf16(identity);
 	w_payload = utf8_to_utf16(formatBuffer);
@@ -84,9 +85,12 @@ done:
 		free(w_identity);
 	if (w_payload)
 		free(w_payload);
+#endif
+	fprintf(stderr, "%s\n", formatBuffer);
 }
 
 
+#if 0
 /*
  * log file location will be - "%programData%\\openssh\\logs\\<module_name>.log"
  */
@@ -178,24 +182,29 @@ syslog_file(int priority, const char *format, const char *formatBuffer)
 	msgbufTimestamp[strnlen(msgbufTimestamp, MSGBUFSIZ)] = '\0';
 	_write(msg_fd, msgbufTimestamp, (unsigned int)strnlen(msgbufTimestamp, MSGBUFSIZ));
 }
+#endif
 
 void
 openlog(const char *ident, unsigned int option, int facility)
 {
+#if 0
 	identity = ident;
 	log_facility = facility;
 	if (log_facility == LOG_LOCAL0)
 		openlog_file();
 	else
 		openlog_etw();
+#endif
 }
 
 void
 syslog(int priority, const char *format, const char *formatBuffer)
 {
+#if 0
 	if (log_facility == LOG_LOCAL0)
 		syslog_file(priority, format, formatBuffer);
 	else
+#endif
 		syslog_etw(priority, format, formatBuffer);
 }
 

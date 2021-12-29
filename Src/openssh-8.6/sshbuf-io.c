@@ -35,13 +35,13 @@ sshbuf_load_fd(int fd, struct sshbuf **blobp)
 {
 	u_char buf[4096];
 	size_t len;
-	struct stat st;
+	struct _stati64 st;
 	int r;
 	struct sshbuf *blob;
 
 	*blobp = NULL;
 
-	if (fstat(fd, &st) == -1)
+	if (_fstati64(fd, &st) == -1)
 		return SSH_ERR_SYSTEM_ERROR;
 	if ((st.st_mode & (S_IFSOCK|S_IFCHR|S_IFIFO)) == 0 &&
 	    st.st_size > SSHBUF_SIZE_MAX)

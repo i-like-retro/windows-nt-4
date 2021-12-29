@@ -52,14 +52,14 @@
 # define glob(a, b, c, d)  _ssh__compat_glob(a, b, c, d)
 # define globfree(a)  _ssh__compat_globfree(a)
 
-struct stat;
+struct _stati64;
 typedef struct {
 	size_t gl_pathc;	/* Count of total paths so far. */
 	size_t gl_matchc;	/* Count of paths matching pattern. */
 	size_t gl_offs;		/* Reserved at beginning of gl_pathv. */
 	int gl_flags;		/* Copy of flags parameter to glob. */
 	char **gl_pathv;	/* List of paths matching pattern. */
-	struct stat **gl_statv;	/* Stat entries corresponding to gl_pathv */
+	struct _stati64 **gl_statv;	/* Stat entries corresponding to gl_pathv */
 				/* Copy of errfunc parameter to glob. */
 	int (*gl_errfunc)(const char *, int);
 
@@ -71,8 +71,8 @@ typedef struct {
 	void (*gl_closedir)(void *);
 	struct dirent *(*gl_readdir)(void *);	
 	void *(*gl_opendir)(const char *);
-	int (*gl_lstat)(const char *, struct stat *);
-	int (*gl_stat)(const char *, struct stat *);
+	int (*gl_lstat)(const char *, struct _stati64 *);
+	int (*gl_stat)(const char *, struct _stati64 *);
 } glob_t;
 
 #define	GLOB_APPEND	0x0001	/* Append to output from previous call. */

@@ -21,7 +21,7 @@
 #include <openssl/err.h>
 #include <openssl/buffer.h>
 #include "internal/thread_once.h"
-#include <windows/ntcompat.h>
+#include <ntcompat/ntcompat.h>
 
 CRYPTO_RWLOCK *bio_lookup_lock;
 static CRYPTO_ONCE bio_lookup_init = CRYPTO_ONCE_STATIC_INIT;

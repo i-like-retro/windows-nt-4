@@ -47,6 +47,7 @@
 #include "debug.h"
 #include "tnnet.h"
 #include "misc_internal.h"
+#include <ntcompat/ntcompat.h>
 
 #define TERM_IO_BUF_SIZE 2048
 
@@ -260,7 +261,7 @@ int
 syncio_close(struct w32_io* pio)
 {
 	debug4("syncio_close - pio:%p", pio);
-	CancelIoEx(WINHANDLE(pio), NULL);
+	CancelIo(WINHANDLE(pio)); //CancelIoEx(WINHANDLE(pio), NULL);
 
 	/* If io is pending, let worker threads exit. */
 	if (pio->read_details.pending) {
@@ -269,7 +270,7 @@ syncio_close(struct w32_io* pio)
 		1. For console - the read thread is blocked by the while loop on raw mode
 		2. Function ReadFile on Win7 machine dees not return when no content to read in non-interactive mode.
 		*/
-		if (FILETYPE(pio) == FILE_TYPE_CHAR && (IsWin7OrLess() || in_raw_mode)) {
+		if (FILETYPE(pio) == FILE_TYPE_CHAR /*&& (IsWin7OrLess() || in_raw_mode)*/) {
 			QueueUserAPC(InterruptThread, pio->read_overlapped.hEvent, (ULONG_PTR)NULL);
 			CancelSynchronousIo(pio->read_overlapped.hEvent);
 		}

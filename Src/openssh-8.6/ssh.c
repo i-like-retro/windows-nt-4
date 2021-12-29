@@ -211,7 +211,7 @@ usage(void)
 
 static int ssh_session2(struct ssh *, const struct ssh_conn_info *);
 static void load_public_identity_files(const struct ssh_conn_info *);
-static void main_sigchld_handler(int);
+//static void main_sigchld_handler(int);
 
 /* ~/ expand a list of paths. NB. assumes path[n] is heap-allocated. */
 static void
@@ -649,7 +649,7 @@ main(int ac, char **av)
 	int was_addr, config_test = 0, opt_terminated = 0, want_final_pass = 0;
 	char *p, *cp, *line, *argv0, *logfile, *host_arg;
 	char cname[NI_MAXHOST], thishost[NI_MAXHOST];
-	struct stat st;
+	struct _stati64 st;
 	struct passwd *pw;
 	extern int optind, optreset;
 	extern char *optarg;
@@ -853,7 +853,7 @@ main(int ac, char **av)
 			break;
 		case 'i':
 			p = tilde_expand_filename(optarg, getuid());
-			if (stat(p, &st) == -1)
+			if (_stati64(p, &st) == -1)
 				fprintf(stderr, "Warning: Identity file %s "
 				    "not accessible: %s.\n", p,
 				    strerror(errno));
@@ -1345,10 +1345,12 @@ main(int ac, char **av)
 		fatal("Cannot execute command-line and remote command.");
 
 	/* Cannot fork to background if no command. */
-	if (fork_after_authentication_flag && sshbuf_len(command) == 0 &&
-	    options.remote_command == NULL && !no_shell_flag)
-		fatal("Cannot fork into background without a command "
-		    "to execute.");
+	//if (fork_after_authentication_flag && sshbuf_len(command) == 0 &&
+	//    options.remote_command == NULL && !no_shell_flag)
+	//	fatal("Cannot fork into background without a command "
+	//	    "to execute.");
+	if (fork_after_authentication_flag) fatal("fork() is not supported.");
+
 
 	/* reinit */
 	log_init(argv0, options.log_level, options.log_facility, !use_syslog);
@@ -1436,7 +1438,7 @@ main(int ac, char **av)
 		free(p);
 		free(options.forward_agent_sock_path);
 		options.forward_agent_sock_path = cp;
-		if (stat(options.forward_agent_sock_path, &st) != 0) {
+		if (_stati64(options.forward_agent_sock_path, &st) != 0) {
 			error("Cannot forward agent socket path \"%s\": %s",
 			    options.forward_agent_sock_path, strerror(errno));
 			if (options.exit_on_forward_failure)
@@ -1669,7 +1671,7 @@ main(int ac, char **av)
 	tilde_expand_paths(options.user_hostfiles, options.num_user_hostfiles);
 
 	ssh_signal(SIGPIPE, SIG_IGN); /* ignore SIGPIPE early */
-	ssh_signal(SIGCHLD, main_sigchld_handler);
+	//ssh_signal(SIGCHLD, main_sigchld_handler);
 
 	/* Log into the remote system.  Never returns if the login fails. */
 	ssh_login(ssh, &sensitive_data, host, (struct sockaddr *)&hostaddr,
@@ -1725,6 +1727,7 @@ main(int ac, char **av)
 	return exit_status;
 }
 
+#if 0
 static void
 control_persist_detach(void)
 {
@@ -1774,6 +1777,7 @@ fork_postauth(void)
 	if (stdfd_devnull(1, 1, !(log_is_on_stderr() && debug_flag)) == -1)
 		error_f("stdfd_devnull failed");
 }
+#endif
 
 static void
 forwarding_success(void)
@@ -1782,8 +1786,8 @@ forwarding_success(void)
 		return;
 	if (--forward_confirms_pending == 0) {
 		debug_f("all expected forwarding replies received");
-		if (fork_after_authentication_flag)
-			fork_postauth();
+		//if (fork_after_authentication_flag)
+			//fork_postauth();
 	} else {
 		debug2_f("%d expected forwarding replies remaining",
 		    forward_confirms_pending);
@@ -2213,14 +2217,14 @@ ssh_session2(struct ssh *ssh, const struct ssh_conn_info *cinfo)
 	 * If requested and we are not interested in replies to remote
 	 * forwarding requests, then let ssh continue in the background.
 	 */
-	if (fork_after_authentication_flag) {
+	/*if (fork_after_authentication_flag) {
 		if (options.exit_on_forward_failure &&
 		    options.num_remote_forwards > 0) {
 			debug("deferring postauth fork until remote forward "
 			    "confirmation received");
 		} else
 			fork_postauth();
-	}
+	}*/
 
 	return client_loop(ssh, tty_flag, tty_flag ?
 	    options.escape_char : SSH_ESCAPECHAR_NONE, id);
@@ -2375,6 +2379,7 @@ load_public_identity_files(const struct ssh_conn_info *cinfo)
 	    sizeof(certificate_file_userprovided));
 }
 
+/*
 static void
 main_sigchld_handler(int sig)
 {
@@ -2387,3 +2392,4 @@ main_sigchld_handler(int sig)
 		;
 	errno = save_errno;
 }
+*/

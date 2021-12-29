@@ -42,6 +42,7 @@
 #include "log.h"
 #include "ssh2.h"
 
+#include <ntcompat/ntcompat.h>
 #include "ssh-gss.h"
 
 /* sshbuf_get for gss_buffer_desc */

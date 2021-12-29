@@ -29,6 +29,7 @@
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <ntcompat/ntcompat.h>
 #include "signal_internal.h"
 
 typedef struct _wait_for_multiple_objects_struct {

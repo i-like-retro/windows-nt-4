@@ -30,6 +30,7 @@
 
 #include <errno.h>
 #include "w32fd.h"
+#include <ntcompat/ntcompat.h>
 #include "signal_internal.h"
 #include "debug.h"
 
@@ -170,7 +171,7 @@ w32_raise(int sig)
 {
 	debug4("raise sig:%d", sig);
 	if (sig == W32_SIGSEGV)
-		return raise(SIGSEGV); /* raise native exception handler*/
+		abort();//return raise(SIGSEGV); /* raise native exception handler*/
 
 	if (sig >= W32_SIGMAX) {
 		errno = EINVAL;

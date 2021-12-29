@@ -63,49 +63,11 @@
 
 #include <ctype.h>
 #include <wchar.h>
-
-#ifndef _countof
-#define _countof(array) (sizeof(array) / sizeof(array[0]))
-#endif
-
-#ifndef ENOENT
-#define ENOENT 2
-#endif
-
-#ifndef EBADF
-#define EBADF 9
-#endif
-
-#ifndef ENOMEM
-#define ENOMEM 12
-#endif
-
-#ifndef EACCES
-#define EACCES 13
-#endif
-
-#ifndef EFAULT
-#define EFAULT 14
-#endif
-
-#ifndef ERANGE
-#define ERANGE 34
-#endif
-
-#ifndef ENOTSUP
-#define ENOTSUP 129
-#endif
-
-#ifndef EOTHER
-#define EOTHER 131
-#endif
+#include <ntcompat/ntcompat.h>
 
 struct rrsetinfo;
 
 static char* s_programdir = NULL;
-
-size_t strlcat(char *dst, const char *src, size_t size);
-size_t strlcpy(char *dst, const char *src, size_t size);
 
 /* Maximum reparse buffer info size. The max user defined reparse
  * data is 16KB, plus there's a header. 
@@ -434,7 +396,7 @@ char*
 	wchar_t* str_w = NULL;
 	char *ret = NULL, *str_tmp = NULL, *cp = NULL;
 	int actual_read = 0;
-	/*errno_t*/int r = 0;
+	errno_t r = 0;
 
 	if (h != NULL && h != INVALID_HANDLE_VALUE
 	    && GetFileType(h) == FILE_TYPE_CHAR) {
@@ -465,11 +427,10 @@ char*
 			
 			if((actual_read + (int)strlen(str_tmp)) >= n)
 				break;
-			if (/*(r = memcpy_s(cp, n - actual_read, str_tmp, strlen(str_tmp))) != 0*/strlen(str_tmp) > n - actual_read) {
+			if ((r = memcpy_s(cp, n - actual_read, str_tmp, strlen(str_tmp))) != 0) {
 				debug3("memcpy_s failed with error: %d.", r);
 				goto cleanup;
 			}
-			memcpy(cp, str_tmp, strlen(str_tmp));
 			actual_read += (int)strlen(str_tmp);
 			cp += strlen(str_tmp);
 			
@@ -630,7 +591,7 @@ int
 w32_chown(const char *pathname, unsigned int owner, unsigned int group)
 {
 	/* TODO - implement this */
-	errno = WSAEOPNOTSUPP;
+	errno = EOPNOTSUPP;
 	return -1;
 }
 
@@ -638,7 +599,7 @@ int
 w32_fchown( int fd, unsigned int owner, unsigned int group)
 {
 	/* TODO - implement this */
-	errno = WSAEOPNOTSUPP;
+	errno = EOPNOTSUPP;
 	return -1;
 }
 
@@ -661,10 +622,6 @@ file_time_to_unix_time(const LPFILETIME pft, time_t * winTime)
 	*winTime -= EPOCH_DELTA;
 	*winTime /= RATE_DIFF;		 /* Nano to seconds resolution */
 }
-
-#ifndef __ascii_iswalpha
-#define __ascii_iswalpha(c)  ( ('A' <= (c) && (c) <= 'Z') || ( 'a' <= (c) && (c) <= 'z'))
-#endif
 
 static BOOL
 is_root_or_empty(wchar_t * path)
@@ -800,8 +757,8 @@ w32_rename(const char *old_name, const char *new_name)
 	 * To be consistent with POSIX rename(), if the new_name is directory
 	 * and it is empty then delete it so that MoveFileEx will succeed.
 	 */
-	struct _stat64 st_new;
-	struct _stat64 st_old;
+	struct _stati64 st_new;
+	struct _stati64 st_old;
 	if ((fileio_stat(new_name, &st_new) != -1) &&
 	    (fileio_stat(old_name, &st_old) != -1) &&
 	    ((st_old.st_mode & _S_IFMT) == _S_IFDIR) &&
@@ -891,7 +848,7 @@ w32_getcwd(char *buffer, int maxlen)
 		return NULL;
 	}
 
-	if (strlcpy(buffer, putf8, maxlen))
+	if (strcpy_s(buffer, maxlen, putf8))
 		return NULL;
 	free(putf8);
 
@@ -915,10 +872,7 @@ w32_getcwd(char *buffer, int maxlen)
 		}
 		else {
 			char *tail = buffer + chroot_path_len;
-			size_t len = strlen(tail + 1);
-			if (len > maxlen)
-				len = maxlen;
-			memmove(buffer, tail, len);
+			memmove_s(buffer, maxlen, tail, strlen(tail) + 1);
 		}
 	} 
 
@@ -949,15 +903,15 @@ w32_mkdir(const char *path_utf8, unsigned short mode)
 }
 
 int
-w32_stat(const char *input_path, struct w32_stat *buf)
+w32_stat(const char *input_path, struct _stati64 *buf)
 {
-	return fileio_stat(input_path, (struct _stat64*)buf);
+	return fileio_stat(input_path, (struct _stati64*)buf);
 }
 
 int
-w32_lstat(const char *input_path, struct w32_stat *buf)
+w32_lstat(const char *input_path, struct _stati64 *buf)
 {
-	return fileio_lstat(input_path, (struct _stat64*)buf);
+	return fileio_lstat(input_path, (struct _stati64*)buf);
 }
 
 /* if file is symbolic link, copy its link into "link" */
@@ -1026,14 +980,11 @@ realpath(const char *inputpath, char * resolved)
 		is_win_path = 0;
 
 	if (is_win_path) {
-		if (strnicmp(inputpath, PROGRAM_DATA, strlen(PROGRAM_DATA)) == 0) {
-			strlcpy(path, __progdata, PATH_MAX);
-			strlcat(path, &inputpath[strlen(PROGRAM_DATA)], PATH_MAX);
+		if (_strnicmp(inputpath, PROGRAM_DATA, strlen(PROGRAM_DATA)) == 0) {
+			strcpy_s(path, PATH_MAX, __progdata);
+			strcat_s(path, PATH_MAX, &inputpath[strlen(PROGRAM_DATA)]);
 		} else {
-			size_t len = strlen(inputpath);
-			if (len > PATH_MAX-1)
-				len = PATH_MAX-1;
-			memcpy(path, inputpath, len);
+			memcpy_s(path, PATH_MAX, inputpath, strlen(inputpath));
 		}
 	}
 
@@ -1055,7 +1006,7 @@ realpath(const char *inputpath, char * resolved)
 	/* "cd .." from within a drive root */
 	if (path_len == 6 && !chroot_path) {
 		char *tmplate = "/x:/..";
-		strlcat(resolved, path, PATH_MAX);
+		strcat_s(resolved, PATH_MAX, path);
 		resolved[1] = 'x';
 		if (strcmp(tmplate, resolved) == 0) {
 			resolved[0] = '/';
@@ -1067,31 +1018,29 @@ realpath(const char *inputpath, char * resolved)
 
 	if (chroot_path) {
 		resolved[0] = '\0';
-		strlcat(resolved, chroot_path, PATH_MAX);
+		strcat_s(resolved, PATH_MAX, chroot_path);
 		/* if path is relative, add cwd within chroot */
 		if (path[0] != '/' && path[0] != '\\') {
 			w32_getcwd(resolved + chroot_path_len, PATH_MAX - chroot_path_len);
-			strlcat(resolved, "/", PATH_MAX);
+			strcat_s(resolved, PATH_MAX, "/");
 		}
 		/* TODO - This logic will fail if the chroot_path is more than PATH_MAX/2.
 		 * resolved variable is of PATH_MAX.
 		 * We first copy chroot_path to resolved variable then incoming path (which can be again chroot_path).
 		 * In this case strcat_s will thrown a run time insufficient buffer exception.
 		 */
-		strlcat(resolved, path, PATH_MAX);
+		strcat_s(resolved, PATH_MAX, path);
 	}
 	else if ((path_len >= 2) && (path[0] == '/') && path[1] && (path[2] == ':')) {
-		if(path_len >= sizeof(resolved)) {
+		if((errno = strncpy_s(resolved, PATH_MAX, path + 1, path_len)) != 0 ) /* skip the first '/' */ {
 			debug3("memcpy_s failed with error: %d.", errno);
 			goto done;
 		}
-		memcpy(resolved, path + 1, path_len); /* skip the first '/' */ 
 	}
-	else { if(path_len + 1 >= sizeof(resolved)) {
+	else if(( errno = strncpy_s(resolved, PATH_MAX, path, path_len + 1)) != 0) {
 		debug3("memcpy_s failed with error: %d.", errno);
 		goto done;
 	}
-	memcpy(resolved, path, path_len + 1); }
 
 	if ((resolved[0]) && (resolved[1] == ':') && (resolved[2] == '\0')) { /* make "x:" as "x:\\" */
 		resolved[2] = '\\';
@@ -1120,9 +1069,9 @@ realpath(const char *inputpath, char * resolved)
 		
 		if (strlen(tempPath) == strlen(chroot_path))
 			/* realpath is the same as chroot_path */
-			strlcat(resolved, "\\", PATH_MAX);
+			strcat_s(resolved, PATH_MAX, "\\");
 		else
-			strlcat(resolved, tempPath + strlen(chroot_path), PATH_MAX);
+			strcat_s(resolved, PATH_MAX, tempPath + strlen(chroot_path));
 
 		if (resolved[0] != '\\') {
 			errno = EACCES;
@@ -1136,11 +1085,10 @@ realpath(const char *inputpath, char * resolved)
 	else {
 		convertToForwardslash(tempPath);
 		resolved[0] = '/'; /* will be our first slash in /x:/users/test1 format */
-		if (strlen(tempPath) >= sizeof(resolved) - 1) {
+		if ((errno = strncpy_s(resolved + 1, PATH_MAX - 1, tempPath, sizeof(tempPath) - 1)) != 0) {
 			debug3("memcpy_s failed with error: %d.", errno);
 			goto done;
 		}
-		strcpy(resolved + 1, tempPath);
 		ret = resolved;
 		goto done;
 	}
@@ -1185,8 +1133,8 @@ resolved_path_utf16(const char *input_path)
 
 	if (chroot_path) {
 		char actual_path[PATH_MAX] = { 0 };
-		strlcat(actual_path, chroot_path, _countof(actual_path));
-		strlcat(actual_path, real_path, _countof(actual_path));
+		strcat_s(actual_path, _countof(actual_path), chroot_path);
+		strcat_s(actual_path, _countof(actual_path), real_path);
 		resolved_path = utf8_to_utf16(actual_path);
 	} else {
 		if ((strlen(real_path) == 1) && (real_path[0] == '/'))
@@ -1251,8 +1199,8 @@ fstatvfs(int fd, struct statvfs *buf)
 char *
 w32_strerror(int errnum)
 {
-	if (errnum >= WSAEADDRINUSE  && errnum <= WSAEWOULDBLOCK)
-		return _sys_errlist_ext[errnum - WSAEADDRINUSE];
+	if (errnum >= EADDRINUSE  && errnum <= EWOULDBLOCK)
+		return _sys_errlist_ext[errnum - EADDRINUSE];
 	
 	strerror_s(errorBuf, ERROR_MSG_MAXLEN, errnum);
 	return errorBuf;
@@ -1515,8 +1463,8 @@ copy_file(char *source, char *destination)
 {
 	if (!source || !destination) return 0;
 
-	struct stat st;
-	if ((stat(source, &st) >= 0) && (stat(destination, &st) < 0)) {
+	struct _stati64 st;
+	if ((stat(source, &st) >= 0) && (_stati64(destination, &st) < 0)) {
 		wchar_t *source_w = utf8_to_utf16(source);
 		if (!source_w) {
 			error("%s utf8_to_utf16() has failed to convert string:%s", __func__, source_w);
@@ -1560,7 +1508,7 @@ freezero(void *ptr, size_t sz)
 int 
 setenv(const char *name, const char *value, int rewrite)
 {
-	/*errno_t*/int result = 0;
+	errno_t result = 0;
 
 	/* If rewrite is 0, then set only if the variable name doesn't already exist in environment */
 	if (!rewrite) {
@@ -1686,7 +1634,7 @@ lookup_sid(const wchar_t* name_utf16, PSID psid, DWORD * psid_len)
 
 	LookupAccountNameW(NULL, name_utf16, NULL, &sid_len, dom, &dom_len, &n_use);
 
-	if (sid_len == 0 && wcsicmp(name_utf16, L"administrators") == 0) {
+	if (sid_len == 0 && _wcsicmp(name_utf16, L"administrators") == 0) {
 		CreateWellKnownSid(WinBuiltinAdministratorsSid, NULL, NULL, &sid_len);
 		resolveAsAdminsSid = 1;
 		debug3_f("resolveAsAdminsSid:%d", resolveAsAdminsSid);
@@ -1871,15 +1819,15 @@ build_exec_command(const char * command)
 	}
 	memset(cmd_sp, '\0', len);
 	if (command_type == CMD_SCP) {
-		strlcpy(cmd_sp, "scp.exe", len);
-		strlcat(cmd_sp, command_args, len);
+		strcpy_s(cmd_sp, len, "scp.exe");
+		strcat_s(cmd_sp, len, command_args);
 	}
 	else if (command_type == CMD_SFTP) {
-		strlcpy(cmd_sp, "sftp-server.exe", len);
-		strlcat(cmd_sp, command_args, len);
+		strcpy_s(cmd_sp, len, "sftp-server.exe");
+		strcat_s(cmd_sp, len, command_args);
 	}
 	else
-		strlcpy(cmd_sp, command, len);
+		strcpy_s(cmd_sp, len, command);
 	return cmd_sp;
 }
 
@@ -2087,13 +2035,13 @@ bash_to_win_path(const char *in, char *out, const size_t out_len)
 	int retVal = 0;
 	const size_t cygwin_path_prefix_len = strlen(CYGWIN_PATH_PREFIX);
 	memset(out, 0, out_len);
-	if (strncasecmp(in, CYGWIN_PATH_PREFIX, cygwin_path_prefix_len) == 0) {
+	if (_strnicmp(in, CYGWIN_PATH_PREFIX, cygwin_path_prefix_len) == 0) {
 		out[0] = in[cygwin_path_prefix_len];
 		out[1] = ':';
-		strlcat(out, &in[cygwin_path_prefix_len + 1], out_len);
+		strcat_s(out, out_len, &in[cygwin_path_prefix_len + 1]);
 		retVal = 1;
 	} else
-		strlcpy(out, in, out_len);
+		strcpy_s(out, out_len, in);
 
 	return retVal;
 }

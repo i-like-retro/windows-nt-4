@@ -173,38 +173,6 @@ gss_channel_bindings_desc, *gss_channel_bindings_t;
  * Function Prototypes 
  */
 
-#ifndef _In_
-#define _In_
-#endif
-
-#ifndef _Out_
-#define _Out_
-#endif
-
-#ifndef _In_opt_
-#define _In_opt_
-#endif
-
-#ifndef _Inout_
-#define _Inout_
-#endif
-
-#ifndef _Inout_opt_
-#define _Inout_opt_
-#endif
-
-#ifndef _Out_opt_
-#define _Out_opt_
-#endif
-
-#ifndef _Outptr_
-#define _Outptr_
-#endif
-
-#ifndef _Outptr_opt_
-#define _Outptr_opt_
-#endif
-
 OM_uint32 
 gss_init_sec_context(
 	_Out_ OM_uint32 * minor_status, _In_ gss_cred_id_t claimant_cred_handle, _In_ gss_ctx_id_t * context_handle,

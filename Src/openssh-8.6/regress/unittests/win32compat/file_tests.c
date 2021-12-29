@@ -587,7 +587,7 @@ file_symlink_tests()
 		ASSERT_INT_EQ(0, memcmp(readlink_buf, tgt_name_uft8_realpath, readlink_ret));
 
 		/* verify lstat() gets the reference to the link */
-		struct w32_stat statbuf;
+		struct _stati64 statbuf;
 		int lstat_ret = lstat(lnk_utf8, &statbuf);
 		ASSERT_INT_EQ(lstat_ret, 0);
 		ASSERT_INT_EQ(1, S_ISLNK(statbuf.st_mode));
@@ -674,7 +674,7 @@ file_link_tests()
 		ASSERT_INT_EQ(link_ret, 0);
 
 		/* verify stat() gets a reference to the dir or file */
-		struct w32_stat statbuf;
+		struct _stati64 statbuf;
 		int stat_ret = stat(lnk_utf8, &statbuf);
 		ASSERT_INT_EQ(stat_ret, 0);
 		ASSERT_INT_EQ(1, S_ISREG(statbuf.st_mode));

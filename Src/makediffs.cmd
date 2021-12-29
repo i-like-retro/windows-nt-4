@@ -22,6 +22,8 @@ git diff 4473eaf416dadee11caf0d654394f25c8edc1234 -- libssh2-1.10.0 > _diff/libs
 if errorlevel 1 exit /B 1
 git diff dc9e6530dea8ee3e7822c3611b55f44fe405fc26 -- ncurses-6.3 > _diff/ncurses-6.3.diff
 if errorlevel 1 exit /B 1
+git diff 64610fbf095ba0387afbafa68ad9ea3b3fdd2c06 -- openssh-8.6 > _diff/openssh-8.6.diff
+if errorlevel 1 exit /B 1
 git diff 81df82167b5ae554ac238ed31b909c6a211e15b9 -- openssl-1.1.1m > _diff/openssl-1.1.1m.diff
 if errorlevel 1 exit /B 1
 git diff 3a51b5c65e950d168c4b8f1179a97b0d49c15096 -- pcre2-10.39 > _diff/pcre2-10.39.diff

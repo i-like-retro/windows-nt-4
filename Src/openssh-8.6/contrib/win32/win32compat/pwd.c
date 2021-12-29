@@ -46,26 +46,7 @@
 #include "inc\utf.h"
 #include "misc_internal.h"
 #include "debug.h"
-
-#ifndef ENOENT
-#define ENOENT 2
-#endif
-
-#ifndef ENOMEM
-#define ENOMEM 12
-#endif
-
-#ifndef EOTHER
-#define EOTHER 131
-#endif
-
-#ifndef SECURITY_MAX_SID_SIZE
-#define SECURITY_MAX_SID_SIZE 68
-#endif
-
-#ifndef _countof
-#define _countof(array) (sizeof(array) / sizeof(array[0]))
-#endif
+#include <ntcompat/ntcompat.h>
 
 static struct passwd pw;
 static char* pw_shellpath = NULL;
@@ -204,7 +185,7 @@ get_passwd(const wchar_t * user_utf16, PSID sid)
 	HKEY reg_key = 0;	
 	
 	BYTE binary_sid[SECURITY_MAX_SID_SIZE];
-	DWORD sid_size = /*ARRAYSIZE*/_countof(binary_sid);
+	DWORD sid_size = ARRAYSIZE(binary_sid);
 	WCHAR domain_name[DNLEN + 1] = L"";
 	DWORD domain_name_size = DNLEN + 1;
 	SID_NAME_USE account_type = 0;
@@ -276,15 +257,15 @@ get_passwd(const wchar_t * user_utf16, PSID sid)
 	if ((_wcsicmp(domain_name, computer_name) == 0) ||
 		((memcmp(&nt_authority, GetSidIdentifierAuthority((PSID)binary_sid), sizeof(SID_IDENTIFIER_AUTHORITY)) == 0) &&
 		 (((SID*)binary_sid)->SubAuthority[0] == SECURITY_LOCAL_SYSTEM_RID))) {
-		wcscpy(user_resolved, user_name);
+		wcscpy_s(user_resolved, ARRAYSIZE(user_resolved), user_name);
 	}
 
 	/* put any other format in sam compatible format */
 	else
-		swprintf(user_resolved, L"%s\\%s", domain_name, user_name);
+		swprintf_s(user_resolved, ARRAYSIZE(user_resolved), L"%s\\%s", domain_name, user_name);
 
 	/* if one of below fails, set profile path to Windows directory */
-	if (swprintf(reg_path, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\%ls", sid_string) == -1 ||
+	if (swprintf_s(reg_path, PATH_MAX, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\%ls", sid_string) == -1 ||
 	    RegOpenKeyExW(HKEY_LOCAL_MACHINE, reg_path, 0, STANDARD_RIGHTS_READ | KEY_QUERY_VALUE | KEY_WOW64_64KEY, &reg_key) != 0 ||
 	    RegQueryValueExW(reg_key, L"ProfileImagePath", 0, NULL, (LPBYTE)profile_home, &reg_path_len) != 0 ||
 	    ExpandEnvironmentStringsW(profile_home, NULL, 0) > PATH_MAX ||
@@ -371,7 +352,7 @@ w32_getpwnam(const char *user_utf8)
 	#endif
 
 	/* for unpriviliged user account, create placeholder and return*/
-	if (strcasecmp(user_utf8, "sshd") == 0) {
+	if (_stricmp(user_utf8, "sshd") == 0) {
 		ret = getpwnam_placeholder(user_utf8);
 		goto done;
 	}

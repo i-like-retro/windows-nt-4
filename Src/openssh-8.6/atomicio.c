@@ -44,6 +44,7 @@
 #include <limits.h>
 
 #include "atomicio.h"
+#include <ntcompat/ntcompat.h>
 
 /*
  * ensure all of data on socket comes through. f==read || f==vwrite

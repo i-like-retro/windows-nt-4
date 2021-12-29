@@ -6,6 +6,7 @@
 #include <Windows.h>
 
 #include "console.h"
+#include <ntcompat/ntcompat.h>
 
 
 int

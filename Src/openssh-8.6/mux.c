@@ -67,6 +67,7 @@
 #include "readconf.h"
 #include "clientloop.h"
 #include "ssherr.h"
+#include <ntcompat/ntcompat.h>
 
 /* from ssh.c */
 extern int tty_flag;
@@ -506,7 +507,7 @@ mux_master_process_alive_check(struct ssh *ssh, u_int rid,
 	/* prepare reply */
 	if ((r = sshbuf_put_u32(reply, MUX_S_ALIVE)) != 0 ||
 	    (r = sshbuf_put_u32(reply, rid)) != 0 ||
-	    (r = sshbuf_put_u32(reply, (u_int)getpid())) != 0)
+	    (r = sshbuf_put_u32(reply, (u_int)GetCurrentProcessId())) != 0)
 		fatal_fr(r, "reply");
 
 	return 0;

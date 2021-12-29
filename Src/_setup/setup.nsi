@@ -147,7 +147,7 @@ Section "Base"
     File "..\_build\libgcc_s_dw2-1.dll"
     File "..\_ntcompat\ntcompat.dll"
     SetOutPath "$INSTDIR\include\windows"
-    File "..\_ntcompat\windows\ntcompat.h"
+    File "..\_ntcompat\ntcompat\*.h"
     SetOutPath "$INSTDIR\lib"
     File "..\_ntcompat\libcompat.dll.a"
 SectionEnd

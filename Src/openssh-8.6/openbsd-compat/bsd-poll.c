@@ -29,6 +29,8 @@
 #include <unistd.h>
 #include "bsd-poll.h"
 
+#include <ntcompat/ntcompat.h>
+
 /*
  * A minimal implementation of poll(2), built on top of select(2).
  *

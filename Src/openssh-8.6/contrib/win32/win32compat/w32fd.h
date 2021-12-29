@@ -149,8 +149,7 @@ int socketio_send(struct w32_io* pio, const void *buf, size_t len, int flags);
 int socketio_shutdown(struct w32_io* pio, int how);
 int socketio_close(struct w32_io* pio);
 
-struct stat;
-#define _stat64 stat
+struct _stati64;
 
 /*POSIX mimic'ing file API and file helper API*/
 BOOL fileio_is_io_available(struct w32_io* pio, BOOL rd);
@@ -163,9 +162,9 @@ struct w32_io* fileio_open(const char *pathname, int flags, mode_t mode);
 int fileio_read(struct w32_io* pio, void *dst, size_t max);
 int fileio_write_wrapper(struct w32_io* pio, const void* buf, size_t bytes_to_copy);
 int fileio_write(struct w32_io* pio, const void *buf, size_t max);
-int fileio_fstat(struct w32_io* pio, struct _stat64 *buf);
-int fileio_stat(const char *path, struct _stat64 *buf);
-int fileio_lstat(const char *path, struct _stat64 *buf);
+int fileio_fstat(struct w32_io* pio, struct _stati64 *buf);
+int fileio_stat(const char *path, struct _stati64 *buf);
+int fileio_lstat(const char *path, struct _stati64 *buf);
 long fileio_lseek(struct w32_io* pio, unsigned __int64 offset, int origin);
 FILE* fileio_fdopen(struct w32_io* pio, const char *mode);
 ssize_t fileio_readlink(const char *path, char *buf, size_t bufsiz);

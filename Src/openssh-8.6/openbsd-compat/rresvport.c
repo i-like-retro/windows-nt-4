@@ -46,6 +46,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <ntcompat/ntcompat.h>
+
 #if 0
 int
 rresvport(int *alport)
@@ -89,7 +91,7 @@ rresvport_af(int *alport, sa_family_t af)
 	if (*alport < IPPORT_RESERVED - 1) {
 		if (bind(s, sa, salen) >= 0)
 			return (s);
-		if (errno != WSAEADDRINUSE) {
+		if (errno != EADDRINUSE) {
 			(void)close(s);
 			return (-1);
 		}

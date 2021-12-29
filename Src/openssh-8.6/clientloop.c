@@ -277,7 +277,7 @@ client_x11_get_proto(struct ssh *ssh, const char *display,
 	static char proto[512], data[512];
 	FILE *f;
 	int got_data = 0, generated = 0, do_unlink = 0, r;
-	struct stat st;
+	struct _stati64 st;
 	u_int now, x11_timeout_real;
 
 	*_proto = proto;
@@ -290,7 +290,7 @@ client_x11_get_proto(struct ssh *ssh, const char *display,
 			    display);
 		return -1;
 	}
-	if (xauth_path != NULL && stat(xauth_path, &st) == -1) {
+	if (xauth_path != NULL && _stati64(xauth_path, &st) == -1) {
 		debug("No xauth program.");
 		xauth_path = NULL;
 	}
@@ -606,7 +606,7 @@ client_suspend_self(struct sshbuf *bin, struct sshbuf *bout, struct sshbuf *berr
 	sshbuf_reset(berr);
 
 	/* Send the suspend signal to the program itself. */
-	kill(getpid(), SIGTSTP);
+	kill(GetCurrentProcessId(), SIGTSTP);
 
 	/* Reset window sizes in case they have changed */
 	received_window_change_signal = 1;
@@ -1084,19 +1084,19 @@ process_escapes(struct ssh *ssh, Channel *c,
 					fatal_fr(r, "sshbuf_putf");
 
 				/* Fork into background. */
-				pid = fork();
-				if (pid == -1) {
-					error("fork: %.100s", strerror(errno));
+				//pid = fork();
+				//if (pid == -1) {
+					error("fork is not implemented!");//"fork: %.100s", strerror(errno));
 					continue;
-				}
-				if (pid != 0) {	/* This is the parent. */
-					/* The parent just exits. */
-					exit(0);
-				}
+				//}
+				//if (pid != 0) {	/* This is the parent. */
+				//	/* The parent just exits. */
+				//	exit(0);
+				//}
 				/* The child continues serving connections. */
 				/* fake EOF on stdin */
-				if ((r = sshbuf_put_u8(bin, 4)) != 0)
-					fatal_fr(r, "sshbuf_put_u8");
+				//if ((r = sshbuf_put_u8(bin, 4)) != 0)
+				//	fatal_fr(r, "sshbuf_put_u8");
 				return -1;
 			case '?':
 				print_escape_help(berr, efc->escape_char,
@@ -2022,7 +2022,7 @@ update_known_hosts(struct hostkeys_update_ctx *ctx)
 	LogLevel loglevel = asking ?  SYSLOG_LEVEL_INFO : SYSLOG_LEVEL_VERBOSE;
 	char *fp, *response;
 	size_t i;
-	struct stat sb;
+	struct _stati64 sb;
 
 	for (i = 0; i < ctx->nkeys; i++) {
 		if (!ctx->keys_verified[i])
@@ -2087,7 +2087,7 @@ update_known_hosts(struct hostkeys_update_ctx *ctx)
 		 * NB. keys are only added to hostfiles[0], for the rest we
 		 * just delete the hostname entries.
 		 */
-		if (stat(options.user_hostfiles[i], &sb) != 0) {
+		if (_stati64(options.user_hostfiles[i], &sb) != 0) {
 			if (errno == ENOENT) {
 				debug_f("known hosts file %s does not "
 				    "exist", options.user_hostfiles[i]);

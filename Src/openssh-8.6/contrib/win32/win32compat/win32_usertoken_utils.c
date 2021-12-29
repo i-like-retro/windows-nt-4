@@ -37,7 +37,7 @@
 #include <Windows.h>
 #include <UserEnv.h>
 #include <Ntsecapi.h>
-#include <ntstatus.h>
+//#include <ntstatus.h>
 #include <Shlobj.h>
 #include <LM.h>
 #include <security.h>
@@ -45,13 +45,15 @@
 #include "inc\utf.h"
 #include "w32api_proxies.h"
 #include <Ntsecapi.h>
-#include <Strsafe.h>
+//#include <Strsafe.h>
 #include <sddl.h>
-#include <ntstatus.h>
+//#include <ntstatus.h>
 #include "misc_internal.h"
 #include "lsa_missingdefs.h"
 #include "Debug.h"
 #include "inc\pwd.h"
+#include <wchar.h>
+#include <ntcompat/ntcompat.h>
 
 #pragma warning(push, 3)
 HANDLE password_auth_token = NULL;
@@ -97,6 +99,7 @@ done:
 HANDLE
 generate_s4u_user_token(wchar_t* user_cpn, int impersonation) {
 	HANDLE lsa_handle = NULL, token = NULL;
+#if 0
 	ULONG auth_package_id;
 	NTSTATUS ret, subStatus;
 	void * logon_info = NULL;
@@ -216,6 +219,7 @@ done:
 		free(logon_info);
 	if (profile)
 		LsaFreeReturnBuffer(profile);
+#endif
 
 	return token;
 }
@@ -224,6 +228,7 @@ HANDLE
 process_custom_lsa_auth(const char* user, const char* pwd, const char* lsa_pkg)
 {
 	HANDLE token = NULL, lsa_handle = NULL;
+#if 0
 	LSA_OPERATIONAL_MODE mode;
 	ULONG auth_package_id;
 	NTSTATUS ret, subStatus;
@@ -251,11 +256,11 @@ process_custom_lsa_auth(const char* user, const char* pwd, const char* lsa_pkg)
 	seperator = wcschr(user_utf16, L'\\');
 	if (seperator != NULL) {
 		/* domain user: generate login info string user;password;domain */
-		swprintf_s(logon_info, ARRAYSIZE(logon_info), L"%s;%s;%.*s",
+		swprintf(logon_info, /*ARRAYSIZE(logon_info),*/ L"%s;%s;%.*s",
 			seperator + 1, pwd_utf16, (int) (seperator - user_utf16), user_utf16);
 	} else {
 		/* local user: generate login info string user;password */
-		swprintf_s(logon_info, ARRAYSIZE(logon_info), L"%s;%s",
+		swprintf(logon_info, /*ARRAYSIZE(logon_info),*/ L"%s;%s",
 			user_utf16, pwd_utf16);
 	}
 
@@ -298,10 +303,11 @@ done:
 	if (user_utf16)
 		free(user_utf16);
 	if (pwd_utf16) {
-		SecureZeroMemory(pwd_utf16, wcslen(pwd_utf16) * sizeof(WCHAR));
+		/*Secure*/ZeroMemory(pwd_utf16, wcslen(pwd_utf16) * sizeof(WCHAR));
 		free(pwd_utf16);
 	}
-	SecureZeroMemory(logon_info, sizeof(logon_info));
+	/*Secure*/ZeroMemory(logon_info, sizeof(logon_info));
+#endif
 
 	return token;
 }
@@ -312,6 +318,7 @@ HANDLE generate_sshd_token_as_nonsystem();
 HANDLE
 get_user_token(const char* user, int impersonation) {
 	HANDLE token = NULL;
+#if 0
 	wchar_t *user_utf16 = NULL;
 	PSID user_sid = NULL, process_sid = NULL;
 	
@@ -387,6 +394,7 @@ done:
 
 	if (process_sid)
 		free(process_sid);
+#endif
 
 	return token;
 }
@@ -394,6 +402,7 @@ done:
 int 
 load_user_profile(HANDLE user_token, char* user)
 {
+#if 0
 	wchar_t * user_utf16 = NULL;
 
 	if (!am_system()) {
@@ -435,6 +444,7 @@ load_user_profile(HANDLE user_token, char* user)
 
 	if (user_utf16)
 		free(user_utf16);
+#endif
 
 	return 0;
 }
@@ -461,6 +471,7 @@ add_sid_mapping_to_lsa(PUNICODE_STRING domain_name,
 	 PUNICODE_STRING account_name,
 	 PSID sid)
 {
+#if 0
 	LSA_SID_NAME_MAPPING_OPERATION_INPUT   input = { 0 };
 	PLSA_SID_NAME_MAPPING_OPERATION_OUTPUT p_output = NULL;
 	LSA_SID_NAME_MAPPING_OPERATION_ERROR op_result =
@@ -496,12 +507,15 @@ add_sid_mapping_to_lsa(PUNICODE_STRING domain_name,
 	}
 
 	return ret;
+#endif
+return -1;
 }
 
 
 int remove_virtual_account_lsa_mapping(PUNICODE_STRING domain_name,
 	PUNICODE_STRING account_name)
 {
+#if 0
 	int ret = 0;
 
 	LSA_SID_NAME_MAPPING_OPERATION_INPUT         input = { 0 };
@@ -524,6 +538,8 @@ int remove_virtual_account_lsa_mapping(PUNICODE_STRING domain_name,
 			debug3("LsaFreeMemory failed with ntstatus: %d", status);
 	}
 	return ret;
+#endif
+return -1;
 }
 
 void 
@@ -534,6 +550,7 @@ init_unicode_string(PUNICODE_STRING dest, PWSTR source)
 	dest->MaximumLength = dest->Length + 2;
 }
 
+#if 0
 HANDLE generate_sshd_token_as_nonsystem()
 {
 	/*
@@ -672,6 +689,7 @@ cleanup:
 
 	return va_token_restricted;
 }
+#endif
 
 
 /* returns NULL if not configured, fatal exists on error */
@@ -681,9 +699,9 @@ get_custom_lsa_package()
 	static char *s_lsa_auth_pkg = NULL;
 	static int s_processed = 0;
 	wchar_t *lsa_auth_pkg_w = NULL;
-	int lsa_auth_pkg_len = 0;
+	DWORD lsa_auth_pkg_len = 0;
 	HKEY reg_key = 0;
-	REGSAM mask = STANDARD_RIGHTS_READ | KEY_QUERY_VALUE | KEY_WOW64_64KEY;
+	REGSAM mask = STANDARD_RIGHTS_READ | KEY_QUERY_VALUE /*| KEY_WOW64_64KEY*/;
 
 	if (s_processed)
 		return s_lsa_auth_pkg;
@@ -718,15 +736,19 @@ get_custom_lsa_package()
  */
 wchar_t* get_final_path_by_handle(HANDLE h)
 {
+#if 0
 	static wchar_t path_buf[PATH_MAX];
 
 	if (GetFinalPathNameByHandleW(h, path_buf, PATH_MAX, 0) == 0) {
 		errno = EOTHER;
+#endif
 		debug3("failed to get final path of file with handle:%d error:%d", h, GetLastError());
 		return NULL;
+#if 0
 	}
 
 	return (path_buf + 4);
+#endif
 }
 
 /* using the netbiosname\samaccountname as an input, lookup the upn for the user.
@@ -737,6 +759,7 @@ int lookup_principal_name(const wchar_t * sam_account_name, wchar_t * user_princ
 	wchar_t domain_upn[MAX_UPN_LEN + 1];
 	DWORD domain_upn_len = ARRAYSIZE(domain_upn);
 	DWORD lookup_error = 0;
+#if 0
 
 	/* sanity check */
 	if (seperator == NULL)
@@ -763,6 +786,7 @@ int lookup_principal_name(const wchar_t * sam_account_name, wchar_t * user_princ
 			__FUNCTION__, sam_account_name, user_principal_name);
 		return 0;
 	}
+#endif
 
 	/* report error */
 	error("%s: User principal name lookup failed for user '%ls' (explicit: %d, implicit: %d)",
@@ -770,6 +794,7 @@ int lookup_principal_name(const wchar_t * sam_account_name, wchar_t * user_princ
 	return -1;
 }
 
+#if 0
 int 
 windows_password_auth(const char *username, const char* password)
 {
@@ -841,5 +866,6 @@ done:
 	return (password_auth_token) ? 1 : 0;
 
 }
+#endif
 
 #pragma warning(pop)

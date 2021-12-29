@@ -1,14 +1,27 @@
-#ifndef WINDOWS_NTCOMPAT_H
-#define WINDOWS_NTCOMPAT_H
+#ifndef NTCOMPAT_WINDOWS_H
+#define NTCOMPAT_WINDOWS_H
 
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #include <errno.h>
 #include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#ifdef getaddrinfo
+#undef getaddrinfo
+#endif
+
+#ifdef freeaddrinfo
+#undef freeaddrinfo
+#endif
+
+#ifdef getnameinfo
+#undef getnameinfo
 #endif
 
 #ifndef AI_PASSIVE
@@ -83,6 +96,103 @@ extern "C" {
 #define NI_DGRAM 0x10
 #endif
 
+#ifndef SECURITY_MAX_SID_SIZE
+#define SECURITY_MAX_SID_SIZE 68
+#endif
+
+#ifndef _In_
+#define _In_
+#endif
+
+#ifndef _Out_
+#define _Out_
+#endif
+
+#ifndef _In_opt_
+#define _In_opt_
+#endif
+
+#ifndef _Inout_
+#define _Inout_
+#endif
+
+#ifndef _Inout_opt_
+#define _Inout_opt_
+#endif
+
+#ifndef _Out_opt_
+#define _Out_opt_
+#endif
+
+#ifndef _Outptr_
+#define _Outptr_
+#endif
+
+#ifndef _Outptr_opt_
+#define _Outptr_opt_
+#endif
+
+#ifndef WSAID_ACCEPTEX
+#define WSAID_ACCEPTEX {0xb5367df1,0xcbac,0x11cf,{0x95,0xca,0x00,0x80,0x5f,0x48,0xa1,0x92}}
+#endif
+#ifndef WSAID_CONNECTEX
+#define WSAID_CONNECTEX {0x25a207b9,0xddf3,0x4660,{0x8e,0xe9,0x76,0xe5,0x8c,0x74,0x06,0x3e}}
+#endif
+#ifndef WSAID_GETACCEPTEXSOCKADDRS
+#define WSAID_GETACCEPTEXSOCKADDRS {0xb5367df2,0xcbac,0x11cf,{0x95,0xca,0x00,0x80,0x5f,0x48,0xa1,0x92}}
+#endif
+
+#ifndef SO_UPDATE_CONNECT_CONTEXT
+#define SO_UPDATE_CONNECT_CONTEXT 0x7010
+#endif
+
+#ifndef POLLRDNORM
+#define POLLRDNORM 0x0100
+#endif
+
+#ifndef POLLRDBAND
+#define POLLRDBAND 0x0200
+#endif
+
+#ifndef POLLIN
+#define POLLIN (POLLRDNORM | POLLRDBAND)
+#endif
+
+#ifndef POLLWRNORM
+#define POLLWRNORM 0x0010
+#endif
+
+#ifndef POLLOUT
+#define POLLOUT (POLLWRNORM)
+#endif
+
+#ifndef POLLERR
+#define POLLERR 0x0001
+#endif
+
+#ifndef IPV6_V6ONLY
+#define IPV6_V6ONLY 27
+#endif
+
+typedef BOOL (APIENTRY* PFNACCEPTEXPROC)
+    (SOCKET, SOCKET, PVOID, DWORD, DWORD, DWORD, LPDWORD, LPOVERLAPPED);
+typedef BOOL (APIENTRY* PFNCONNECTEXPROC)
+    (SOCKET, const struct sockaddr*, int, PVOID, DWORD, LPDWORD, LPOVERLAPPED);
+typedef VOID (APIENTRY* PFNGETACCEPTEXSOCKADDRSPROC)
+    (PVOID, DWORD, DWORD, DWORD, struct sockaddr**, LPINT, struct sockaddr**, LPINT);
+
+#ifndef LPFN_ACCEPTEX
+#define LPFN_ACCEPTEX PFNACCEPTEXPROC
+#endif
+
+#ifndef LPFN_CONNECTEX
+#define LPFN_CONNECTEX PFNCONNECTEXPROC
+#endif
+
+#ifndef LPFN_GETACCEPTEXSOCKADDRS
+#define LPFN_GETACCEPTEXSOCKADDRS PFNGETACCEPTEXSOCKADDRSPROC
+#endif
+
 #if defined(_MSC_VER) && _MSC_VER == 1200
 typedef int socklen_t;
 struct addrinfo
@@ -96,6 +206,18 @@ struct addrinfo
     struct sockaddr* ai_addr;
     struct addrinfo* ai_next;
 };
+#endif
+
+#ifndef _countof
+#define _countof(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
+#ifndef ARRAYSIZE
+#define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
+#ifndef __ascii_iswalpha
+#define __ascii_iswalpha(c)  ( ('A' <= (c) && (c) <= 'Z') || ( 'a' <= (c) && (c) <= 'z'))
 #endif
 
 #ifndef NTCOMPAT_EXPORTS

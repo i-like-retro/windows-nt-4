@@ -49,7 +49,7 @@ mktemp_internal(char *path, int slen, int mode)
 	char *start, *cp, *ep;
 	const char *tempchars = TEMPCHARS;
 	unsigned int r, tries;
-	struct stat sb;
+	struct _stati64 sb;
 	size_t len;
 	int fd;
 
@@ -75,7 +75,7 @@ mktemp_internal(char *path, int slen, int mode)
 
 		switch (mode) {
 		case MKTEMP_NAME:
-			if (lstat(path, &sb) != 0)
+			if (_lstati64(path, &sb) != 0)
 				return(errno == ENOENT ? 0 : -1);
 			break;
 		case MKTEMP_FILE:

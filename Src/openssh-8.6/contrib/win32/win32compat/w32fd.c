@@ -30,6 +30,7 @@
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "inc\sys\socket.h"
+#include <unistd.h>
 #include "inc\sys\select.h"
 #include "inc\sys\uio.h"
 #include "inc\sys\types.h"
@@ -41,6 +42,7 @@
 #include "inc\stdio.h"
 
 #include "w32fd.h"
+#include <ntcompat/ntcompat.h>
 #include "signal_internal.h"
 #include <stdarg.h>
 #include <errno.h>
@@ -65,7 +67,7 @@ static struct w32fd_table fd_table;
 /* main thread handle*/
 HANDLE main_thread;
 
-void fd_table_set(struct w32_io* pio, int index);
+static void fd_table_set(struct w32_io* pio, int index);
 
 void fd_decode_state(char*);
 #define POSIX_FD_STATE "c28fc6f98a2c44abbbd89d6a3037d0d9_POSIX_FD_STATE"
@@ -114,7 +116,7 @@ fd_table_initialize()
 	/* decode fd state if any */
 	{
 		char *posix_fd_state;
-		_dupenv_s(&posix_fd_state, NULL, POSIX_FD_STATE);
+		posix_fd_state = getenv(POSIX_FD_STATE);//_dupenv_s(&posix_fd_state, NULL, POSIX_FD_STATE);
 		/*TODO - validate parent process - to accomodate these scenarios -
 		* A posix parent process launches a regular process that inturn launches a posix child process
 		* In this case the posix child process may misinterpret POSIX_FD_STATE set by grand parent
@@ -122,14 +124,16 @@ fd_table_initialize()
 
 		if (NULL != posix_fd_state) {
 			fd_decode_state(posix_fd_state);
-			free(posix_fd_state);
-			_putenv_s(POSIX_FD_STATE, "");
+			//free(posix_fd_state);
+			char* buf = (char*)malloc(strlen(POSIX_FD_STATE) + 2);
+			sprintf(buf, "%s=", POSIX_FD_STATE);
+			putenv(buf); //_putenv_s(POSIX_FD_STATE, "");
 		}
 	}
 
 	/* decode chroot if any */
 	{
-		_wdupenv_s(&chroot_pathw, NULL, POSIX_CHROOTW);
+		chroot_pathw = _wgetenv(POSIX_CHROOTW);
 		if (chroot_pathw != NULL) {
 			if ((chroot_path = utf16_to_utf8(chroot_pathw)) == NULL)
 				return -1;
@@ -188,13 +192,13 @@ fd_table_clear(int index)
 void 
 init_prog_paths()
 {
-	wchar_t* wpgmptr;
+	wchar_t wpgmptr[MAX_PATH];
 	static int processed = 0;
 
 	if (processed)
 		return;
 
-	if (_get_wpgmptr(&wpgmptr) != 0)
+	if (!GetModuleFileNameW(NULL, wpgmptr, MAX_PATH)) //if (_get_wpgmptr(&wpgmptr) != 0)
 		fatal("unable to retrieve wpgmptr");
 
 	if ((__wprogdir = _wcsdup(wpgmptr)) == NULL ||
@@ -210,8 +214,8 @@ init_prog_paths()
 	*(__progname + strlen(__progname) - 4) = '\0';
 
 	/* get %programdata% value */
-	size_t len = 0;
-	_dupenv_s(&__progdata, &len, "ProgramData");
+	//size_t len = 0;
+	__progdata = getenv("ProgramData");//_dupenv_s(&__progdata, &len, "ProgramData");
 
 	if (!__progdata)
 		fatal("couldn't find ProgramData environment variable");
@@ -228,7 +232,7 @@ w32posix_initialize()
 	init_prog_paths();
 	if ((fd_table_initialize() != 0) || (socketio_initialize() != 0))
 		debug_assert_internal();
-	main_thread = OpenThread(THREAD_SET_CONTEXT | SYNCHRONIZE, FALSE, GetCurrentThreadId());
+	main_thread = NT4_GetCurrentThreadHandle();//OpenThread(THREAD_SET_CONTEXT | SYNCHRONIZE, FALSE, GetCurrentThreadId());
 	if (main_thread == NULL || 
 	    sw_initialize() != 0 ) {
 		debug_assert_internal();
@@ -524,7 +528,7 @@ w32_open(const char *pathname, int flags, ... /* arg */)
 		return -1;
 	if (flags & O_CREAT) {
 		va_start(valist, flags);
-		mode = va_arg(valist, mode_t);
+		mode = va_arg(valist, int/*mode_t*/);
 		va_end(valist);
 	}
 
@@ -578,10 +582,10 @@ w32_writev(int fd, const struct iovec *iov, int iovcnt)
 }
 
 int
-w32_fstat(int fd, struct w32_stat *buf)
+w32_fstat(int fd, struct _stati64 *buf)
 {
 	CHECK_FD(fd);
-	return fileio_fstat(fd_table.w32_ios[fd], (struct _stat64*)buf);
+	return fileio_fstat(fd_table.w32_ios[fd], (struct _stati64*)buf);
 }
 
 long
@@ -712,7 +716,7 @@ w32_fcntl(int fd, int cmd, ... /* arg */)
 int
 w32_select(int fds, w32_fd_set* readfds, w32_fd_set* writefds, w32_fd_set* exceptfds, const struct timeval *timeout)
 {
-	ULONGLONG ticks_start = GetTickCount64(), ticks_spent;
+	ULONGLONG ticks_start = GetTickCount(), ticks_spent;
 	w32_fd_set read_ready_fds, write_ready_fds;
 	HANDLE events[SELECT_EVENT_LIMIT];
 	int num_events = 0;
@@ -827,7 +831,7 @@ w32_select(int fds, w32_fd_set* readfds, w32_fd_set* writefds, w32_fd_set* excep
 	if ((timeout == NULL) || (timeout_ms != 0))
 		/* wait for io until any is ready */
 		while (out_ready_fds == 0) {
-			ticks_spent = GetTickCount64() - ticks_start;
+			ticks_spent = GetTickCount() - ticks_start;
 			time_rem = 0;
 
 			if (timeout != NULL) {
@@ -1134,6 +1138,7 @@ struct inh_fd_state {
 };
 
 
+#if 0
 /* encodes the fd info into a base64 encoded binary blob */
 static char*
 fd_encode_state(const posix_spawn_file_actions_t *file_actions, HANDLE aux_h[])
@@ -1266,7 +1271,9 @@ posix_spawn_internal(pid_t *pidp, const char *path, const posix_spawn_file_actio
 	if ((fd_info = fd_encode_state(file_actions, aux_handles)) == NULL)
 		goto cleanup;
 
-	if (_putenv_s(POSIX_FD_STATE, fd_info) != 0)
+	char* buf = malloc(strlen(POSIX_FD_STATE) + strlen(fd_info) + 2);
+	sprintf(buf, "%s=%s", POSIX_FD_STATE, fd_info);
+	if (setenv(buf) != 0)
 		goto cleanup;
 	i = spawn_child_internal(path, argv + 1, stdio_handles[STDIN_FILENO], stdio_handles[STDOUT_FILENO], stdio_handles[STDERR_FILENO], sc_flags, user_token, prepend_module_path);
 	if (i == -1)
@@ -1275,7 +1282,9 @@ posix_spawn_internal(pid_t *pidp, const char *path, const posix_spawn_file_actio
 		*pidp = i;
 	ret = 0;
 cleanup:
-	_putenv_s(POSIX_FD_STATE, "");
+	buf = malloc(strlen(POSIX_FD_STATE) + 2);
+	sprintf(buf, "%s=", POSIX_FD_STATE);
+	setenv(buf);
 	for (i = 0; i <= STDERR_FILENO; i++) {
 		if (stdio_handles[i] != NULL) {
 			if (fd_table.w32_ios[file_actions->stdio_redirect[i]]->type == SOCK_FD)
@@ -1309,3 +1318,4 @@ posix_spawnp(pid_t *pidp, const char *file, const posix_spawn_file_actions_t *fi
 {
 	return posix_spawn_internal(pidp, file, file_actions, attrp, argv, envp, NULL, FALSE);
 }
+#endif

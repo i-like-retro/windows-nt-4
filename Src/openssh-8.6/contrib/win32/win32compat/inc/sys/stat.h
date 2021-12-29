@@ -23,15 +23,15 @@
 #define WRITE_PERMISSIONS (FILE_WRITE_DATA | FILE_APPEND_DATA | FILE_WRITE_ATTRIBUTES | FILE_WRITE_EA)
 #define EXECUTE_PERMISSIONS (READ_PERMISSIONS | FILE_EXECUTE)
 
-struct w32_stat;
+struct _stati64;
 
-int w32_fstat(int fd, struct w32_stat *buf);
+int w32_fstat(int fd, struct _stati64 *buf);
 #define fstat(a,b)	w32_fstat((a), (b))
 
-int w32_stat(const char *path, struct w32_stat *buf);
+int w32_stat(const char *path, struct _stati64 *buf);
 #define stat w32_stat
 
-int w32_lstat(const char *path, struct w32_stat *buf);
+int w32_lstat(const char *path, struct _stati64 *buf);
 #define lstat w32_lstat
 
 int w32_mkdir(const char *pathname, unsigned short mode);
@@ -44,6 +44,7 @@ int w32_fchmod(int fd, mode_t mode);
 #define fchmod w32_fchmod
 
 
+#if 0
 struct w32_stat {
 	dev_t     st_dev;     /* ID of device containing file */
 	unsigned short     st_ino;     /* inode number */
@@ -57,6 +58,7 @@ struct w32_stat {
 	__int64    st_mtime;   /* time of last modification */
 	__int64    st_ctime;   /* time of last status change */
 };
+#endif
 
 
 void strmode(mode_t mode, char *p);

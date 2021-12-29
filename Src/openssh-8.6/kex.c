@@ -66,6 +66,8 @@
 #include "sshbuf.h"
 #include "digest.h"
 
+#include <ntcompat/ntcompat.h>
+
 /* prototype */
 static int kex_choose_conf(struct ssh *);
 static int kex_input_newkeys(int, u_int32_t, struct ssh *);
@@ -1245,7 +1247,7 @@ kex_exchange_identification(struct ssh *ssh, int timeout_ms,
 			if (timeout_ms > 0) {
 				r = waitrfd(ssh_packet_get_connection_in(ssh),
 				    &timeout_ms);
-				if (r == -1 && errno == WSAETIMEDOUT) {
+				if (r == -1 && errno == ETIMEDOUT) {
 					send_error(ssh, "Timed out waiting "
 					    "for SSH identification string.");
 					error("Connection timed out during "

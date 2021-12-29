@@ -39,39 +39,11 @@
 #include "misc_internal.h"
 #include "debug.h"
 
-#ifndef ENOTSUP
-#define ENOTSUP 129
-#endif
-
-#ifndef EOTHER
-#define EOTHER 131
-#endif
-
-#ifndef WSAID_ACCEPTEX
-#define WSAID_ACCEPTEX {0xb5367df1,0xcbac,0x11cf,{0x95,0xca,0x00,0x80,0x5f,0x48,0xa1,0x92}}
-#endif
-#ifndef WSAID_CONNECTEX
-#define WSAID_CONNECTEX {0x25a207b9,0xddf3,0x4660,{0x8e,0xe9,0x76,0xe5,0x8c,0x74,0x06,0x3e}}
-#endif
-#ifndef WSAID_GETACCEPTEXSOCKADDRS
-#define WSAID_GETACCEPTEXSOCKADDRS {0xb5367df2,0xcbac,0x11cf,{0x95,0xca,0x00,0x80,0x5f,0x48,0xa1,0x92}}
-#endif
-
-#ifndef SO_UPDATE_CONNECT_CONTEXT
-#define SO_UPDATE_CONNECT_CONTEXT 0x7010
-#endif
-
 #define INTERNAL_SEND_BUFFER_SIZE 70*1024 //70KB
 #define INTERNAL_RECV_BUFFER_SIZE 70*1024 //70KB
 #define errno_from_WSALastError() errno_from_WSAError(WSAGetLastError())
 
-#undef getaddrinfo
-#undef freeaddrinfo
-#include "wspiapi.h"
-
-typedef BOOL (APIENTRY* LPFN_ACCEPTEX)(SOCKET,SOCKET,PVOID,DWORD,DWORD,DWORD,LPDWORD,LPOVERLAPPED);
-typedef BOOL (APIENTRY* LPFN_CONNECTEX)(SOCKET,const struct sockaddr*,int,PVOID,DWORD,LPDWORD,LPOVERLAPPED);
-typedef VOID (APIENTRY* LPFN_GETACCEPTEXSOCKADDRS)(PVOID,DWORD,DWORD,DWORD,struct sockaddr**,LPINT,struct sockaddr**,LPINT);
+#include <ntcompat/ntcompat.h>
 
 /* state info that needs to be persisted for an inprocess acceptEx call*/
 struct acceptEx_context {
@@ -95,19 +67,19 @@ errno_from_WSAError(int wsaerrno)
 	case WSAEINVAL:
 		return EINVAL;
 	case WSAECONNABORTED:
-		return WSAECONNABORTED;
+		return ECONNABORTED;
 	case WSAETIMEDOUT:
-		return WSAETIMEDOUT;
+		return ETIMEDOUT;
 	case WSAECONNREFUSED:
-		return WSAECONNREFUSED;
+		return ECONNREFUSED;
 	case WSAEINPROGRESS:
-		return WSAEINPROGRESS;
+		return EINPROGRESS;
 	case WSAESHUTDOWN:
-		return WSAECONNRESET;
+		return ECONNRESET;
 	case WSAENOTCONN:
-		return WSAENOTCONN;
+		return ENOTCONN;
 	case WSAECONNRESET:
-		return WSAECONNRESET;
+		return ECONNRESET;
 	default:
 		return wsaerrno - 10000;
 	}
@@ -288,7 +260,7 @@ int
 socketio_setsockopt(struct w32_io* pio, int level, int optname, const char* optval, int optlen)
 {
 	if ((optname == SO_KEEPALIVE) || (optname == SO_REUSEADDR) ||
-	    (optname == TCP_NODELAY)/* || (optname == IPV6_V6ONLY)*/)
+	    (optname == TCP_NODELAY) || (optname == IPV6_V6ONLY))
 		SET_ERRNO_ON_ERROR(setsockopt(pio->sock, level, optname, optval, optlen));
 	else {
 		debug3("setsockop - ERROR: unsupported optname:%d io:%p", optname, pio);
@@ -393,7 +365,7 @@ int
 socketio_recv(struct w32_io* pio, void *buf, size_t len, int flags)
 {
 	BOOL completed = FALSE;
-	/*errno_t*/int r = 0;
+	errno_t r = 0;
 	debug5("recv - io:%p state:%d", pio, pio->internal.state);
 
 	if ((buf == NULL) || (len == 0)) {
@@ -428,11 +400,11 @@ socketio_recv(struct w32_io* pio, void *buf, size_t len, int flags)
 	/* if we have some buffer copy it and return #bytes copied */
 	if (pio->read_details.remaining) {
 		int num_bytes_copied = min((int)len, pio->read_details.remaining);
-		if (num_bytes_copied > len) {
+		if ((r = memcpy_s(buf, len, pio->read_details.buf + pio->read_details.completed,
+			num_bytes_copied)) != 0) {
 			debug4("memcpy_s failed with error: %d.", r);
 			return -1;
 		}
-		memcpy(buf, pio->read_details.buf + pio->read_details.completed, num_bytes_copied);
 		pio->read_details.remaining -= num_bytes_copied;
 		pio->read_details.completed += num_bytes_copied;
 		debug5("recv - returning %d bytes from prior completed IO, remaining:%d, io:%p",
@@ -503,11 +475,10 @@ socketio_recv(struct w32_io* pio, void *buf, size_t len, int flags)
 
 	if (pio->read_details.remaining) {
 		int num_bytes_copied = min((int)len, pio->read_details.remaining);
-		if (num_bytes_copied > len) {
+		if ((r = memcpy_s(buf, len, pio->read_details.buf, num_bytes_copied)) != 0) {
 			debug3("memcpy_s failed with error: %d.", r);
 			return -1;
 		}
-		memcpy(buf, pio->read_details.buf, num_bytes_copied);
 		pio->read_details.remaining -= num_bytes_copied;
 		pio->read_details.completed = num_bytes_copied;
 		debug4("recv - (2) returning %d bytes from completed IO, remaining:%d, io:%p",
@@ -548,7 +519,7 @@ socketio_send(struct w32_io* pio, const void *buf, size_t len, int flags)
 {
 	int ret = 0;
 	WSABUF wsabuf;
-	/*errno_t*/int r = 0;
+	errno_t r = 0;
 		
 	debug5("send - io:%p state:%d", pio, pio->internal.state);
 
@@ -601,7 +572,10 @@ socketio_send(struct w32_io* pio, const void *buf, size_t len, int flags)
 		wsabuf.buf = pio->write_details.buf;
 
 	wsabuf.len = min(wsabuf.len, (int)len);
-	memcpy(wsabuf.buf, buf, wsabuf.len);
+	if ((r = memcpy_s(wsabuf.buf, wsabuf.len, buf, wsabuf.len)) != 0) {
+		debug3("memcpy_s failed with error: %d.", r);
+		return -1;
+	}
 
 	/* TODO - implement flags support if needed */
 	ret = WSASend(pio->sock, &wsabuf, 1, NULL, 0, &pio->write_overlapped, &WSASendCompletionRoutine);
@@ -701,7 +675,7 @@ socketio_accept(struct w32_io* pio, struct sockaddr* addr, int* addrlen)
 	struct acceptEx_context* context;
 	struct sockaddr *local_address, *remote_address;
 	int local_address_len, remote_address_len;
-	/*errno_t*/int r = 0;
+	errno_t r = 0;
 
 	debug5("accept - io:%p", pio);
 	/* start io if not already started */
@@ -762,7 +736,10 @@ socketio_accept(struct w32_io* pio, struct sockaddr* addr, int* addrlen)
 			sizeof(SOCKADDR_STORAGE) + 16, &local_address,
 			&local_address_len, &remote_address, &remote_address_len);
 		if (remote_address_len) {
-			memcpy(addr, remote_address, remote_address_len);
+			if((r = memcpy_s(addr, remote_address_len, remote_address, remote_address_len)) != 0) {
+				debug3("memcpy_s failed with error: %d.", r);
+				goto on_error;
+			}
 			*addrlen = remote_address_len;
 		}
 	}
@@ -871,7 +848,7 @@ socketio_connect(struct w32_io* pio, const struct sockaddr* name, int namelen)
 	} else {
 		/* if i/o is not ready */
 		if (FALSE == socketio_is_io_available(pio, TRUE)) {
-			errno = WSAEINPROGRESS;
+			errno = EINPROGRESS;
 			debug4("connect - in progress, io:%p", pio);
 			return -1;
 		}

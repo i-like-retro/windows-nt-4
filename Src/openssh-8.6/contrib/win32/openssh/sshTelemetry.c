@@ -41,15 +41,18 @@ GitHub releases will not send any Telemetry.
 #include "sshTelemetry.h"
 #include "sshTelemetryInternal.h"
 
+#if 0
 // {0d986661-0dd7-561a-b15b-fcc1cd46d2bb}
 TRACELOGGING_DEFINE_PROVIDER(
     g_hProvider1,
     "Microsoft.Windows.Win32OpenSSH",
     (0x0d986661, 0x0dd7, 0x561a, 0xb1, 0x5b, 0xfc, 0xc1, 0xcd, 0x46, 0xd2, 0xbb),
     TraceLoggingOptionMicrosoftTelemetry());
+#endif
 
 void send_auth_telemetry(const int status, const char* auth_type)
 {
+#if 0
     /* 
     registering only needs to be done once per process but
     since these functions are used by multiple processes
@@ -67,10 +70,12 @@ void send_auth_telemetry(const int status, const char* auth_type)
         TraceLoggingString(auth_type, "authType")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 
 void send_auth_method_telemetry(const char* auth_methods)
 {
+#if 0
     TraceLoggingRegister(g_hProvider1);
     TraceLoggingWrite(
         g_hProvider1,
@@ -80,6 +85,7 @@ void send_auth_method_telemetry(const char* auth_methods)
         TraceLoggingString(auth_methods, "authMethodsConfigured")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 
 void send_encryption_telemetry(const char* direction, 
@@ -87,6 +93,7 @@ void send_encryption_telemetry(const char* direction,
     const char* comp, const char* host_key, 
     const char** cproposal, const char** sproposal)
 {
+#if 0
     TraceLoggingRegister(g_hProvider1);
     TraceLoggingWrite(
         g_hProvider1,
@@ -117,10 +124,12 @@ void send_encryption_telemetry(const char* direction,
         TraceLoggingString(sproposal[7], "serverProposedCompressionStoc")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 
 void send_pubkey_telemetry(const char* pubKeyStatus)
 {
+#if 0
     TraceLoggingRegister(g_hProvider1);
     TraceLoggingWrite(
         g_hProvider1,
@@ -130,10 +139,12 @@ void send_pubkey_telemetry(const char* pubKeyStatus)
         TraceLoggingString(pubKeyStatus, "status")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 
 void send_shell_telemetry(const int pty, const int shell_type)
 {
+#if 0
     TraceLoggingRegister(g_hProvider1);
     TraceLoggingWrite(
         g_hProvider1,
@@ -144,10 +155,12 @@ void send_shell_telemetry(const int pty, const int shell_type)
         TraceLoggingInt16(shell_type, "type")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 
 void send_pubkey_sign_telemetry(const char* pubKeySignStatus)
 {
+#if 0
     TraceLoggingRegister(g_hProvider1);
     TraceLoggingWrite(
         g_hProvider1,
@@ -157,10 +170,12 @@ void send_pubkey_sign_telemetry(const char* pubKeySignStatus)
         TraceLoggingString(pubKeySignStatus, "status")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 
 void send_ssh_connection_telemetry(const char* conn, const char* port)
 {
+#if 0
     int isCustomPort = 0;
     if (strcmp(port, "22") != 0) {
         isCustomPort = 1;
@@ -175,10 +190,12 @@ void send_ssh_connection_telemetry(const char* conn, const char* port)
         TraceLoggingBool(isCustomPort, "isCustomSSHServerPort")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 
 void send_sshd_connection_telemetry(const char* conn)
 {
+#if 0
     TraceLoggingRegister(g_hProvider1);
     TraceLoggingWrite(
         g_hProvider1,
@@ -188,11 +205,13 @@ void send_sshd_connection_telemetry(const char* conn)
         TraceLoggingString(conn, "connStatus")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 
 void send_ssh_version_telemetry(const char* ssh_version, 
     const char* peer_version, const char* remote_protocol_error)
 {
+#if 0
     TraceLoggingRegister(g_hProvider1);
     TraceLoggingWrite(
         g_hProvider1,
@@ -204,5 +223,6 @@ void send_ssh_version_telemetry(const char* ssh_version,
         TraceLoggingString(peer_version, "peerVersion")
     );
     TraceLoggingUnregister(g_hProvider1);
+#endif
 }
 

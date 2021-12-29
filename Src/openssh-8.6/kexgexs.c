@@ -47,6 +47,7 @@
 #include "dh.h"
 #include "ssh2.h"
 #include "compat.h"
+#include <ntcompat/ntcompat.h>
 #ifdef GSSAPI
 #include "ssh-gss.h"
 #endif

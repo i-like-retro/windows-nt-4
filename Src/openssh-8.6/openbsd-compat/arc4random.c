@@ -157,7 +157,7 @@ _rs_stir(void)
 static inline void
 _rs_stir_if_needed(size_t len)
 {
-	pid_t pid = getpid();
+	pid_t pid = GetCurrentProcessId();//getpid();
 
 	if (rs_count <= len || !rs_initialized || rs_stir_pid != pid) {
 		rs_stir_pid = pid;

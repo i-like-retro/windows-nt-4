@@ -47,14 +47,7 @@
 #include "misc_internal.h"
 #include "debug.h"
 #include <Sddl.h>
-
-#ifndef EOTHER
-#define EOTHER 131
-#endif
-
-#ifndef ENOTSUP
-#define ENOTSUP 129
-#endif
+#include <ntcompat/ntcompat.h>
 
 /* internal read buffer size */
 #define READ_BUFFER_SIZE 100*1024
@@ -109,7 +102,7 @@ errno_from_Win32Error(int win32_error)
 		return ENOENT;
 	case ERROR_INVALID_FUNCTION:
 	case ERROR_NOT_SUPPORTED:
-		return WSAEOPNOTSUPP;
+		return EOPNOTSUPP;
 	default:
 		return win32_error;
 	}
@@ -210,8 +203,8 @@ fileio_pipe(struct w32_io* pio[2], int duplex)
 	}
 
 	/* create name for named pipe */
-	if (-1 == snprintf(pipe_name, PATH_MAX, "\\\\.\\Pipe\\W32PosixPipe.%08x.%08x",
-		GetCurrentProcessId(), pipe_counter++)) {
+	if (snprintf(pipe_name, PATH_MAX, "\\\\.\\Pipe\\W32PosixPipe.%08x.%08x",
+		GetCurrentProcessId(), pipe_counter++) < 0) {
 		errno = EOTHER;
 		debug3("pipe - ERROR sprintf_s %d", errno);
 		goto error;
@@ -528,7 +521,7 @@ cleanup:
 }
 
 VOID CALLBACK 
-ReadCompletionRoutine(DWORD dwErrorCode, DWORD dwNumberOfBytesTransfered, LPOVERLAPPED lpOverlapped)
+ReadCompletionRoutine(_In_ DWORD dwErrorCode, _In_ DWORD dwNumberOfBytesTransfered, _Inout_ LPOVERLAPPED lpOverlapped)
 {
 	struct w32_io* pio = (struct w32_io*)((char*)lpOverlapped - offsetof(struct w32_io, read_overlapped));
 	debug4("ReadCB pio:%p, pending_state:%d, error:%d, received:%d",
@@ -578,7 +571,7 @@ int
 fileio_read(struct w32_io* pio, void *dst, size_t max_bytes)
 {
 	int bytes_copied;
-	/*errno_t*/int r = 0;
+	errno_t r = 0;
 
 	debug5("read - io:%p remaining:%d", pio, pio->read_details.remaining);
 
@@ -652,11 +645,10 @@ fileio_read(struct w32_io* pio, void *dst, size_t max_bytes)
 	}
 
 	bytes_copied = min((DWORD)max_bytes, pio->read_details.remaining);
-	if (bytes_copied > max_bytes) {
+	if ((r = memcpy_s(dst, max_bytes, pio->read_details.buf + pio->read_details.completed, bytes_copied)) != 0) {
 		debug3("memcpy_s failed with error: %d.", r);
 		return -1;
 	}
-	memcpy(dst, pio->read_details.buf + pio->read_details.completed, bytes_copied);
 	pio->read_details.remaining -= bytes_copied;
 	pio->read_details.completed += bytes_copied;
 	debug4("read - io:%p read: %d remaining: %d", pio, bytes_copied,
@@ -665,9 +657,9 @@ fileio_read(struct w32_io* pio, void *dst, size_t max_bytes)
 }
 
 VOID CALLBACK 
-WriteCompletionRoutine(DWORD dwErrorCode,
-			DWORD dwNumberOfBytesTransfered,
-			LPOVERLAPPED lpOverlapped)
+WriteCompletionRoutine(_In_ DWORD dwErrorCode,
+			_In_ DWORD dwNumberOfBytesTransfered,
+			_Inout_ LPOVERLAPPED lpOverlapped)
 {
 	struct w32_io* pio =
 		(struct w32_io*)((char*)lpOverlapped - offsetof(struct w32_io, write_overlapped));
@@ -723,7 +715,7 @@ fileio_write(struct w32_io* pio, const void *buf, size_t max_bytes)
 {
 	int bytes_copied;
 	DWORD pipe_flags = 0, pipe_instances = 0;
-	/*errno_t*/int r = 0;
+	errno_t r = 0;
 
 	debug4("write - io:%p", pio);
 	if (pio->write_details.pending) {
@@ -761,11 +753,10 @@ fileio_write(struct w32_io* pio, const void *buf, size_t max_bytes)
 	}
 
 	bytes_copied = min((int)max_bytes, pio->write_details.buf_size);
-	if(bytes_copied > max_bytes) {
+	if((r = memcpy_s(pio->write_details.buf, max_bytes, buf, bytes_copied)) != 0) {
 		debug3("memcpy_s failed with error: %d.", r);
 		return -1;
 	}
-	memcpy(pio->write_details.buf, buf, bytes_copied);
 
 	if (pio->type == NONSOCK_SYNC_FD || FILETYPE(pio) == FILE_TYPE_CHAR) {
 		if (syncio_initiate_write(pio, bytes_copied) == 0) {
@@ -817,7 +808,7 @@ fileio_write(struct w32_io* pio, const void *buf, size_t max_bytes)
 
 /* fstat() implemetation */
 int
-fileio_fstat(struct w32_io* pio, struct _stat64 *buf)
+fileio_fstat(struct w32_io* pio, struct _stati64 *buf)
 {
 	HANDLE dup_handle = 0;
 	if (!DuplicateHandle(GetCurrentProcess(), pio->handle, GetCurrentProcess(), &dup_handle, 0,
@@ -839,12 +830,8 @@ fileio_fstat(struct w32_io* pio, struct _stat64 *buf)
 	return res;
 }
 
-#ifndef __ascii_iswalpha
-#define __ascii_iswalpha(c)  ( ('A' <= (c) && (c) <= 'Z') || ( 'a' <= (c) && (c) <= 'z'))
-#endif
-
 int
-fileio_stat_or_lstat_internal(const char *path, struct _stat64 *buf, int do_lstat)
+fileio_stat_or_lstat_internal(const char *path, struct _stati64 *buf, int do_lstat)
 {
 	wchar_t *wpath = NULL;
 	char link_test = L'\0';
@@ -853,7 +840,7 @@ fileio_stat_or_lstat_internal(const char *path, struct _stat64 *buf, int do_lsta
 	int ret = -1;
 	int is_link = 0;
 
-	memset(buf, 0, sizeof(struct _stat64));
+	memset(buf, 0, sizeof(struct _stati64));
 
 	/* Detect root dir */
 	if (path && strcmp(path, "/") == 0) {
@@ -903,14 +890,18 @@ fileio_stat_or_lstat_internal(const char *path, struct _stat64 *buf, int do_lsta
 	buf->st_uid = 0; /* UNIX - specific; has no meaning on windows */
 	buf->st_nlink = 1; /* number of hard links. Always 1 on non - NTFS file systems.*/
 	buf->st_mode |= file_attr_to_st_mode(wpath, attributes.dwFileAttributes);
-	buf->st_size = attributes.nFileSizeLow | (((off_t)attributes.nFileSizeHigh) << 32);
+	buf->st_size = attributes.nFileSizeLow | (((off64_t)attributes.nFileSizeHigh) << 32);
 	if (wcslen(wpath) > 1 && __ascii_iswalpha(*wpath) && (*(wpath + 1) == ':'))
 		buf->st_dev = buf->st_rdev = towupper(*wpath) - L'A'; /* drive num */
 	else
 		buf->st_dev = buf->st_rdev = _getdrive() - 1;
-	file_time_to_unix_time(&(attributes.ftLastAccessTime), &(buf->st_atime));
-	file_time_to_unix_time(&(attributes.ftLastWriteTime), &(buf->st_mtime));
-	file_time_to_unix_time(&(attributes.ftCreationTime), &(buf->st_ctime));
+	time_t t;
+	file_time_to_unix_time(&(attributes.ftLastAccessTime), &t);
+	buf->st_atime = t;
+	file_time_to_unix_time(&(attributes.ftLastWriteTime), &t);
+	buf->st_mtime = t;
+	file_time_to_unix_time(&(attributes.ftCreationTime), &t);
+	buf->st_ctime = t;
 
 	/* link type supercedes other file type bits */
 	if (is_link) {
@@ -929,13 +920,13 @@ cleanup:
 }
 
 int
-fileio_stat(const char *path, struct _stat64 *buf)
+fileio_stat(const char *path, struct _stati64 *buf)
 {
 	return fileio_stat_or_lstat_internal(path, buf, 0);
 }
 
 int
-fileio_lstat(const char *path, struct _stat64 *buf)
+fileio_lstat(const char *path, struct _stati64 *buf)
 {
 	return fileio_stat_or_lstat_internal(path, buf, 1);
 }
@@ -1024,7 +1015,7 @@ fileio_fdopen_disk(struct w32_io* pio, const char *mode)
 	 */
 	int w32_close(int);
 	w32_close(pio->table_index);
-	errno = _wfopen_s(&ret, file_path, wmode);
+	ret = _wfopen(file_path, wmode);
 
 cleanup:
 	if (wmode)
@@ -1073,7 +1064,7 @@ fileio_on_select(struct w32_io* pio, BOOL rd)
 				return;
 			}
 		} else {
-			if (fileio_ReadFileEx(pio, INT_MAX) != 0) {
+			if (fileio_ReadFileEx(pio, /*INT_MAX*/0x7fffffff) != 0) {
 				pio->read_details.error = errno;
 				errno = 0;
 				return;
@@ -1185,7 +1176,7 @@ fileio_readlink(const char *path, char *buf, size_t bufsiz)
 	PREPARSE_DATA_BUFFER_SYMLINK reparse_buffer = NULL;
 
 	/* sanity check */
-	//if (path == NULL || buf == NULL || bufsiz == 0) {
+	if (path == NULL || buf == NULL || bufsiz == 0) {
 		errno = EINVAL;
 		goto cleanup;
 	}
@@ -1237,7 +1228,7 @@ fileio_readlink(const char *path, char *buf, size_t bufsiz)
 	}
 
 	/* copy the data out of the reparse buffer and add null terminator */
-	memcpy(linkpath, symlink_nonnull, symlink_nonnull_size);
+	memcpy_s(linkpath, symlink_nonnull_size + sizeof(wchar_t), symlink_nonnull, symlink_nonnull_size);
 	linkpath[symlink_nonnull_size / sizeof(wchar_t)] = L'\0';
 
 	/* convert link path to utf8 */

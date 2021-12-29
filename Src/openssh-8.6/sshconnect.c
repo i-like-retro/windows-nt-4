@@ -73,6 +73,7 @@
 #include "ssherr.h"
 #include "authfd.h"
 #include "kex.h"
+#include <ntcompat/ntcompat.h>
 
 struct sshkey *previous_host_key = NULL;
 
@@ -110,6 +111,7 @@ expand_proxy_command(const char *proxy_command, const char *user,
 	return ret;
 }
 
+#if 0
 /*
  * Connect to the given ssh server using a proxy command that passes a
  * a connected fd back to us.
@@ -192,6 +194,7 @@ ssh_proxy_fdpass_connect(struct ssh *ssh, const char *host,
 
 	return 0;
 }
+#endif
 
 /*
  * Connect to the given ssh server using a proxy command.
@@ -592,9 +595,9 @@ ssh_connect(struct ssh *ssh, const char *host, const char *host_arg,
 		if ((ssh_packet_set_connection(ssh, in, out)) == NULL)
 			return -1; /* ssh_packet_set_connection logs error */
 		return 0;
-	} else if (options.proxy_use_fdpass) {
-		return ssh_proxy_fdpass_connect(ssh, host, host_arg, port,
-		    options.proxy_command);
+	//} else if (options.proxy_use_fdpass) {
+	//	return ssh_proxy_fdpass_connect(ssh, host, host_arg, port,
+	//	    options.proxy_command);
 	}
 	return ssh_proxy_connect(ssh, host, host_arg, port,
 	    options.proxy_command);

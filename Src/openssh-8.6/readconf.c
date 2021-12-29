@@ -69,6 +69,8 @@
 #include "myproposal.h"
 #include "digest.h"
 
+void convertToForwardslash(char *str);
+
 /* Format of the configuration file:
 
    # Configuration data is parsed as follows:

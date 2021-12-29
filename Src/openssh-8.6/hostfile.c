@@ -477,7 +477,7 @@ hostfile_create_user_ssh_dir(const char *filename, int notify)
 {
 	char *dotsshdir = NULL, *p;
 	size_t len;
-	struct stat st;
+	struct _stati64 st;
 
 	if ((p = strrchr(filename, '/')) == NULL)
 		return;
@@ -485,7 +485,7 @@ hostfile_create_user_ssh_dir(const char *filename, int notify)
 	dotsshdir = tilde_expand_filename("~/" _PATH_SSH_USER_DIR, getuid());
 	if (strlen(dotsshdir) > len || strncmp(filename, dotsshdir, len) != 0)
 		goto out; /* not ~/.ssh prefixed */
-	if (stat(dotsshdir, &st) == 0)
+	if (_stati64(dotsshdir, &st) == 0)
 		goto out; /* dir already exists */
 	else if (errno != ENOENT)
 		error("Could not stat %s: %s", dotsshdir, strerror(errno));

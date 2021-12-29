@@ -29,6 +29,7 @@
 */
 
 #include <Windows.h>
+#include <ntcompat/ntcompat.h>
 #include "inc\utf.h"
 #include "Debug.h"
 

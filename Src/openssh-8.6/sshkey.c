@@ -68,6 +68,7 @@
 #endif
 
 #include "openbsd-compat/openssl-compat.h"
+#include <ntcompat/ntcompat.h>
 
 /* openssh private key file format */
 #define MARK_BEGIN		"-----BEGIN OPENSSH PRIVATE KEY-----\n"
@@ -3132,7 +3133,7 @@ sshkey_cert_check_authority(const struct sshkey *k,
 
 #ifdef WINDOWS
 			char cert_principal_name_copy[UNLEN + DNLEN + 1 + 1] = { 0, };
-			strlcpy(cert_principal_name_copy, k->cert->principals[i], _countof(cert_principal_name_copy));
+			strcpy_s(cert_principal_name_copy, _countof(cert_principal_name_copy), k->cert->principals[i]);
 
 			/*
 			* For domain user we need special handling.

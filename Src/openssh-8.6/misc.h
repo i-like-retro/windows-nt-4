@@ -181,7 +181,7 @@ char	*argv_assemble(int, char **argv);
 int	 exited_cleanly(pid_t, const char *, const char *, int);
 
 struct stat;
-int	 safe_path(const char *, struct stat *, const char *, uid_t,
+int	 safe_path(const char *, struct _stati64 *, const char *, uid_t,
 	    char *, size_t);
 int	 safe_path_fd(int, const char *, struct passwd *,
 	    char *err, size_t errlen);

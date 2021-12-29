@@ -97,6 +97,8 @@
 #include "ssherr.h"
 #include "sshbuf.h"
 
+#include <ntcompat/ntcompat.h>
+
 #ifdef PACKET_DEBUG
 #define DBG(x) x
 #else
@@ -1858,7 +1860,7 @@ sshpkt_vfatal(struct ssh *ssh, int r, const char *fmt, va_list ap)
 		ssh_packet_clear_keys(ssh);
 		logdie("Disconnected from %s", remote_id);
 	case SSH_ERR_SYSTEM_ERROR:
-		if (errno == WSAECONNRESET) {
+		if (errno == ECONNRESET) {
 			ssh_packet_clear_keys(ssh);
 			logdie("Connection reset by %s", remote_id);
 		}

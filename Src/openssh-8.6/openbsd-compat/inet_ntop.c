@@ -32,6 +32,8 @@
 #include <errno.h>
 #include <stdio.h>
 
+#include <ntcompat/ntcompat.h>
+
 #ifndef IN6ADDRSZ
 #define IN6ADDRSZ   16   /* IPv6 T_AAAA */                 
 #endif
@@ -65,7 +67,7 @@ inet_ntop(int af, const void *src, char *dst, socklen_t size)
 	case AF_INET6:
 		return (inet_ntop6(src, dst, (size_t)size));
 	default:
-		errno = EPFNOSUPPORT; //EAFNOSUPPORT;
+		errno = EAFNOSUPPORT;
 		return (NULL);
 	}
 	/* NOTREACHED */

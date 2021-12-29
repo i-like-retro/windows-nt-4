@@ -3,8 +3,8 @@
 #include "utf.h"
 
 /* string.h overrides */
-//#define strcasecmp _stricmp
-//#define strncasecmp _strnicmp
+#define _stricmp strcasecmp
+#define _strnicmp strncasecmp
 char *w32_strerror(int);
 #define strerror w32_strerror
 #define strdup _strdup

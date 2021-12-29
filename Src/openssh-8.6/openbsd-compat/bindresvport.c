@@ -42,6 +42,8 @@
 #include <errno.h>
 #include <string.h>
 
+#include <ntcompat/ntcompat.h>
+
 #define STARTPORT 600
 #define ENDPORT (IPPORT_RESERVED - 1)
 #define NPORTS	(ENDPORT - STARTPORT + 1)
@@ -105,7 +107,7 @@ bindresvport_sa(int sd, struct sockaddr *sa)
 			break;
 			
 		/* Terminate on errors, except "address already in use" */
-		if ((error < 0) && !((errno == WSAEADDRINUSE) || (errno == EINVAL)))
+		if ((error < 0) && !((errno == EADDRINUSE) || (errno == EINVAL)))
 			break;
 			
 		port++;

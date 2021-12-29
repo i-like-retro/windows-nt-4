@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 project(newapi)
 
+# NOTE: this code is intended to be compiled with MSVC 6
+
 add_definitions(
     -D_WIN32_WINNT=0x400
     -DWINVER=0x400
@@ -22,6 +24,8 @@ endif()
 
 add_library(ntcompat SHARED
     hardlink.cpp
+    secure.c
+    thread.c
     wspiapi.c
     )
 

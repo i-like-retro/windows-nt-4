@@ -41,6 +41,8 @@
 #include "compat.h"
 #include "log.h"
 
+#include <ntcompat/ntcompat.h>
+
 /*
  * SSH Protocol 1.5 aka New Channel Protocol
  * Thanks to Martina, Axel and everyone who left Erlangen, leaving me bored.
@@ -406,7 +408,7 @@ chan_shutdown_read(struct ssh *ssh, Channel *c)
 		 * write side has been closed already. (bug on Linux)
 		 * HP-UX may return ENOTCONN also.
 		 */
-		if (shutdown(c->sock, SHUT_RD) == -1 && errno != WSAENOTCONN) {
+		if (shutdown(c->sock, SHUT_RD) == -1 && errno != ENOTCONN) {
 			error_f("channel %d: shutdown() failed for "
 			    "fd %d [i%d o%d]: %.100s", c->self, c->sock,
 			    c->istate, c->ostate, strerror(errno));

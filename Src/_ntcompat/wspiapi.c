@@ -1,5 +1,5 @@
 #define NTCOMPAT_EXPORTS __declspec(dllexport)
-#include "windows/ntcompat.h"
+#include "ntcompat/ntcompat.h"
 
 #define restrict
 
