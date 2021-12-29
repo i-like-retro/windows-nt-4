@@ -70,8 +70,17 @@ Function ConditionalAddToRegisty
 FunctionEnd
 
 Section "-Main"
-    SetOutPath "$INSTDIR"
     WriteRegStr SHCTX "Software\PuTTY" "" $INSTDIR
+
+    SetOutPath "$INSTDIR"
+    File "..\..\putty-0.76\windows\pageant.exe"
+    File "..\..\putty-0.76\windows\plink.exe"
+    File "..\..\putty-0.76\windows\pscp.exe"
+    File "..\..\putty-0.76\windows\psftp.exe"
+    File "..\..\putty-0.76\windows\putty.exe"
+    File "..\..\putty-0.76\windows\puttygen.exe"
+    File /oname=README.txt "..\..\putty-0.76\windows\README-msi.txt"
+    File /oname=LICENCE.txt "..\..\putty-0.76\LICENCE"
 
     ;Create uninstaller
     WriteUninstaller "$INSTDIR\uninst.exe"
@@ -101,6 +110,15 @@ Section "-Main"
 
     CreateShortCut "$DESKTOP\PuTTY.lnk" "$INSTDIR\putty.exe"
 
+    ; Create associations
+    WriteRegStr HKCR ".ppk" "" "PuTTY Key"
+    WriteRegStr HKCR "PuTTY Key" "" "PuTTY Key"
+    WriteRegStr HKCR "PuTTY Key\shell" "" "open"
+    WriteRegStr HKCR "PuTTY Key\DefaultIcon" "" "$INSTDIR\pageant.exe,0"
+    WriteRegStr HKCR "PuTTY Key\shell\open\command" "" '"$INSTDIR\pageant.exe" "%1"'
+    WriteRegStr HKCR "PuTTY Key\shell\edit" "" "Edit"
+    WriteRegStr HKCR "PuTTY Key\shell\edit\command" "" '"$INSTDIR\puttygen.exe" "%1"'
+
     ;Read a value from an InstallOptions INI file
     !insertmacro MUI_INSTALLOPTIONS_READ $ADD_TO_PATH_ALL_USERS "setup.ini" "Field 2" "State"
     !insertmacro MUI_INSTALLOPTIONS_READ $ADD_TO_PATH_CURRENT_USER "setup.ini" "Field 3" "State"
@@ -129,18 +147,6 @@ Section "-Main"
   doNotAddToPath:
 SectionEnd
 
-Section "Base"
-    SetOutPath "$INSTDIR"
-    File "..\..\putty-0.76\windows\pageant.exe"
-    File "..\..\putty-0.76\windows\plink.exe"
-    File "..\..\putty-0.76\windows\pscp.exe"
-    File "..\..\putty-0.76\windows\psftp.exe"
-    File "..\..\putty-0.76\windows\putty.exe"
-    File "..\..\putty-0.76\windows\puttygen.exe"
-    File /oname=README.txt "..\..\putty-0.76\windows\README-msi.txt"
-    File /oname=LICENCE.txt "..\..\putty-0.76\LICENCE"
-SectionEnd
-
 Section "Uninstall"
     ReadRegStr $START_MENU SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuTTY" "StartMenu"
     ReadRegStr $DO_NOT_ADD_TO_PATH SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuTTY" "DoNotAddToPath"
@@ -156,6 +162,9 @@ Section "Uninstall"
     Delete "$INSTDIR\puttygen.exe"
     Delete "$INSTDIR\README.txt"
     Delete "$INSTDIR\LICENCE.txt"
+
+    DeleteRegKey HKCR ".ppk"
+    DeleteRegKey HKCR "PuTTY Key"
 
     DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuTTY"
     DeleteRegKey SHCTX "Software\PuTTY"
