@@ -153,6 +153,7 @@ Section "Uninstall"
     ReadRegStr $ADD_TO_PATH_ALL_USERS SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuTTY" "AddToPathAllUsers"
     ReadRegStr $ADD_TO_PATH_CURRENT_USER SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuTTY" "AddToPathCurrentUser"
 
+    Delete "$INSTDIR\uninst.exe"
     Delete "$INSTDIR\LICENCE"
     Delete "$INSTDIR\pageant.exe"
     Delete "$INSTDIR\plink.exe"
@@ -162,6 +163,7 @@ Section "Uninstall"
     Delete "$INSTDIR\puttygen.exe"
     Delete "$INSTDIR\README.txt"
     Delete "$INSTDIR\LICENCE.txt"
+    RMDir $INSTDIR
 
     DeleteRegKey HKCR ".ppk"
     DeleteRegKey HKCR "PuTTY Key"

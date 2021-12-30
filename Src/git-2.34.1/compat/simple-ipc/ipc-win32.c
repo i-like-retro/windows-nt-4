@@ -5,6 +5,7 @@
 #include "thread-utils.h"
 #include "accctrl.h"
 #include "aclapi.h"
+#include "../../../_ntcompat/ntcompat/errno.h"
 
 #ifndef SUPPORTS_SIMPLE_IPC
 /*
@@ -770,7 +771,7 @@ int ipc_server_run_async(struct ipc_server_data **returned_server_data,
 
 	hPipeFirst = create_new_pipe(wpath, 1);
 	if (hPipeFirst == INVALID_HANDLE_VALUE) {
-		errno = WSAEADDRINUSE;
+		errno = EADDRINUSE;
 		return -2;
 	}
 

@@ -160,6 +160,32 @@ if errorlevel 1 goto error
 mingw32-make -j 4
 if errorlevel 1 goto error
 
+if not exist %BUILD%\libssh2_static mkdir %BUILD%\libssh2_static
+if errorlevel 1 goto error
+cd %BUILD%\libssh2_static
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+    -Wno-dev ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    -DBUILD_SHARED_LIBS:BOOL=NO ^
+    -DENABLE_ZLIB_COMPRESSION:BOOL=YES ^
+    -DBUILD_EXAMPLES=OFF ^
+    -DBUILD_TESTING=OFF ^
+    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DZLIB_INCLUDE_DIR:PATH=%ZLIB%;%BUILD%\zlib ^
+    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
+    -DZLIB_FOUND:BOOL=TRUE ^
+    -DOPENSSL_INCLUDE_DIR:PATH=%OPENSSL%\include ^
+    -DOPENSSL_CRYPTO_LIBRARY:PATH=%OPENSSL%\libcrypto.dll.a ^
+    -DOPENSSL_SSL_LIBRARY:PATH=%OPENSSL%\libssl.dll.a ^
+    -DOPENSSL_ROOT_DIR:PATH=%OPENSSL% ^
+    -DOPENSSL_FOUND:BOOL=TRUE ^
+    %LIBSSH2%
+if errorlevel 1 goto error
+mingw32-make -j 4
+if errorlevel 1 goto error
+
 if not "%1" == "" goto next
 
 rem =======
@@ -226,6 +252,36 @@ if errorlevel 1 goto error
 mingw32-make -j 4
 if errorlevel 1 goto error
 
+if not exist %BUILD%\curl_static mkdir %BUILD%\curl_static
+if errorlevel 1 goto error
+cd %BUILD%\curl_static
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+    -Wno-dev ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DBUILD_SHARED_LIBS:BOOL=NO ^
+    -DENABLE_INET_PTON=OFF ^
+    -DCMAKE_USE_OPENSSL=YES ^
+    -DCURL_TARGET_WINDOWS_VERSION=0x400 ^
+    -DCURL_LTO=NO ^
+    -DCURL_ENABLE_SSL=YES ^
+    -DZLIB_INCLUDE_DIR:PATH=%ZLIB%;%BUILD%\zlib ^
+    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
+    -DZLIB_FOUND:BOOL=TRUE ^
+    -DOPENSSL_INCLUDE_DIR:PATH=%OPENSSL%\include ^
+    -DOPENSSL_CRYPTO_LIBRARY:PATH=%OPENSSL%\libcrypto.dll.a ^
+    -DOPENSSL_SSL_LIBRARY:PATH=%OPENSSL%\libssl.dll.a ^
+    -DOPENSSL_ROOT_DIR:PATH=%OPENSSL% ^
+    -DOPENSSL_FOUND:BOOL=TRUE ^
+    -DLIBSSH2_INCLUDE_DIR:PATH=%LIBSSH2%\include ^
+    -DLIBSSH2_LIBRARY:PATH=%BUILD%\libssh2\src\liblibssh2.dll.a ^
+    %CURL%
+if errorlevel 1 goto error
+mingw32-make -j 4
+if errorlevel 1 goto error
+
 if not "%1" == "" goto next
 
 rem =======
@@ -242,6 +298,25 @@ cmake -G "MinGW Makefiles" ^
     -Wno-dev ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DEXPAT_BUILD_TOOLS=FALSE ^
+    -DEXPAT_BUILD_EXAMPLES=FALSE ^
+    -DEXPAT_BUILD_TESTS=FALSE ^
+    -DEXPAT_BUILD_PKGCONFIG=FALSE ^
+    %EXPAT%
+if errorlevel 1 goto error
+mingw32-make -j 4
+if errorlevel 1 goto error
+
+if not exist %BUILD%\expat_static mkdir %BUILD%\expat_static
+if errorlevel 1 goto error
+cd %BUILD%\expat_static
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+    -Wno-dev ^
+    -DCMAKE_BUILD_TYPE=Release ^
+    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
+    -DBUILD_SHARED_LIBS=NO ^
     -DEXPAT_BUILD_TOOLS=FALSE ^
     -DEXPAT_BUILD_EXAMPLES=FALSE ^
     -DEXPAT_BUILD_TESTS=FALSE ^
@@ -381,7 +456,6 @@ if errorlevel 1 goto error
 
 cd %BASEDIR%_setup\putty
 if errorlevel 1 goto error
-
 makensis setup.nsi
 if errorlevel 1 goto error
 
@@ -397,28 +471,39 @@ if errorlevel 1 goto error
 cd %BUILD%\git
 if errorlevel 1 goto error
 
+if exist %BASEDIR%..\CD\SOFTWARE\DEVEL\GIT2341.EXE del %BASEDIR%..\CD\SOFTWARE\DEVEL\GIT2341.EXE
+
 cmake -G "MinGW Makefiles" ^
     -Wno-dev ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DCMAKE_MAKE_PROGRAM=mingw32-make ^
     -DUSE_VCPKG=FALSE ^
+    -DCMAKE_INSTALL_PREFIX=%BUILD%\git\_INSTALL_ ^
+    -DBUILD_SHARED_LIBS=TRUE ^
     -DZLIB_INCLUDE_DIR:PATH=%ZLIB%;%BUILD%\zlib ^
-    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
+    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlibstatic.a ^
     -DZLIB_FOUND:BOOL=TRUE ^
     -DCURL_INCLUDE_DIR:PATH=%CURL%\include ^
-    -DCURL_LIBRARY:PATH=%BUILD%\curl\lib\libcurl.dll.a ^
+    -DCURL_LIBRARY:PATH=%BUILD%\curl_static\lib\libcurl.a ^
     -DCURL_FOUND:BOOL=TRUE ^
     -DEXPAT_INCLUDE_DIR:PATH=%EXPAT%\lib ^
-    -DEXPAT_LIBRARY:PATH=%BUILD%\expat\libexpat.dll.a ^
+    -DEXPAT_LIBRARY:PATH=%BUILD%\expat_static\libexpat.a ^
     -DEXPAT_FOUND:BOOL=TRUE ^
     -DIconv_INCLUDE_DIR:PATH=%ICONV%\include ^
-    -DIconv_LIBRARY:PATH=%ICONV%\lib\libiconv.dll.a ^
+    -DIconv_LIBRARY:PATH=%ICONV%\lib\.libs\libiconv.a ^
     -DIconv_FOUND:BOOL=TRUE ^
     -DNO_GETTEXT=YES ^
     -DBUILD_TESTING=NO ^
     %GIT%\contrib\buildsystems
 if errorlevel 1 goto error
-mingw32-make -j 4
+mingw32-make
+if errorlevel 1 goto error
+mingw32-make install
+if errorlevel 1 goto error
+
+cd %BASEDIR%_setup\git
+if errorlevel 1 goto error
+makensis setup.nsi
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

@@ -60,7 +60,7 @@
 #include "curl_memory.h"
 #include "memdebug.h"
 
-#include <windows/ntcompat.h>
+#include <ntcompat/ntcompat.h>
 
 /*
  * Curl_freeaddrinfo()

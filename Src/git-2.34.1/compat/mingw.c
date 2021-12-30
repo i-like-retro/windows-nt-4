@@ -12,7 +12,7 @@
 #undef getaddrinfo
 #undef freeaddrinfo
 #undef getnameinfo
-#include "wspiapi.h"
+#include "../../../_ntcompat/ntcompat/ntcompat.h"
 
 #define HCAST(type, handle) ((type)(intptr_t)handle)
 
@@ -2441,6 +2441,9 @@ int mingw_raise(int sig)
 	}
 }
 
+BOOL WINAPI CreateHardLinkW(LPCWSTR lpFileName, LPCWSTR lpExistingFileName,
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes);
+
 int link(const char *oldpath, const char *newpath)
 {
 	wchar_t woldpath[MAX_PATH], wnewpath[MAX_PATH];
@@ -2448,25 +2451,42 @@ int link(const char *oldpath, const char *newpath)
 		xutftowcs_path(wnewpath, newpath) < 0)
 		return -1;
 
-	//if (!CreateHardLinkW(wnewpath, woldpath, NULL)) {
-		errno = ENOSYS;//err_win_to_posix(GetLastError());
+	if (!CreateHardLinkW(wnewpath, woldpath, NULL)) {
+		errno = err_win_to_posix(GetLastError());
 		return -1;
-	//}
-	//return 0;
+	}
+	return 0;
 }
 
 pid_t waitpid(pid_t pid, int *status, int options)
 {
 	HANDLE h = OpenProcess(SYNCHRONIZE | PROCESS_QUERY_INFORMATION,
 	    FALSE, pid);
+	BOOL closeHandle = TRUE;
 	if (!h) {
-		errno = ECHILD;
-		return -1;
+		closeHandle = FALSE;
+		EnterCriticalSection(&pinfo_cs);
+
+		struct pinfo_t *info = pinfo;
+		while (info) {
+			if (info->pid == pid) {
+				h = info->proc;
+				break;
+			}
+			info = info->next;
+		}
+
+		LeaveCriticalSection(&pinfo_cs);
+
+		if (!h) {
+			errno = ECHILD;
+			return -1;
+		}
 	}
 
 	if (pid > 0 && options & WNOHANG) {
 		if (WAIT_OBJECT_0 != WaitForSingleObject(h, 0)) {
-			CloseHandle(h);
+			if (closeHandle) CloseHandle(h);
 			return 0;
 		}
 		options &= ~WNOHANG;
@@ -2475,7 +2495,7 @@ pid_t waitpid(pid_t pid, int *status, int options)
 	if (options == 0) {
 		struct pinfo_t **ppinfo;
 		if (WaitForSingleObject(h, INFINITE) != WAIT_OBJECT_0) {
-			CloseHandle(h);
+			if (closeHandle) CloseHandle(h);
 			return 0;
 		}
 
@@ -2498,10 +2518,10 @@ pid_t waitpid(pid_t pid, int *status, int options)
 
 		LeaveCriticalSection(&pinfo_cs);
 
-		CloseHandle(h);
+		if (closeHandle) CloseHandle(h);
 		return pid;
 	}
-	CloseHandle(h);
+	if (closeHandle) CloseHandle(h);
 
 	errno = EINVAL;
 	return -1;
@@ -2873,7 +2893,7 @@ extern int *_imp___fmode;
  * To be more compatible with the core git code, we convert
  * argv into UTF8 and pass them directly to main().
  */
-int wmain(int argc, const wchar_t **wargv)
+__declspec(dllexport) int git_wmain(int argc, const wchar_t **wargv)
 {
 	int i, maxlen, exit_status;
 	char *buffer, **save;
@@ -2954,41 +2974,3 @@ int uname(struct utsname *buf)
 		  "%u", (v >> 16) & 0x7fff);
 	return 0;
 }
-
-#ifdef __MINGW32__
-
-// https://github.com/coderforlife/mingw-unicode-main/blob/master/mingw-unicode.c
-// Code below is released into the public domain. Absolutely no warranty is provided.
-// See http://www.coderforlife.com/projects/utilities.
-//
-// This is for the MinGW compiler which does not support wmain.
-// It is a wrapper for _tmain when _UNICODE is defined (wmain).
-//
-// !! Do not compile this file, but instead include it right before your _tmain function like:
-// #include "mingw-unicode.c"
-// int _tmain(int argc, _TCHAR *argv[]) {
-//
-// If you wish to have enpv in your main, then define the following before including this file:
-// #define MAIN_USE_ENVP
-//
-// This wrapper adds ~300 bytes to the program and negligible overhead
-
-#ifndef __MSVCRT__
-#error Unicode main function requires linking to MSVCRT
-#endif
-
-#include <wchar.h>
-#include <stdlib.h>
-
-extern int _CRT_glob;
-void __wgetmainargs(int*,wchar_t***,wchar_t***,int,int*);
-
-int main()
-{
-	wchar_t **enpv, **argv;
-	int argc, si = 0;
-	__wgetmainargs(&argc, &argv, &enpv, _CRT_glob, &si); // this also creates the global variable __wargv
-	return wmain(argc, argv);
-}
-
-#endif

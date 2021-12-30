@@ -50,8 +50,9 @@ to avoid this, add `-DNO_VCPKG=TRUE` to the command line when configuring.
 cmake_minimum_required(VERSION 3.14)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -w -std=c99 -march=i586")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -Wl,--export-all-symbols -static-libgcc")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -static-libgcc")
+add_definitions(-DPCRE2_STATIC -DCURL_STATICLIB)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../pcre2-10.39/src")
 
 #set the source directory to root of git
@@ -674,65 +675,71 @@ if(WIN32)
 endif()
 
 #link all required libraries to common-main
-add_library(common-main OBJECT ${CMAKE_SOURCE_DIR}/common-main.c)
+#add_library(common-main OBJECT ${CMAKE_SOURCE_DIR}/common-main.c)
+target_sources(libgit PRIVATE ${CMAKE_SOURCE_DIR}/common-main.c)
+set_target_properties(libgit PROPERTIES OUTPUT_NAME "git" PREFIX "")
 
-target_link_libraries(common-main libgit xdiff ${ZLIB_LIBRARIES})
+target_link_libraries(libgit xdiff ${ZLIB_LIBRARIES} "${CMAKE_SOURCE_DIR}/../_ntcompat/libntcompat.dll.a")
 if(Intl_FOUND)
-	target_link_libraries(common-main ${Intl_LIBRARIES})
+	target_link_libraries(libgit ${Intl_LIBRARIES})
 endif()
 if(Iconv_FOUND)
-	target_link_libraries(common-main ${Iconv_LIBRARIES})
+	target_link_libraries(libgit ${Iconv_LIBRARIES})
 endif()
 if(WIN32)
-	target_link_libraries(common-main ws2_32 ntdll ${CMAKE_BINARY_DIR}/git.res "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/pcre2/libpcre2x.dll.a")
-	add_dependencies(common-main git-rc)
+	target_link_libraries(libgit ws2_32 ntdll ${CMAKE_BINARY_DIR}/git.res
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/pcre2/libpcre2-posix.a"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/pcre2/libpcre2-8.a"
+        )
+	add_dependencies(libgit git-rc)
 	if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-		#target_link_options(common-main PUBLIC -municode -Wl,--nxcompat -Wl,--dynamicbase -Wl,--pic-executable,-e,mainCRTStartup)
+		#target_link_options(libgit PUBLIC -municode -Wl,--nxcompat -Wl,--dynamicbase -Wl,--pic-executable,-e,mainCRTStartup)
 	elseif(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-		target_link_options(common-main PUBLIC -municode -Wl,-nxcompat -Wl,-dynamicbase -Wl,-entry:wmainCRTStartup -Wl,invalidcontinue.obj)
+		target_link_options(libgit PUBLIC -municode -Wl,-nxcompat -Wl,-dynamicbase -Wl,-entry:wmainCRTStartup -Wl,invalidcontinue.obj)
 	elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
-		target_link_options(common-main PUBLIC /IGNORE:4217 /IGNORE:4049 /NOLOGO /ENTRY:wmainCRTStartup /SUBSYSTEM:CONSOLE invalidcontinue.obj)
+		target_link_options(libgit PUBLIC /IGNORE:4217 /IGNORE:4049 /NOLOGO /ENTRY:wmainCRTStartup /SUBSYSTEM:CONSOLE invalidcontinue.obj)
 	else()
 		message(FATAL_ERROR "Unhandled compiler: ${CMAKE_C_COMPILER_ID}")
 	endif()
 elseif(UNIX)
-	target_link_libraries(common-main pthread rt)
+	target_link_libraries(libgit pthread rt)
 endif()
 
 #git
 parse_makefile_for_sources(git_SOURCES "BUILTIN_OBJS")
 
 list(TRANSFORM git_SOURCES PREPEND "${CMAKE_SOURCE_DIR}/")
-add_executable(git ${CMAKE_SOURCE_DIR}/git.c ${git_SOURCES})
-target_link_libraries(git common-main)
+target_sources(libgit PRIVATE ${CMAKE_SOURCE_DIR}/git.c ${git_SOURCES})
+add_executable(git ${CMAKE_SOURCE_DIR}/compat/main.c)
+target_link_libraries(git libgit)
 
-add_executable(git-daemon ${CMAKE_SOURCE_DIR}/daemon.c)
-target_link_libraries(git-daemon common-main)
+add_executable(git-daemon ${CMAKE_SOURCE_DIR}/daemon.c ${CMAKE_SOURCE_DIR}/compat/main.c)
+target_link_libraries(git-daemon libgit)
 
-add_executable(git-http-backend ${CMAKE_SOURCE_DIR}/http-backend.c)
-target_link_libraries(git-http-backend common-main)
+add_executable(git-http-backend ${CMAKE_SOURCE_DIR}/http-backend.c ${CMAKE_SOURCE_DIR}/compat/main.c)
+target_link_libraries(git-http-backend libgit)
 
-add_executable(git-sh-i18n--envsubst ${CMAKE_SOURCE_DIR}/sh-i18n--envsubst.c)
-target_link_libraries(git-sh-i18n--envsubst common-main)
+add_executable(git-sh-i18n--envsubst ${CMAKE_SOURCE_DIR}/sh-i18n--envsubst.c ${CMAKE_SOURCE_DIR}/compat/main.c)
+target_link_libraries(git-sh-i18n--envsubst libgit)
 
-add_executable(git-shell ${CMAKE_SOURCE_DIR}/shell.c)
-target_link_libraries(git-shell common-main)
+add_executable(git-shell ${CMAKE_SOURCE_DIR}/shell.c ${CMAKE_SOURCE_DIR}/compat/main.c)
+target_link_libraries(git-shell libgit)
 
 if(CURL_FOUND)
 	add_library(http_obj OBJECT ${CMAKE_SOURCE_DIR}/http.c)
 
-	add_executable(git-imap-send ${CMAKE_SOURCE_DIR}/imap-send.c)
-	target_link_libraries(git-imap-send http_obj common-main ${CURL_LIBRARIES})
+	add_executable(git-imap-send ${CMAKE_SOURCE_DIR}/imap-send.c ${CMAKE_SOURCE_DIR}/compat/main.c)
+	target_link_libraries(git-imap-send http_obj libgit ${CURL_LIBRARIES} "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2_static/src/libssh2.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.a" crypt32 wldap32)
 
-	add_executable(git-http-fetch ${CMAKE_SOURCE_DIR}/http-walker.c ${CMAKE_SOURCE_DIR}/http-fetch.c)
-	target_link_libraries(git-http-fetch http_obj common-main ${CURL_LIBRARIES})
+	add_executable(git-http-fetch ${CMAKE_SOURCE_DIR}/http-walker.c ${CMAKE_SOURCE_DIR}/http-fetch.c ${CMAKE_SOURCE_DIR}/compat/main.c)
+	target_link_libraries(git-http-fetch http_obj libgit ${CURL_LIBRARIES} "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2_static/src/libssh2.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.a" crypt32 wldap32)
 
-	add_executable(git-remote-http ${CMAKE_SOURCE_DIR}/http-walker.c ${CMAKE_SOURCE_DIR}/remote-curl.c)
-	target_link_libraries(git-remote-http http_obj common-main ${CURL_LIBRARIES} )
+	add_executable(git-remote-http ${CMAKE_SOURCE_DIR}/http-walker.c ${CMAKE_SOURCE_DIR}/remote-curl.c ${CMAKE_SOURCE_DIR}/compat/main.c)
+	target_link_libraries(git-remote-http http_obj libgit ${CURL_LIBRARIES} "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2_static/src/libssh2.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.a" crypt32 wldap32)
 
 	if(EXPAT_FOUND)
-		add_executable(git-http-push ${CMAKE_SOURCE_DIR}/http-push.c)
-		target_link_libraries(git-http-push http_obj common-main ${CURL_LIBRARIES} ${EXPAT_LIBRARIES})
+		add_executable(git-http-push ${CMAKE_SOURCE_DIR}/http-push.c ${CMAKE_SOURCE_DIR}/compat/main.c)
+		target_link_libraries(git-http-push http_obj libgit ${CURL_LIBRARIES} ${EXPAT_LIBRARIES} "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2_static/src/libssh2.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.a" crypt32 wldap32)
 	endif()
 endif()
 
@@ -914,14 +921,14 @@ if(BUILD_TESTING)
 
 #tests-helpers
 add_executable(test-fake-ssh ${CMAKE_SOURCE_DIR}/t/helper/test-fake-ssh.c)
-target_link_libraries(test-fake-ssh common-main)
+target_link_libraries(test-fake-ssh libgit)
 
 #test-tool
 parse_makefile_for_sources(test-tool_SOURCES "TEST_BUILTINS_OBJS")
 
 list(TRANSFORM test-tool_SOURCES PREPEND "${CMAKE_SOURCE_DIR}/t/helper/")
 add_executable(test-tool ${CMAKE_SOURCE_DIR}/t/helper/test-tool.c ${test-tool_SOURCES})
-target_link_libraries(test-tool common-main)
+target_link_libraries(test-tool libgit)
 
 set_target_properties(test-fake-ssh test-tool
 			PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/t/helper)

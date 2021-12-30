@@ -106,6 +106,7 @@ static void get_processes(struct json_writer *jw, HANDLE hSnapshot)
  */
 static void get_ancestry(void)
 {
+    /*
 	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
 	if (hSnapshot != INVALID_HANDLE_VALUE) {
@@ -121,6 +122,7 @@ static void get_ancestry(void)
 		jw_release(&jw);
 		CloseHandle(hSnapshot);
 	}
+    */
 }
 
 /*

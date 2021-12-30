@@ -46,8 +46,7 @@ static inline FARVOIDPROC get_proc_addr(struct proc_addr *proc)
 	if (!proc->initialized) {
 		HANDLE hnd;
 		proc->initialized = 1;
-		hnd = LoadLibraryExA(proc->dll, NULL,
-				     /*LOAD_LIBRARY_SEARCH_SYSTEM32*/0);
+		hnd = LoadLibraryA(proc->dll);
 		if (hnd)
 			proc->pfunction = (FARVOIDPROC)GetProcAddress(hnd,
 							proc->function);

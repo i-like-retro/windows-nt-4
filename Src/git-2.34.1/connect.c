@@ -1104,9 +1104,9 @@ static void override_ssh_variant(enum ssh_variant *ssh_variant)
 	if (!variant && git_config_get_string_tmp("ssh.variant", &variant))
 		return;
 
-	if (!strcmp(variant, "auto"))
+	if (!strcmp(variant, "auto")) {
 		*ssh_variant = VARIANT_AUTO;
-	else if (!strcmp(variant, "plink"))
+	} else if (!strcmp(variant, "plink"))
 		*ssh_variant = VARIANT_PLINK;
 	else if (!strcmp(variant, "putty"))
 		*ssh_variant = VARIANT_PUTTY;
@@ -1315,7 +1315,7 @@ static void fill_ssh_args(struct child_process *conn, const char *ssh_host,
 
 		ssh = getenv("GIT_SSH");
 		if (!ssh)
-			ssh = "ssh";
+			ssh = "plink";//"ssh";
 		variant = determine_ssh_variant(ssh, 0);
 	}
 

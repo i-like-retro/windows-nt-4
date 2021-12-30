@@ -1658,6 +1658,7 @@ if not "%1" == "" goto next
 :libssh2
 
 rmdir /S/Q %BUILD%\libssh2
+rmdir /S/Q %BUILD%\libssh2_static
 
 if not "%1" == "" goto next
 
@@ -1782,12 +1783,14 @@ if not "%1" == "" goto next
 :curl
 
 rmdir /S/Q %BUILD%\curl
+rmdir /S/Q %BUILD%\curl_static
 
 if not "%1" == "" goto next
 
 :expat
 
 rmdir /S/Q %BUILD%\expat
+rmdir /S/Q %BUILD%\expat_static
 
 if not "%1" == "" goto next
 
