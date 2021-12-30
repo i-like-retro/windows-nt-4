@@ -192,9 +192,8 @@ if you plan to use it together with CMake.
 Utility
 -------
 
-* [FAR Manager 1.70](CD/SOFTWARE/UTILITY/FAR170/FAR170.EXE) `2006-03-29`: freeware and
-open source orthodox file manager (for more information see
-https://farmanager.com).
+* [Adobe Acrobat Reader 7.09](CD/SOFTWARE/UTILITY/ADOBR709.EXE) `2006-12-05`:
+freeware utility to view, print and annotate PDF files.
 
 Useful links
 ============
