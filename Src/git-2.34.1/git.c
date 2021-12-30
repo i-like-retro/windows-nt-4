@@ -6,6 +6,8 @@
 #include "alias.h"
 #include "shallow.h"
 
+#ifndef GIT_CMD_MAIN
+
 #define RUN_SETUP		(1<<0)
 #define RUN_SETUP_GENTLY	(1<<1)
 #define USE_PAGER		(1<<2)
@@ -108,7 +110,7 @@ static int list_cmds(const char *spec)
 	return 0;
 }
 
-static void commit_pager_choice(void)
+void commit_pager_choice(void)
 {
 	switch (use_pager) {
 	case 0:
@@ -132,7 +134,7 @@ void setup_auto_pager(const char *cmd, int def)
 	commit_pager_choice();
 }
 
-static int handle_options(const char ***argv, int *argc, int *envchanged)
+int handle_options(const char ***argv, int *argc, int *envchanged)
 {
 	const char **orig_argv = *argv;
 
@@ -682,7 +684,7 @@ static void strip_extension(const char **argv)
 #define strip_extension(cmd)
 #endif
 
-static void handle_builtin(int argc, const char **argv)
+void handle_builtin(int argc, const char **argv)
 {
 	struct strvec args = STRVEC_INIT;
 	const char *cmd;
@@ -760,7 +762,7 @@ static void execv_dashed_external(const char **argv)
 		exit(128);
 }
 
-static int run_argv(int *argcp, const char ***argv)
+int run_argv(int *argcp, const char ***argv)
 {
 	int done_alias = 0;
 	struct string_list cmd_list = STRING_LIST_INIT_NODUP;
@@ -850,6 +852,8 @@ static int run_argv(int *argcp, const char ***argv)
 	return done_alias;
 }
 
+#else
+
 int cmd_main(int argc, const char **argv)
 {
 	const char *cmd;
@@ -929,3 +933,5 @@ int cmd_main(int argc, const char **argv)
 
 	return 1;
 }
+
+#endif

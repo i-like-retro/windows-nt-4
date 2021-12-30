@@ -2893,7 +2893,7 @@ extern int *_imp___fmode;
  * To be more compatible with the core git code, we convert
  * argv into UTF8 and pass them directly to main().
  */
-__declspec(dllexport) int git_wmain(int argc, const wchar_t **wargv)
+__declspec(dllexport) int git_wmain(int argc, const wchar_t **wargv, int (*my_main)(int argc, const char **argv))
 {
 	int i, maxlen, exit_status;
 	char *buffer, **save;

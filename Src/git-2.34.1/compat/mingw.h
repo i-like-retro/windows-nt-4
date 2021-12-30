@@ -615,7 +615,6 @@ extern CRITICAL_SECTION pinfo_cs;
  * then hands off to the main() function.
  */
 int wmain(int argc, const wchar_t **w_argv);
-int my_main(int argc, const char **argv);
 
 /*
  * For debugging: if a problem occurs, say, in a Git process that is spawned

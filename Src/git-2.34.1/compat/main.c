@@ -35,12 +35,14 @@
 extern int _CRT_glob;
 void __wgetmainargs(int*,wchar_t***,wchar_t***,int,int*);
 
-__declspec(dllimport) int git_wmain(int argc, const wchar_t **wargv);
+int my_main(int argc, const char **argv);
+
+__declspec(dllimport) int git_wmain(int argc, const wchar_t **wargv, int (*my_main)(int argc, const char **argv));
 
 int main()
 {
 	wchar_t **enpv, **argv;
 	int argc, si = 0;
 	__wgetmainargs(&argc, &argv, &enpv, _CRT_glob, &si); // this also creates the global variable __wargv
-	return git_wmain(argc, argv);
+	return git_wmain(argc, argv, my_main);
 }

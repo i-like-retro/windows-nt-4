@@ -496,7 +496,7 @@ cmake -G "MinGW Makefiles" ^
     -DBUILD_TESTING=NO ^
     %GIT%\contrib\buildsystems
 if errorlevel 1 goto error
-mingw32-make
+mingw32-make -j 4
 if errorlevel 1 goto error
 mingw32-make install
 if errorlevel 1 goto error

@@ -271,6 +271,8 @@ Section "-Main"
     File "..\..\_build\git\_INSTALL_\libexec\git-core\mergetools\vimdiff"
     File "..\..\_build\git\_INSTALL_\libexec\git-core\mergetools\winmerge"
     File "..\..\_build\git\_INSTALL_\libexec\git-core\mergetools\xxdiff"
+    SetOutPath "$INSTDIR\share"
+    File /oname=rootca.crt "..\..\cacert\cacert.pem"
     SetOutPath "$INSTDIR\share\git-core\templates"
     File "..\..\_build\git\_INSTALL_\share\git-core\templates\description"
     CreateDirectory "$INSTDIR\share\git-core\templates\branches"
@@ -334,11 +336,15 @@ Section "-Main"
 
     !insertmacro MUI_STARTMENU_WRITE_END
 
+    WriteRegStr HKCU "Environment" "LESSANSIENDCHARS" "|"
+    WriteRegStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "LESSANSIENDCHARS" "|"
+
     Push $INSTDIR\bin
     StrCmp "ON" "ON" 0 doNotAddToPath
     StrCmp $DO_NOT_ADD_TO_PATH "1" doNotAddToPath 0
         Call AddToPath
   doNotAddToPath:
+
 SectionEnd
 
 Section "Uninstall"
@@ -554,6 +560,7 @@ Section "Uninstall"
     RMDir "$INSTDIR\libexec\git-core\mergetools"
     RMDir "$INSTDIR\libexec\git-core"
     RMDir "$INSTDIR\libexec"
+    Delete "$INSTDIR\share\rootca.crt"
     Delete "$INSTDIR\share\git-core\templates\description"
     RMDir "$INSTDIR\share\git-core\templates\branches"
     Delete "$INSTDIR\share\git-core\templates\hooks\applypatch-msg.sample"
@@ -577,6 +584,8 @@ Section "Uninstall"
     RMDir "$INSTDIR\share"
     RMDir "$INSTDIR"
 
+    DeleteRegValue HKCU "Environment" "LESSANSIENDCHARS"
+    DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "LESSANSIENDCHARS"
     DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\Git"
     DeleteRegKey SHCTX "Software\Git"
 
