@@ -22,7 +22,7 @@ struct strbuf;
 #define COLOR_MAXLEN 75
 
 #define GIT_COLOR_NORMAL	""
-#define GIT_COLOR_RESET		"\033[m"
+#define GIT_COLOR_RESET		""//"\033[m"
 #define GIT_COLOR_BOLD		"\033[1m"
 #define GIT_COLOR_RED		"\033[31m"
 #define GIT_COLOR_GREEN		"\033[32m"

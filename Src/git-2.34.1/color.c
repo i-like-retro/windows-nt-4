@@ -2,7 +2,7 @@
 #include "config.h"
 #include "color.h"
 
-static int git_use_color_default = GIT_COLOR_AUTO;
+static int git_use_color_default = GIT_COLOR_NEVER;//GIT_COLOR_AUTO;
 int color_stdout_is_tty = -1;
 
 /*
@@ -226,11 +226,12 @@ static char *color_output(char *out, int len, const struct color *c, int backgro
 
 static int color_empty(const struct color *c)
 {
-	return c->type <= COLOR_NORMAL;
+	return 1;//c->type <= COLOR_NORMAL;
 }
 
 int color_parse_mem(const char *value, int value_len, char *dst)
 {
+#if 0
 	const char *ptr = value;
 	int len = value_len;
 	char *end = dst + COLOR_MAXLEN;
@@ -328,10 +329,13 @@ int color_parse_mem(const char *value, int value_len, char *dst)
 bad:
 	return error(_("invalid color value: %.*s"), value_len, value);
 #undef OUT
+#endif
+	return 0;
 }
 
 int git_config_colorbool(const char *var, const char *value)
 {
+#if 0
 	if (value) {
 		if (!strcasecmp(value, "never"))
 			return 0;
@@ -350,11 +354,13 @@ int git_config_colorbool(const char *var, const char *value)
 
 	/* any normal truth value defaults to 'auto' */
 	return GIT_COLOR_AUTO;
+#endif
+	return 0;
 }
 
 static int check_auto_color(int fd)
 {
-/* FIXME
+#if 0
 	static int color_stderr_is_tty = -1;
 	int *is_tty_p = fd == 1 ? &color_stdout_is_tty : &color_stderr_is_tty;
 	if (*is_tty_p < 0)
@@ -363,12 +369,13 @@ static int check_auto_color(int fd)
 		if (!is_terminal_dumb())
 			return 1;
 	}
-*/
+#endif
 	return 0;
 }
 
 int want_color_fd(int fd, int var)
 {
+#if 0
 	/*
 	 * NEEDSWORK: This function is sometimes used from multiple threads, and
 	 * we end up using want_auto racily. That "should not matter" since
@@ -390,14 +397,18 @@ int want_color_fd(int fd, int var)
 		return want_auto[fd];
 	}
 	return var;
+#endif
+	return 0;
 }
 
 int git_color_config(const char *var, const char *value, void *cb)
 {
+#if 0
 	if (!strcmp(var, "color.ui")) {
 		git_use_color_default = git_config_colorbool(var, value);
 		return 0;
 	}
+#endif
 
 	return 0;
 }

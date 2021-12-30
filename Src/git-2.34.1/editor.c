@@ -10,8 +10,8 @@
 
 int is_terminal_dumb(void)
 {
-	const char *terminal = getenv("TERM");
-	return !terminal || !strcmp(terminal, "dumb");
+	//const char *terminal = getenv("TERM");
+	return 1;//!terminal || !strcmp(terminal, "dumb");
 }
 
 const char *git_editor(void)
