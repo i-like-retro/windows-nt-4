@@ -354,6 +354,7 @@ int git_config_colorbool(const char *var, const char *value)
 
 static int check_auto_color(int fd)
 {
+/* FIXME
 	static int color_stderr_is_tty = -1;
 	int *is_tty_p = fd == 1 ? &color_stdout_is_tty : &color_stderr_is_tty;
 	if (*is_tty_p < 0)
@@ -362,6 +363,7 @@ static int check_auto_color(int fd)
 		if (!is_terminal_dumb())
 			return 1;
 	}
+*/
 	return 0;
 }
 

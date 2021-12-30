@@ -617,7 +617,7 @@ void winansi_init(void)
 	/* Also compute console bit for fd 0 even though we don't need the result here. */
 	is_console(0);
 
-	//if (!con1 && !con2) {
+	if (!con1 && !con2) {
 #ifdef DETECT_MSYS_TTY
 		/* check if stdin / stdout / stderr are MSYS2 pty pipes */
 		detect_msys_tty(0);
@@ -625,7 +625,7 @@ void winansi_init(void)
 		detect_msys_tty(2);
 #endif
 		return;
-	//}
+	}
 
 	/* create a named pipe to communicate with the console thread */
 	if (swprintf(name, ARRAY_SIZE(name) - 1, L"\\\\.\\pipe\\winansi%lu",
