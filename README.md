@@ -131,7 +131,7 @@ and work under Windows NT 4.
 
 * [WinRAR 3.93](CD/SOFTWARE/COMPRESS/WRAR393.EXE) `2010-03-15`: trial
 version of the popular commercial compression tool. This is the latest version
-that works under Windows NT 4. **NOTE**: due to its age it doesn't support
+known to work under Windows NT 4. **NOTE**: due to its age it doesn't support
 RAR4 archives.
 
 Drivers
@@ -177,9 +177,13 @@ Visual Studio 7 (aka .NET 2002). So there is little benefit in using newer
 versions. CMake [source code](Src/cmake-3.5.2) have been modified to build and
 work under Windows NT 4.
 
+* [Git 2.34.1](CD/SOFTWARE/DEVEL/GIT2341.EXE) `2021-11-15`: free and open
+source distributed version control system designed to handle everything from
+small to very large projects with speed and efficiency.
+
 * [HxD 1.7.7.0](CD/SOFTWARE/DEVEL/HXD1770.EXE) `2009-04-03`: freeware hex
 editor and disk editor (for more information see https://mh-nexus.de/en/hxd).
-This is the latest version to work on Windows NT 4.
+This is the latest version known to work on Windows NT 4.
 
 * [Nullsoft Scriptable Install System 2.51](CD/SOFTWARE/DEVEL/NSIS251.EXE)
 `2016-04-20`: free and open source system for creating installers for Windows
@@ -193,10 +197,19 @@ Utility
 -------
 
 * [Adobe Acrobat Reader 7.09](CD/SOFTWARE/UTILITY/ADOBR709.EXE) `2006-12-05`:
-freeware utility to view, print and annotate PDF files.
+freeware utility to view, print and annotate PDF files. This is the latest
+version known to work on Windows NT 4.
+
+* [FAR Manager 1.70](CD/SOFTWARE/UTILITY/FAR170/FAR170.EXE) `2006-03-29`:
+freeware and open source orthodox file manager (for more information see
+https://farmanager.com).
 
 Useful links
 ============
 
-* [Windows NT 4.0 Service Pack and Hotfixes Reference](https://nt4ref.zcm.com.au/patch.htm)
+* [Windows NT 4.0 Reference Material](https://nt4ref.zcm.com.au/index.htm):
+the information presented on this web site is intended to assist those who
+still maintain a PC running the Microsoft Windows NT 4.0 (Workstation or
+Server) Operating System.
+
 * [1996 Windows NT 4.0 Workstation Certification Series](https://www.youtube.com/watch?v=nvFkASRpPIo)
