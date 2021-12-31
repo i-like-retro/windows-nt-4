@@ -1771,6 +1771,9 @@ del %ICONV%\libcharset\lib\libcharset.def
 del %ICONV%\confdefs.h
 del %ICONV%\conftest.c
 del %ICONV%\conftest.err
+del %ICONV%\libcharset\confdefs.h
+del %ICONV%\libcharset\conftest.c
+del %ICONV%\libcharset\conftest.err
 del %ICONV%\lib\libiconv.dll.a
 del %ICONV%\libcharset\lib\libcharset.dll.a
 rmdir /S/Q %ICONV%\bin
@@ -1779,6 +1782,7 @@ rmdir /S/Q %ICONV%\srclib\sys
 rmdir /S/Q %ICONV%\lib\.libs
 rmdir /S/Q %ICONV%\src\.libs
 rmdir /S/Q %ICONV%\conftest*
+rmdir /S/Q %ICONV%\libcharset\conftest*
 
 if not "%1" == "" goto next
 

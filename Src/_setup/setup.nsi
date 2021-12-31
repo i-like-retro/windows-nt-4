@@ -131,10 +131,10 @@ Section "-Main"
     !insertmacro MUI_STARTMENU_WRITE_END
 
     Push $INSTDIR\bin
-    StrCmp "ON" "ON" 0 doNotAddToPath
     StrCmp $DO_NOT_ADD_TO_PATH "1" doNotAddToPath 0
         Call AddToPath
   doNotAddToPath:
+
 SectionEnd
 
 InstType "User"

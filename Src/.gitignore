@@ -135,6 +135,10 @@
 /libiconv-1.16/conftest.c
 /libiconv-1.16/conftest.err
 /libiconv-1.16/conftest*
+/libiconv-1.16/libcharset/confdefs.h
+/libiconv-1.16/libcharset/conftest.c
+/libiconv-1.16/libcharset/conftest.err
+/libiconv-1.16/libcharset/conftest*
 /libiconv-1.16/lib/libiconv.dll.a
 /libiconv-1.16/libcharset/lib/libcharset.dll.a
 /putty-0.76/windows/agentf.o

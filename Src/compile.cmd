@@ -210,7 +210,7 @@ sh configure ^
 
 cd %ICONV%
 if errorlevel 1 goto error
-mingw32-make
+mingw32-make -j 4
 if errorlevel 1 goto error
 cd src
 if errorlevel 1 goto error

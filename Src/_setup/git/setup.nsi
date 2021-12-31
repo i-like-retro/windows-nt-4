@@ -340,7 +340,6 @@ Section "-Main"
     WriteRegStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "LESSANSIENDCHARS" "|"
 
     Push $INSTDIR\bin
-    StrCmp "ON" "ON" 0 doNotAddToPath
     StrCmp $DO_NOT_ADD_TO_PATH "1" doNotAddToPath 0
         Call AddToPath
   doNotAddToPath:
