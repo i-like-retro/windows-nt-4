@@ -10,11 +10,8 @@ set LIBSSH2=%BASEDIR%libssh2-1.10.0
 set ICONV=%BASEDIR%libiconv-1.16
 set CURL=%BASEDIR%curl-7.80.0
 set EXPAT=%BASEDIR%expat-2.4.2
-set NCURSES=%BASEDIR%ncurses-6.3
 set PCRE2=%BASEDIR%pcre2-10.39
-set LESS=%BASEDIR%less-590
 set PUTTY=%BASEDIR%putty-0.76
-set OPENSSH=%BASEDIR%openssh-8.6
 set GIT=%BASEDIR%git-2.34.1
 
 rem ==========================================================================
@@ -351,90 +348,6 @@ cmake -G "MinGW Makefiles" ^
     -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
     -DZLIB_FOUND:BOOL=TRUE ^
     %PCRE2%
-if errorlevel 1 goto error
-mingw32-make
-if errorlevel 1 goto error
-
-if not "%1" == "" goto next
-
-rem =========
-rem  NCURSES
-rem =========
-:ncurses
-
-cd %NCURSES%
-if errorlevel 1 goto error
-
-rmdir %NCURSES%\misc\_terminfo_
-
-sh configure ^
-    MAKE=mingw32-make ^
-    CFLAGS="-fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -march=i586 -I%PCRE2%/src" ^
-    LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%BUILD:\=/%/pcre2" ^
-    --without-ada ^
-    --without-manpages ^
-    --without-debug ^
-    --without-cxx-binding ^
-    --without-tests ^
-    --with-pcre2 ^
-    --with-shared ^
-    --with-trace ^
-    --with-panel-libname=pane ^
-    --disable-exp-win32 ^
-    --disable-home-terminfo ^
-    --disable-getcap ^
-    --disable-termcap ^
-    --disable-hard-tabs ^
-    --disable-leaks ^
-    --enable-opaque-curses ^
-    --enable-opaque-form ^
-    --enable-opaque-menu ^
-    --enable-opaque-panel ^
-    --enable-database ^
-    --enable-sp-funcs ^
-    --enable-term-driver ^
-    --enable-fvisibility ^
-    --enable-interop
-if errorlevel 1 goto error
-mingw32-make -j 4
-if errorlevel 1 goto error
-mingw32-make install.data
-if errorlevel 1 goto error
-
-if not "%1" == "" goto next
-
-rem ======
-rem  LESS
-rem ======
-:less
-
-cd %LESS%
-if errorlevel 1 goto error
-
-sh configure ^
-    CFLAGS="-march=i586 -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -I%NCURSES%/include -I%BUILD%/pcre2" ^
-    LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-L%NCURSES%/lib -Wl,-L%BUILD%/pcre2" ^
-if errorlevel 1 goto error
-mingw32-make -j 4
-if errorlevel 1 goto error
-
-if not "%1" == "" goto next
-
-rem =========
-rem  OPENSSH
-rem =========
-:openssh
-
-if not exist %BUILD%\openssh mkdir %BUILD%\openssh
-if errorlevel 1 goto error
-cd %BUILD%\openssh
-if errorlevel 1 goto error
-
-cmake -G "MinGW Makefiles" ^
-    -Wno-dev ^
-    -DCMAKE_BUILD_TYPE=Release ^
-    -DCMAKE_MAKE_PROGRAM=mingw32-make ^
-    %OPENSSH%
 if errorlevel 1 goto error
 mingw32-make
 if errorlevel 1 goto error

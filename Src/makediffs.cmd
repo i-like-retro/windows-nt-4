@@ -16,13 +16,7 @@ git diff 3ed5a4df74ad572a7fd323cd3cffa236e7328ae1 -- expat-2.4.2 > _diff/expat-2
 if errorlevel 1 exit /B 1
 git diff c979d25756c577aa470cd110bbe0538a7a7f6dfa -- git-2.34.1 > _diff/git-2.34.1.diff
 if errorlevel 1 exit /B 1
-git diff 2bbff5eaedfde1bdcbe39ebbec5cbb3c13f9909b -- less-590 > _diff/less-590.diff
-if errorlevel 1 exit /B 1
 git diff 4473eaf416dadee11caf0d654394f25c8edc1234 -- libssh2-1.10.0 > _diff/libssh2-1.10.0.diff
-if errorlevel 1 exit /B 1
-git diff dc9e6530dea8ee3e7822c3611b55f44fe405fc26 -- ncurses-6.3 > _diff/ncurses-6.3.diff
-if errorlevel 1 exit /B 1
-git diff 64610fbf095ba0387afbafa68ad9ea3b3fdd2c06 -- openssh-8.6 > _diff/openssh-8.6.diff
 if errorlevel 1 exit /B 1
 git diff 81df82167b5ae554ac238ed31b909c6a211e15b9 -- openssl-1.1.1m > _diff/openssl-1.1.1m.diff
 if errorlevel 1 exit /B 1
