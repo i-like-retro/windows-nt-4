@@ -33,13 +33,16 @@ rem ==========================================================================
 rem ========
 rem  Common
 rem ========
+:common
 
 if exist %BUILD%\libgcc_s_dw2-1.dll goto haslibgcc
-copy /b %BASEDIR%..\Toolchain\TDM-GCC\bin\libgcc_s_dw2-1.dll %BUILD%
+copy /b %BASEDIR%..\Toolchain\TDM-GCC\bin\libgcc_s_dw2-1.dll %BUILD%\libgcc.dll
 if errorlevel 1 goto error
-strip %BUILD%\libgcc_s_dw2-1.dll
+strip %BUILD%\libgcc.dll
 if errorlevel 1 goto error
 :haslibgcc
+
+if not "%1" == "" goto next
 
 rem =========
 rem  AUTORUN
@@ -203,7 +206,9 @@ sh configure ^
     --disable-nls ^
     MAKE=mingw32-make ^
     CFLAGS="-march=i586 -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables" ^
-    LDFLAGS="-Wl,--build-id=none -Wl,-s" ^
+    LDFLAGS="-Wl,--build-id=none -Wl,-s -Wl,-shared-libgcc" ^
+
+cd %ICONV%
 if errorlevel 1 goto error
 mingw32-make
 if errorlevel 1 goto error

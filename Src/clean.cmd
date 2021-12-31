@@ -13,7 +13,11 @@ if errorlevel 1 goto error
 
 if not "%1" == "" goto :%1
 
-del %BUILD%\libgcc_s_dw2-1.dll
+:common
+
+del %BUILD%\libgcc.dll
+
+if not "%1" == "" goto :%1
 
 :autorun
 

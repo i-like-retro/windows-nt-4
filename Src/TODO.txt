@@ -1,6 +1,4 @@
 * Give each DLL interesting load address
-* Less is not working
-* Rename libgcc...dll
 * Static version of ntcompat needed
 * CMake not using ntcompat yet
 * SSH does not pass keyboard input to plink, so you have to do `plink git@github.com` to press Y.
