@@ -206,11 +206,6 @@ SectionGroup /e "!Core"
         File "..\libiconv-1.16\libcharset\include\localcharset.h"
         File "..\libiconv-1.16\include\iconv.h"
     SectionEnd
-    ;Section "less-590" LESS
-    ;    SectionIn 2
-    ;    SetOutPath "$INSTDIR\bin"
-    ;    File "..\less-590\less.exe"
-    ;SectionEnd
     Section "libexpat-2.4.2" EXPAT
         SectionIn 2
         SetOutPath "$INSTDIR\bin"
@@ -227,48 +222,6 @@ SectionGroup /e "!Core"
         File "..\expat-2.4.2\lib\expat.h"
         File "..\expat-2.4.2\lib\expat_external.h"
     SectionEnd
-    ;Section "libncurses-6.3" NCURSES
-    ;    SectionIn 2
-    ;    SetOutPath "$INSTDIR\bin"
-    ;    File "..\ncurses-6.3\lib\libform6.dll"
-    ;    File "..\ncurses-6.3\lib\libmenu6.dll"
-    ;    File "..\ncurses-6.3\lib\libpane6.dll"
-    ;    File "..\ncurses-6.3\lib\ncurses6.dll"
-    ;    SetOutPath "$INSTDIR\share\terminfo"
-    ;    File /r "..\ncurses-6.3\misc\_terminfo_\*"
-    ;    SetOutPath "$INSTDIR\share\tabset"
-    ;    File /r "..\ncurses-6.3\misc\tabset\_tabset_\*"
-    ;SectionEnd
-    ;Section "libncurses-6.3-devel" NCURSES_DEVEL
-    ;    SectionIn 2
-    ;    SetOutPath "$INSTDIR\lib"
-    ;    File /oname=libncurses.a "..\ncurses-6.3\lib\ncurses.dll.a"
-    ;    File /oname=libncurses-static.a "..\ncurses-6.3\lib\libncurses.a"
-    ;    File /oname=libform.a "..\ncurses-6.3\lib\libform.dll.a"
-    ;    File /oname=libform-static.a "..\ncurses-6.3\lib\libform.a"
-    ;    File /oname=libmenu.a "..\ncurses-6.3\lib\libmenu.dll.a"
-    ;    File /oname=libmenu-static.a "..\ncurses-6.3\lib\libmenu.a"
-    ;    File /oname=libpanel.a "..\ncurses-6.3\lib\libpane.dll.a"
-    ;    File /oname=libpanel-static.a "..\ncurses-6.3\lib\libpane.a"
-    ;    File /oname=libncurses.def "..\ncurses-6.3\lib\ncurses.def"
-    ;    File /oname=libpanel.def "..\ncurses-6.3\lib\libpane.def"
-    ;    File "..\ncurses-6.3\lib\libform.def"
-    ;    File "..\ncurses-6.3\lib\libmenu.def"
-    ;    SetOutPath "$INSTDIR\include"
-    ;    File "..\ncurses-6.3\include\curses.h"
-    ;    File /oname=ncurses.h "..\ncurses-6.3\include\curses.h"
-    ;    File "..\ncurses-6.3\include\unctrl.h"
-    ;    File "..\ncurses-6.3\include\ncurses_dll.h"
-    ;    File "..\ncurses-6.3\include\term.h"
-    ;    File "..\ncurses-6.3\include\termcap.h"
-    ;    File "..\ncurses-6.3\include\ncurses_mingw.h"
-    ;    File "..\ncurses-6.3\include\nc_mingw.h"
-    ;    File "..\ncurses-6.3\include\nc_termios.h"
-    ;    File "..\ncurses-6.3\menu\eti.h"
-    ;    File "..\ncurses-6.3\menu\menu.h"
-    ;    File "..\ncurses-6.3\panel\panel.h"
-    ;    File "..\ncurses-6.3\form\form.h"
-    ;SectionEnd
     Section "libpcre2-10.39" LIBPCRE2
         SectionIn 2
         SetOutPath "$INSTDIR\bin"
@@ -360,11 +313,8 @@ Var CURL
 Var CURL_DEVEL
 Var ICONV
 Var ICONV_DEVEL
-;Var LESS
 Var EXPAT
 Var EXPAT_DEVEL
-;Var NCURSES
-;Var NCURSES_DEVEL
 Var LIBPCRE2
 Var LIBPCRE2_DEVEL
 Var LIBSSH2
@@ -406,11 +356,8 @@ Function .onSelChange
     StrCpy $CURL_DEVEL          "NO"
     StrCpy $ICONV               "NO"
     StrCpy $ICONV_DEVEL         "NO"
-    ;StrCpy $LESS                "NO"
     StrCpy $EXPAT               "NO"
     StrCpy $EXPAT_DEVEL         "NO"
-    ;StrCpy $NCURSES             "NO"
-    ;StrCpy $NCURSES_DEVEL       "NO"
     StrCpy $LIBPCRE2            "NO"
     StrCpy $LIBPCRE2_DEVEL      "NO"
     StrCpy $LIBSSH2             "NO"
@@ -424,14 +371,10 @@ Function .onSelChange
     !insertmacro Depends        ${CURL_DEVEL}       $CURL_DEVEL         $CURL
     !insertmacro Depends        ${ICONV_DEVEL}      $ICONV_DEVEL        $ICONV
     !insertmacro Depends        ${EXPAT_DEVEL}      $EXPAT_DEVEL        $EXPAT
-    ;!insertmacro Depends        ${NCURSES_DEVEL}    $NCURSES_DEVEL      $NCURSES
     !insertmacro Depends        ${LIBPCRE2_DEVEL}   $LIBPCRE2_DEVEL     $LIBPCRE2
     !insertmacro Depends        ${LIBSSH2_DEVEL}    $LIBSSH2_DEVEL      $LIBSSH2
     !insertmacro Depends        ${OPENSSL_DEVEL}    $OPENSSL_DEVEL      $OPENSSL
     !insertmacro Depends        ${ZLIB_DEVEL}       $ZLIB_DEVEL         $ZLIB
-    ;!insertmacro Depends        ${LESS}             $LESS               $NCURSES
-    ;!insertmacro Depends        ${LESS}             $LESS               $LIBPCRE2
-    ;!insertmacro Depends        ${NCURSES}          $NCURSES            $LIBPCRE2
     !insertmacro Depends        ${CURL}             $CURL               $LIBSSH2
     !insertmacro Depends        ${CURL}             $CURL               $OPENSSL
     !insertmacro Depends        ${CURL}             $CURL               $ZLIB
@@ -445,11 +388,8 @@ Function .onSelChange
     !insertmacro MaybeNeeded    ${CURL_DEVEL}       $CURL_DEVEL
     !insertmacro MaybeNeeded    ${ICONV}            $ICONV
     !insertmacro MaybeNeeded    ${ICONV_DEVEL}      $ICONV_DEVEL
-    ;!insertmacro MaybeNeeded    ${LESS}             $LESS
     !insertmacro MaybeNeeded    ${EXPAT}            $EXPAT
     !insertmacro MaybeNeeded    ${EXPAT_DEVEL}      $EXPAT_DEVEL
-    ;!insertmacro MaybeNeeded    ${NCURSES}          $NCURSES
-    ;!insertmacro MaybeNeeded    ${NCURSES_DEVEL}    $NCURSES_DEVEL
     !insertmacro MaybeNeeded    ${LIBPCRE2}         $LIBPCRE2
     !insertmacro MaybeNeeded    ${LIBPCRE2_DEVEL}   $LIBPCRE2_DEVEL
     !insertmacro MaybeNeeded    ${LIBSSH2}          $LIBSSH2
