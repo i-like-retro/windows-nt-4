@@ -1980,13 +1980,21 @@ del %PUTTY%\windows\testcrypt.o
 del %PUTTY%\windows\window.o
 del %PUTTY%\windows\winpgen.o
 del %PUTTY%\windows\winprint.o
+del %~dp0..\CD\SOFTWARE\NETWORK\PUTTY076.EXE
 
 if not "%1" == "" goto next
 
 :git
 
 del %GIT%\GIT-VERSION-FILE
+del %~dp0..\CD\SOFTWARE\DEVEL\GIT2341.EXE
 rmdir /S/Q %BUILD%\git
+
+if not "%1" == "" goto next
+
+:installer
+
+del %~dp0..\CD\SOFTWARE\GNU-NT4.EXE
 
 if not "%1" == "" goto next
 

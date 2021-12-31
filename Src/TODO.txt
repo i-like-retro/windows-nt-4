@@ -4,6 +4,7 @@
 * Static version of ntcompat needed
 * CMake not using ntcompat yet
 * SSH does not pass keyboard input to plink, so you have to do `plink git@github.com` to press Y.
+* AddPath script does not correctly change PATH variable if it reads outdated environment
 * Curl: USE_LIBIDN2, USE_WIN32_IDN, USE_NGHTTP2, USE_NGTCP2, USE_QUICHE, CURL_BROTLI, CURL_ZSTD
 
 gettext?

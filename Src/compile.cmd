@@ -397,7 +397,7 @@ cmake -G "MinGW Makefiles" ^
     -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlibstatic.a ^
     -DZLIB_FOUND:BOOL=TRUE ^
     -DCURL_INCLUDE_DIR:PATH=%CURL%\include ^
-    -DCURL_LIBRARY:PATH=%BUILD%\curl_static\lib\libcurl.a ^
+    -DCURL_LIBRARY:PATH=%BUILD%\curl\lib\libcurl.a ^
     -DCURL_FOUND:BOOL=TRUE ^
     -DEXPAT_INCLUDE_DIR:PATH=%EXPAT%\lib ^
     -DEXPAT_LIBRARY:PATH=%BUILD%\expat_static\libexpat.a ^

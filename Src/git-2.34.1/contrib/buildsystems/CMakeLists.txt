@@ -52,7 +52,7 @@ cmake_minimum_required(VERSION 3.14)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -w -std=c99 -march=i586")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -Wl,--export-all-symbols -static-libgcc")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -static-libgcc")
-add_definitions(-DPCRE2_STATIC -DCURL_STATICLIB)
+add_definitions(-DPCRE2_STATIC)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../pcre2-10.39/src")
 
 #set the source directory to root of git
@@ -689,12 +689,12 @@ if(Iconv_FOUND)
 	target_link_libraries(libgit ${Iconv_LIBRARIES})
 endif()
 if(WIN32)
-	target_link_libraries(common-main ws2_32 ntdll ${CMAKE_BINARY_DIR}/git.res)
+	target_link_libraries(common-main ws2_32 ntdll) #${CMAKE_BINARY_DIR}/git.res)
+	add_dependencies(common-main git-rc)
 	target_link_libraries(libgit ws2_32 ntdll
 		"${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/pcre2/libpcre2-posix.a"
 		"${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/pcre2/libpcre2-8.a"
 		)
-	add_dependencies(common-main git-rc)
 	if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 		#target_link_options(common-main PUBLIC -municode -Wl,--nxcompat -Wl,--dynamicbase -Wl,--pic-executable,-e,mainCRTStartup)
 	elseif(CMAKE_C_COMPILER_ID STREQUAL "Clang")
