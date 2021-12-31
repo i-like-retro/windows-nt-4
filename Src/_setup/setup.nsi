@@ -146,7 +146,7 @@ Section "Base"
     File "gnu.ico"
     File "licenses.txt"
     SetOutPath "$INSTDIR\bin"
-    File "..\_build\libgcc_s_dw2-1.dll"
+    File "..\_build\libgcc.dll"
     File "..\_ntcompat\ntcompat.dll"
     SetOutPath "$INSTDIR\include\windows"
     File "..\_ntcompat\ntcompat\*.h"
@@ -445,4 +445,5 @@ Section "Uninstall"
     StrCmp $DO_NOT_ADD_TO_PATH_ "1" doNotRemoveFromPath 0
         Call un.RemoveFromPath
   doNotRemoveFromPath:
+
 SectionEnd

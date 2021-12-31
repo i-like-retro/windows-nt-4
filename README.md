@@ -162,7 +162,7 @@ able to start was 5.35), but later versions display various errors and seem
 to only provide partial functionality.
 
 Network
---------------------
+-------
 
 * [PuTTY 0.76](CD/SOFTWARE/NETWORK/PUTTY076.EXE) `2021-07-17`: is an SSH and telnet
 client. PuTTY has been compiled for Windows NT from [source code](Src/putty-0.76).
@@ -179,7 +179,9 @@ work under Windows NT 4.
 
 * [Git 2.34.1](CD/SOFTWARE/DEVEL/GIT2341.EXE) `2021-11-15`: free and open
 source distributed version control system designed to handle everything from
-small to very large projects with speed and efficiency.
+small to very large projects with speed and efficiency. **NOTE**: it is
+recommended to also install Perl along with Git, otherwise some of the
+Git commands will not work.
 
 * [HxD 1.7.7.0](CD/SOFTWARE/DEVEL/HXD1770.EXE) `2009-04-03`: freeware hex
 editor and disk editor (for more information see https://mh-nexus.de/en/hxd).
@@ -192,6 +194,9 @@ applications. This is the latest version of NSIS 2.x. Actually
 and works perfectly on Windows NT 4, but it seems to be unable to parse
 scripts used by CMake. For this reason it is recommended to install NSIS 2.x
 if you plan to use it together with CMake.
+
+* [Perl 5.12.3.0](CD/SOFTWARE/DEVEL/PERL5123.EXE) `2011-05-15`: the latest
+version of Strawberry Perl known to work on Windows NT.
 
 Utility
 -------

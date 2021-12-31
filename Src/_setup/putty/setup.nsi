@@ -155,7 +155,7 @@ Section "Uninstall"
 
     Delete "$INSTDIR\uninst.exe"
     Delete "$INSTDIR\LICENCE"
-    Delete "$INSTDIR\pageant.exe"
+    Delete /REBOOTOK "$INSTDIR\pageant.exe"
     Delete "$INSTDIR\plink.exe"
     Delete "$INSTDIR\pscp.exe"
     Delete "$INSTDIR\psftp.exe"
@@ -163,7 +163,7 @@ Section "Uninstall"
     Delete "$INSTDIR\puttygen.exe"
     Delete "$INSTDIR\README.txt"
     Delete "$INSTDIR\LICENCE.txt"
-    RMDir $INSTDIR
+    RMDir /REBOOTOK $INSTDIR
 
     DeleteRegKey HKCR ".ppk"
     DeleteRegKey HKCR "PuTTY Key"
@@ -206,8 +206,9 @@ Section "Uninstall"
 
     DeleteRegKey /ifempty SHCTX "Software\PuTTY"
 
-    Push $INSTDIR\bin
+    Push $INSTDIR
     StrCmp $DO_NOT_ADD_TO_PATH_ "1" doNotRemoveFromPath 0
         Call un.RemoveFromPath
   doNotRemoveFromPath:
+
 SectionEnd

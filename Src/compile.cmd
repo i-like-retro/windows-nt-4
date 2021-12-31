@@ -402,7 +402,7 @@ cmake -G "MinGW Makefiles" ^
     -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlibstatic.a ^
     -DZLIB_FOUND:BOOL=TRUE ^
     -DCURL_INCLUDE_DIR:PATH=%CURL%\include ^
-    -DCURL_LIBRARY:PATH=%BUILD%\curl\lib\libcurl.a ^
+    -DCURL_LIBRARY:PATH=%BUILD%\curl\lib\libcurl.dll.a ^
     -DCURL_FOUND:BOOL=TRUE ^
     -DEXPAT_INCLUDE_DIR:PATH=%EXPAT%\lib ^
     -DEXPAT_LIBRARY:PATH=%BUILD%\expat_static\libexpat.a ^
@@ -420,6 +420,20 @@ mingw32-make install
 if errorlevel 1 goto error
 
 cd %BASEDIR%_setup\git
+if errorlevel 1 goto error
+makensis setup.nsi
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem ======
+rem  PERL
+rem ======
+:perl
+
+if exist %BASEDIR%..\CD\SOFTWARE\DEVEL\PERL5123.EXE del %BASEDIR%..\CD\SOFTWARE\NETWORK\PERL5123.EXE
+
+cd %BASEDIR%_setup\perl
 if errorlevel 1 goto error
 makensis setup.nsi
 if errorlevel 1 goto error

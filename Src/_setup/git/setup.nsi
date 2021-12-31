@@ -622,4 +622,5 @@ Section "Uninstall"
     StrCmp $DO_NOT_ADD_TO_PATH_ "1" doNotRemoveFromPath 0
         Call un.RemoveFromPath
   doNotRemoveFromPath:
+
 SectionEnd
