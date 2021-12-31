@@ -180,7 +180,7 @@ Section "Uninstall"
     Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
     Delete "$DESKTOP\PuTTY.lnk"
 
-    ;Delete empty start menu parent diretories
+    ;Delete empty start menu parent directories
     StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
   startMenuDeleteLoop:
     ClearErrors
@@ -194,7 +194,7 @@ Section "Uninstall"
     ; try to fix it.
     StrCpy $MUI_TEMP "$START_MENU"
     Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
-    ;Delete empty start menu parent diretories
+    ;Delete empty start menu parent directories
     StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
   secondStartMenuDeleteLoop:
     ClearErrors

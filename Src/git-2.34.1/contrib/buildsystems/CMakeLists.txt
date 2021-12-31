@@ -50,10 +50,10 @@ to avoid this, add `-DNO_VCPKG=TRUE` to the command line when configuring.
 cmake_minimum_required(VERSION 3.14)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-ident -fno-stack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -w -std=c99 -march=i586")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -Wl,--export-all-symbols -static-libgcc")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -static-libgcc")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -Wl,--export-all-symbols -shared-libgcc")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--build-id=none -Wl,-s -shared-libgcc")
 add_definitions(-DPCRE2_STATIC)
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../pcre2-10.39/src")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../../pcre2-10.39/src" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/include")
 
 #set the source directory to root of git
 set(CMAKE_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../..)
@@ -221,7 +221,7 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR})
 add_compile_definitions(GIT_HOST_CPU="${CMAKE_SYSTEM_PROCESSOR}")
 add_compile_definitions(SHA256_BLK INTERNAL_QSORT RUNTIME_PREFIX)
-add_compile_definitions(NO_OPENSSL SHA1_DC SHA1DC_NO_STANDARD_INCLUDES
+add_compile_definitions(SHA1_DC SHA1DC_NO_STANDARD_INCLUDES #NO_OPENSSL
 			SHA1DC_INIT_SAFE_HASH_DEFAULT=0
 			SHA1DC_CUSTOM_INCLUDE_SHA1_C="cache.h"
 			SHA1DC_CUSTOM_INCLUDE_UBC_CHECK_C="git-compat-util.h" )
@@ -734,20 +734,20 @@ if(CURL_FOUND)
 
 	add_executable(git-imap-send ${CMAKE_SOURCE_DIR}/imap-send.c)
 	target_link_libraries(git-imap-send http_obj common-main ${CURL_LIBRARIES})
-	target_link_libraries(git-imap-send "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2_static/src/libssh2.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.a" crypt32 wldap32)
+	target_link_libraries(git-imap-send "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2/src/liblibssh2.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.dll.a" crypt32 wldap32)
 
 	add_executable(git-http-fetch ${CMAKE_SOURCE_DIR}/http-walker.c ${CMAKE_SOURCE_DIR}/http-fetch.c)
 	target_link_libraries(git-http-fetch http_obj common-main ${CURL_LIBRARIES})
-	target_link_libraries(git-http-fetch "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2_static/src/libssh2.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.a" crypt32 wldap32)
+	target_link_libraries(git-http-fetch "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2/src/liblibssh2.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.dll.a" crypt32 wldap32)
 
 	add_executable(git-remote-http ${CMAKE_SOURCE_DIR}/http-walker.c ${CMAKE_SOURCE_DIR}/remote-curl.c)
 	target_link_libraries(git-remote-http http_obj common-main ${CURL_LIBRARIES} )
-	target_link_libraries(git-remote-http "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2_static/src/libssh2.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.a" crypt32 wldap32)
+	target_link_libraries(git-remote-http "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2/src/liblibssh2.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.dll.a" crypt32 wldap32)
 
 	if(EXPAT_FOUND)
 		add_executable(git-http-push ${CMAKE_SOURCE_DIR}/http-push.c)
 		target_link_libraries(git-http-push http_obj common-main ${CURL_LIBRARIES} ${EXPAT_LIBRARIES})
-		target_link_libraries(git-http-push "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2_static/src/libssh2.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.a" crypt32 wldap32)
+		target_link_libraries(git-http-push "${CMAKE_CURRENT_SOURCE_DIR}/../../../_build/libssh2/src/liblibssh2.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libssl.dll.a" "${CMAKE_CURRENT_SOURCE_DIR}/../../../openssl-1.1.1m/libcrypto.dll.a" crypt32 wldap32)
 	endif()
 endif()
 

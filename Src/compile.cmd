@@ -399,7 +399,7 @@ cmake -G "MinGW Makefiles" ^
     -DCMAKE_INSTALL_PREFIX=%BUILD%\git\_INSTALL_ ^
     -DBUILD_SHARED_LIBS=TRUE ^
     -DZLIB_INCLUDE_DIR:PATH=%ZLIB%;%BUILD%\zlib ^
-    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlibstatic.a ^
+    -DZLIB_LIBRARY:PATH=%BUILD%\zlib\libzlib.dll.a ^
     -DZLIB_FOUND:BOOL=TRUE ^
     -DCURL_INCLUDE_DIR:PATH=%CURL%\include ^
     -DCURL_LIBRARY:PATH=%BUILD%\curl\lib\libcurl.dll.a ^

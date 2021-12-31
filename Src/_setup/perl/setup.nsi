@@ -81,6 +81,47 @@ Section "-Main"
     CreateDirectory "$INSTDIR\data"
     CreateDirectory "$INSTDIR\perl\site\bin"
     CreateDirectory "$INSTDIR\win32"
+    CreateDirectory "$INSTDIR\c\include"
+    CreateDirectory "$INSTDIR\c\lib"
+    SetOutPath "$INSTDIR\c\bin"
+    File "..\..\perl-5.12.3.0-bin\c\bin\dmake.exe"
+    File "..\..\perl-5.12.3.0-bin\c\bin\patch.exe"
+    SetOutPath "$INSTDIR\c\startup"
+    File "..\..\perl-5.12.3.0-bin\c\bin\startup\config.mk"
+    File "..\..\perl-5.12.3.0-bin\c\bin\startup\local.mk"
+    File "..\..\perl-5.12.3.0-bin\c\bin\startup\startup.mk"
+    SetOutPath "$INSTDIR\c\startup\winnt"
+    File "..\..\perl-5.12.3.0-bin\c\bin\startup\winnt\macros.mk"
+    File "..\..\perl-5.12.3.0-bin\c\bin\startup\winnt\recipes.mk"
+    SetOutPath "$INSTDIR\c\startup\winnt\mingw"
+    File "..\..\perl-5.12.3.0-bin\c\bin\startup\winnt\mingw\macros.mk"
+    SetOutPath "$INSTDIR\perl\vendor\lib"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git.pm"
+    SetOutPath "$INSTDIR\perl\vendor\lib\FromCPAN"
+    File "..\..\_build\git\_INSTALL_\share\perl5\FromCPAN\Error.pm"
+    SetOutPath "$INSTDIR\perl\vendor\lib\FromCPAN\Mail"
+    File "..\..\_build\git\_INSTALL_\share\perl5\FromCPAN\Mail\Address.pm"
+    SetOutPath "$INSTDIR\perl\vendor\lib\Git"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\I18N.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\IndexInfo.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\LoadCPAN.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\Packet.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN.pm"
+    SetOutPath "$INSTDIR\perl\vendor\lib\Git\LoadCPAN"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\LoadCPAN\Error.pm"
+    SetOutPath "$INSTDIR\perl\vendor\lib\Git\LoadCPAN\Mail"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\LoadCPAN\Mail\Address.pm"
+    SetOutPath "$INSTDIR\perl\vendor\lib\Git\SVN"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\Editor.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\Fetcher.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\GlobSpec.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\Log.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\Migration.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\Prompt.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\Ra.pm"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\Utils.pm"
+    SetOutPath "$INSTDIR\perl\vendor\lib\Git\SVN\Memoize"
+    File "..\..\_build\git\_INSTALL_\share\perl5\Git\SVN\Memoize\YAML.pm"
 
     ;Create uninstaller
     WriteUninstaller "$INSTDIR\uninst.exe"
@@ -159,9 +200,10 @@ Section "Uninstall"
 
     !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
 
+    Delete "$SMPROGRAMS\$MUI_TEMP\Perl Shell.lnk"
     Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
 
-    ;Delete empty start menu parent diretories
+    ;Delete empty start menu parent directories
     StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
   startMenuDeleteLoop:
     ClearErrors
@@ -175,7 +217,7 @@ Section "Uninstall"
     ; try to fix it.
     StrCpy $MUI_TEMP "$START_MENU"
     Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
-    ;Delete empty start menu parent diretories
+    ;Delete empty start menu parent directories
     StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
   secondStartMenuDeleteLoop:
     ClearErrors
