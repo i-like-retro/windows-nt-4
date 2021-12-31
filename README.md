@@ -23,9 +23,15 @@ For your convenience, you can build an ISO image with all useful
 stuff in this repository to burn on CD and apply to your Windows NT4
 installation at once.
 
-To build ISO image just run makecd.cmd command from the root of the
-repository. No additional software is needed to build ISO image, all
+To build ISO image just run [makecd.cmd](makecd.cmd) command from the root of
+the repository. No additional software is needed to build ISO image, all
 dependencies are already in the repo.
+
+If you want to recompile software from source code, you can use the
+[compile.cmd](Src/compile.cmd) script. It does not have external dependencies,
+everything needed is either provided in the [Toolchain](Toolchain) library
+or is built by the script itself. Running it without arguments will compile
+everything, or you can pass a name or multiple names of the packages to build.
 
 Updates
 =======
