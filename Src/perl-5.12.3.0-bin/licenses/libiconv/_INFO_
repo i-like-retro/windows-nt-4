@@ -1,0 +1,3 @@
+Package: libiconv-1.13.1
+Homepage: http://www.gnu.org/software/libiconv/
+Sources: ftp://ftp.gnu.org/gnu/libiconv/libiconv-1.13.1.tar.gz

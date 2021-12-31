@@ -1,0 +1,4 @@
+Package: xz-4.999.9beta
+Homepage: http://tukaani.org/xz/
+Sources: http://tukaani.org/xz/xz-4.999.9beta.tar.gz
+Comment: this packs contains only liblzma (-lzma) binaries

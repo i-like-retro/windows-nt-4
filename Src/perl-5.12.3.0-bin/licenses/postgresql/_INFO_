@@ -1,0 +1,4 @@
+Package: postgresql-8.4.1
+Homepage: http://www.postgresql.org/
+Download: http://www.postgresql.org/ftp/source/v8.4.1/
+Sources: http://wwwmaster.postgresql.org/redir/335/h/source/v8.4.1/postgresql-8.4.1.tar.gz

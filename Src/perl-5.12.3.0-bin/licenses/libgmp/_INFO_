@@ -1,0 +1,4 @@
+Package: gmp-5.0.1-419f6a4cc606
+Homepage: http://gmplib.org/
+Sources: ftp://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.gz
+Comment: used src from rev. http://gmplib.org:8000/gmp/rev/419f6a4cc606

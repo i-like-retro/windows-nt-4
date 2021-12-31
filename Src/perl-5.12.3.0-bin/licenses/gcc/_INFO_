@@ -1,0 +1,5 @@
+Package: gcc-4.4.3
+Homepage: http://gcc.gnu.org/
+Sources: ftp://gcc.gnu.org/pub/gcc/releases/gcc-4.4.3/
+Comment: based on sezero's 20100123 pack - svn rev. 156151 (4.4.3 release with many patches)
+Comment: configured with --enable-languages=c,c++ --disable-multilib --disable-nls --disable-win32-registry

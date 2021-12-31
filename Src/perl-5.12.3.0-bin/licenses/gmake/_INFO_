@@ -1,0 +1,4 @@
+Package: make-3.81.90
+Homepage: http://www.gnu.org/software/make/
+Sources: ftp://ftp.gnu.org/gnu/make/make-3.81.tar.gz
+Comment: based on sezero's 20100123 pack - v3.81.90 (cvs, 2009-12-24 16:00 GMT, with w64 patches applied according to savannah bug items 27809 and 27825)

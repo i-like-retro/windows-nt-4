@@ -1,0 +1,4 @@
+Package: binutils-2.20.51
+Homepage: http://www.gnu.org/software/binutils/
+Sources: http://ftp.gnu.org/gnu/binutils/binutils-2.20.tar.gz
+Comment: based on sezero's 20100123 pack - v2.20.51 (cvs, 2010-01-23 18:32 GMT)
