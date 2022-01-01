@@ -217,6 +217,11 @@ version known to work on Windows NT 4.
 freeware and open source orthodox file manager (for more information see
 [farmanager.com](https://farmanager.com)).
 
+* [ShellExView 2.01](CD/SOFTWARE/UTILITY/SHEXVIEW.EXE): The ShellExView utility
+displays the details of shell extensions installed on your computer, and allows
+you to easily disable and enable each shell extension. For more details see
+[the official website](http://www.nirsoft.net/utils/shexview.html).
+
 Useful links
 ============
 
