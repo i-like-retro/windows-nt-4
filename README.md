@@ -150,8 +150,8 @@ PC Cards and PCMCIA for Windows NT.
 * [USB support](CD/SOFTWARE/DRIVERS/R62200.EXE): set of USB drivers,
 developed by Inside Out Networks and provided by DELL for its computers.
 It is reported to work with non-DELL computers as well. **NOTE**: there
-is an information on the Internet that this driver may cause problems with a
-PS/2 keyboard. **NOTE**: installer claims that the driver does not support
+is an information on the Internet that this driver may cause problems with
+PS/2 keyboards. **NOTE**: installer claims that the driver does not support
 multiprocessor systems.
 
 Multimedia
@@ -171,17 +171,17 @@ to only provide partial functionality.
 Graphics
 --------
 
-* [ArtIcons 5.52](CD/SOFTWARE/GRAPHICS/AIPRO552) `2019-03-23`: is an advanced
+* [ArtIcons 5.52](CD/SOFTWARE/GRAPHICS/AIPRO552) `2019-03-23`: an advanced
 icon maker for Windows. It allows professional and amateur alike to create and
 edit icon images and manage icon files and libraries. **NOTE**: this is a
-shareware program and should be purchased for prolonged use. See
-[official website](http://www.aha-soft.com/articons/index.htm) for more
+shareware program and should be purchased for prolonged use. Visit
+[the official website](http://www.aha-soft.com/articons/index.htm) for more
 information.
 
 Network
 -------
 
-* [PuTTY 0.76](CD/SOFTWARE/NETWORK/PUTTY076.EXE) `2021-07-17`: is an SSH and telnet
+* [PuTTY 0.76](CD/SOFTWARE/NETWORK/PUTTY076.EXE) `2021-07-17`: an SSH and telnet
 client. PuTTY has been compiled for Windows NT from [source code](Src/putty-0.76).
 
 Software Development
@@ -227,10 +227,17 @@ version known to work on Windows NT 4.
 freeware and open source orthodox file manager (for more information see
 [farmanager.com](https://farmanager.com)).
 
-* [ShellExView 2.01](CD/SOFTWARE/UTILITY/SHEXVIEW.EXE): The ShellExView utility
-displays the details of shell extensions installed on your computer, and allows
-you to easily disable and enable each shell extension. For more details see
+* [ShellExView 2.01](CD/SOFTWARE/UTILITY/SHEXVIEW.EXE): utility to display
+the details of shell extensions installed on your computer. Also allows
+you to easily disable and enable each shell extension. For more details visit
 [the official website](http://www.nirsoft.net/utils/shexview.html).
+
+* [System Information Viewer 5.62](CD/SOFTWARE/UTILITY/SIV562.EXE): `2021-12-14`
+utility for displaying lots of useful Windows, Network and hardware info: CPU
+info, PCI info, PCMCIA info, USB info SMBus info, SPD info, ACPI methods,
+Machine info, Hardware Sensors, Networked computers, Operating System
+Information and more. For details visit
+[the official website](http://rh-software.com/).
 
 Useful links
 ============

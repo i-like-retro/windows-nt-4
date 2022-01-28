@@ -60,6 +60,9 @@ START /WAIT %sSOFTWARE\DRIVERS\R62200.EXE
 
 ------------------------------------------------------------------------------
 
+>> Adobe Acrobat Reader 7.09
+%sSOFTWARE\UTILITY\ADOBR709.EXE
+
 >> FAR Manager 1.7
 %sSOFTWARE\UTILITY\FAR170\INSTALL.BAT
 
