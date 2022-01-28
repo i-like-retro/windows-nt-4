@@ -178,6 +178,11 @@ shareware program and should be purchased for prolonged use. Visit
 [the official website](http://www.aha-soft.com/articons/index.htm) for more
 information.
 
+* [IrfanView 4.35](CD/SOFTWARE/GRAPHICS/IRFAN435) `2012-11-07`: very fast,
+small, compact and innovative FREEWARE (for non-commercial use) graphic viewer
+for Windows. It is designed to be simple for beginners and powerful for
+professionals.
+
 Network
 -------
 
