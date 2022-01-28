@@ -28,3 +28,20 @@ dns tools
 
 dos2unix
 unix2dos
+
+tweakui
+
+putty agent to Startup?
+putty agent needs to add key every time :(
+
+add proxy server for old browsers to work
+
+-----
+C:\Work\RetroDE\common> git add -p win32
+The system cannot find the path specified.
+MSWin32 does not support: :(,prefix:7)common/win32
+----
+
+Make "ACDSee here..."
+
+pkzipc

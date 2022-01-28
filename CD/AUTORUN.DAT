@@ -84,6 +84,12 @@ START /WAIT %sSOFTWARE\MULTIMED\WAMP295.EXE
 
 ------------------------------------------------------------------------------
 
+>> ArtIcons Pro 5.52
+START NOTEPAD %sSOFTWARE\GRAPHICS\AIPRO552\SERIAL.TXT
+START /WAIT %sSOFTWARE\GRAPHICS\AIPRO552\SETUP.EXE
+
+------------------------------------------------------------------------------
+
 >> PuTTY 0.76
 START /WAIT %sSOFTWARE\NETWORK\PUTTY076.EXE
 

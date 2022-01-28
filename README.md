@@ -168,6 +168,16 @@ latest one that starts on Windows NT 4 (in my tests the latest version to be
 able to start was 5.35), but later versions display various errors and seem
 to only provide partial functionality.
 
+Graphics
+--------
+
+* [ArtIcons 5.52](CD/SOFTWARE/GRAPHICS/AIPRO552) `2019-03-23`: is an advanced
+icon maker for Windows. It allows professional and amateur alike to create and
+edit icon images and manage icon files and libraries. **NOTE**: this is a
+shareware program and should be purchased for prolonged use. See
+[official website](http://www.aha-soft.com/articons/index.htm) for more
+information.
+
 Network
 -------
 

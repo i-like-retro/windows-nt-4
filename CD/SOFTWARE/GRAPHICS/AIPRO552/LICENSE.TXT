@@ -1,0 +1,35 @@
+Aha-soft ArtIcons Pro
+
+SOFTWARE LICENSE AGREEMENT
+
+This user license agreement  (the "AGREEMENT") is an agreement between you (individual or single entity) and Aha-soft, for the Aha-soft software (the "SOFTWARE") that is accompanying this AGREEMENT. 
+
+The SOFTWARE is the property of Aha-soft and is protected by copyright laws and international copyright treaties. The SOFTWARE is not sold, it is licensed.
+
+TRIAL VERSION
+
+If you accept the terms and conditions of this AGREEMENT, you have certain rights and obligations as follows:
+
+YOU MAY:
+
+1. Install and use the unlimited number of copies of the TRIAL VERSION for a period of 30 days.
+2. Use one or more copies of the TRIAL VERSION for evaluation purposes only.
+3. Copy and distribute freely the TRIAL VERSION (see 'DISTRIBUTION').
+
+YOU MAY NOT:
+
+1. Sublicense, rent or lease the TRIAL VERSION or any portion of it.
+2. Decompile, disassemble, reverse engineer or modify the TRIAL VERSION or any portion of it.
+3. Use the TRIAL VERSION after your trial period of 30 days.
+
+DISTRIBUTION:
+
+You are hereby licensed to make as many copies of the TRIAL VERSION as you wish and distribute them to anyone provided that all files are intact. You must distribute the install form of the TRIAL VERSION (not the files resulting of an installation). You are not allowed to sell the TRIAL VERSION (except for shipment and handling charges). Computer's Magazines are authorized to distribute it on any Cover Disk or CD-ROM without any permission. Please inform us by e-mail each time you distribute the TRIAL VERSION.
+
+WARRANTY DISCLAIMER
+
+The SOFTWARE is supplied "AS IS". Aha-soft disclaims all warranties, expressed or implied, including, without limitation, the warranties of merchantability and of fitness for any purpose. The user must assume the entire risk of using the SOFTWARE. 
+
+DISCLAIMER OF DAMAGES
+
+Aha-soft assumes no liability for damages, direct or consequential, which may result from the use of the SOFTWARE, even if Aha-soft has been advised of the possibility of such damages. Any liability of the seller will be limited to refund the purchase price.
