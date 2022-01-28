@@ -1,0 +1,58 @@
+NAME=LuaMacro
+USERCPP=/Iluasdk/include /DEXPORT_OPEN /DEXPORT_CONFIGURE \
+        /DEXPORT_PROCESSEDITOREVENT /DEXPORT_PROCESSVIEWEREVENT \
+        /DEXPORT_PROCESSDIALOGEVENT /DEXPORT_PROCESSEDITORINPUT /DEXPORT_PROCESSCONSOLEINPUT \
+        /DEXPORT_ANALYSE /DEXPORT_CLOSEPANEL /DEXPORT_COMPARE /DEXPORT_DELETEFILES \
+        /DEXPORT_GETFILES /DEXPORT_GETFINDDATA /DEXPORT_GETOPENPANELINFO /DEXPORT_MAKEDIRECTORY \
+        /DEXPORT_PROCESSHOSTFILE /DEXPORT_PROCESSPANELEVENT /DEXPORT_PROCESSPANELINPUT \
+        /DEXPORT_PUTFILES /DEXPORT_SETDIRECTORY /DEXPORT_SETFINDLIST /DEXPORT_GETCONTENTDATA \
+        /DRUN_LUAFAR_INIT
+LUA_VER=51
+
+LUALIB=$(INTDIR)\luafar3.lib
+
+DOCS = luamacro.example.ini
+
+!include ..\makefile_vc_def_inc
+
+!ifndef FAR_WORKDIR
+!ifndef DEBUG
+FAR_DIRNAME=Release
+!else
+FAR_DIRNAME=Debug
+!endif
+FAR_WORKDIR=$(FARDIR)\$(FAR_DIRNAME).$(DIRBIT).vc
+!endif
+
+ALL: lualib lualegacy
+
+LINK_OBJS = $(INTDIR)\luaplug.obj
+
+LINK_LIBS=$(LINK_LIBS) luasdk\$(DIRBIT)\lua$(LUA_VER).lib $(LUALIB)
+
+!include ..\makefile_vc_target_inc
+
+!ifndef __MAKE__
+{luafar}.c{$(INTDIR)}.obj::
+	$(CC) @<<
+	$(CPPFLAGS) $<
+<<
+!else
+{luafar}.c{$(INTDIR)}.obj:
+	@$(CC) $(CPPFLAGS) /Fo$(INTDIR)\ { $< }
+!endif
+
+!include ../makefile_vc_getmode
+
+.PHONY: lualib
+lualib:
+	@$(MAKE) $(_MKHIDE) /f makefile_lib_vc INSTALL=$(FAR_WORKDIR) $(_MKDO_)INSTALL_TO_ROOT=1 $(_MDEFS)
+
+.PHONY: lualegacy
+lualegacy:
+!if "$(DIRBIT)" == "32"
+	@if not exist $(FAR_WORKDIR)\Legacy\$(NULL) mkdir $(FAR_WORKDIR)\Legacy
+	@copy /y luasdk\32\legacy\lua51.dll $(FAR_WORKDIR)\Legacy 1>nul
+!else
+	@echo >nul
+!endif

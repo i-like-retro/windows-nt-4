@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<farconfig>
+    <generalconfig>
+    	<!-- Windows GUI like behaviour for FAR -->
+    	<!-- turn off persistent blocks and turn on selection deletion with Del -->
+        <setting key="Editor" name="PersistentBlocks" type="qword" value="0000000000000000" />
+        <setting key="Editor" name="DelRemovesBlocks" type="qword" value="0000000000000001" />
+        <!-- BkSpace will clear unchanged input lines -->
+        <setting key="Dialog" name="EULBsClear" type="qword" value="0000000000000001" />
+        <!-- turn off persistent blocks in input lines -->
+        <setting key="Dialog" name="EditBlock" type="qword" value="0000000000000001" />
+    </generalconfig>
+</farconfig>

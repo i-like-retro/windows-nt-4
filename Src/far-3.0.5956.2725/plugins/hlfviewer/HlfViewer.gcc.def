@@ -1,0 +1,7 @@
+EXPORTS 
+	GetGlobalInfoW=GetGlobalInfoW@4
+	SetStartupInfoW=SetStartupInfoW@4
+	OpenW=OpenW@4
+	GetPluginInfoW=GetPluginInfoW@4
+	ProcessEditorInputW=ProcessEditorInputW@4
+	ConfigureW=ConfigureW@4

@@ -1,0 +1,11 @@
+NAME = Network
+
+SRCS = \
+	Network.cpp \
+	NetCfg.cpp \
+	NetClass.cpp \
+	NetCommon.cpp \
+	NetFavorites.cpp
+
+include ../makefile_gcc_def_inc
+include ../makefile_gcc_target_inc

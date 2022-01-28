@@ -1,0 +1,16 @@
+EXPORTS 
+	AnalyseW=AnalyseW@4
+	ClosePanelW=ClosePanelW@4
+	ConfigureW=ConfigureW@4
+	ExitFARW=ExitFARW@4
+	GetFindDataW=GetFindDataW@4
+	GetGlobalInfoW=GetGlobalInfoW@4
+	GetOpenPanelInfoW=GetOpenPanelInfoW@4
+	GetPluginInfoW=GetPluginInfoW@4
+	OpenW=OpenW@4
+	ProcessPanelEventW=ProcessPanelEventW@4
+	ProcessPanelInputW=ProcessPanelInputW@4
+	PutFilesW=PutFilesW@4
+	SetDirectoryW=SetDirectoryW@4
+	SetFindListW=SetFindListW@4
+	SetStartupInfoW=SetStartupInfoW@4

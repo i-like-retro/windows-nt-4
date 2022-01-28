@@ -1,0 +1,104 @@
+﻿
+            FarFtp used FTP commands list
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Plugin uses only commands described in table below.
+Each command has a name in registry, default value and usage description for
+command usage in plugin.
+
+The base key, where plugin is looking for commands names is:
+  HKEY_CURRENT_USER\Software\Far2\plugins\FTP
+
+The default commands values can be found in the registry file "TechInfo.reg".
+
+Command string may contain any characters up to 20 length.
+Command string may contain not only the command itself but additional command
+parameters too.
+Plugin does not change or convert text of commands, so you must enter just as
+it requested by server.
+
++---------+-------+----------------------------------------------------------+
+|Name     |Default| Description                                              |
++---------+-------+----------------------------------------------------------+
+|xcmdPUT  |STOR   | Used in "Send a single file" operation to append a file. |
+|         |       |                                                          |
+|xcmdSTOR |STOR   | Used in "Send a single file" operation to store file.    |
+|         |       |                                                          |
+|xcmdSTOU |STOU   | Used in "Send a single file" operation to store unique   |
+|         |       | file.                                                    |
+|         |       |                                                          |
+|xcmdPASV |PASV   | Used in "Switch to passive mode" operation.              |
+|         |       |                                                          |
+|xcmdPORT |PORT   | Used in "Get preferred port" operation.                  |
+|         |       |                                                          |
+|xcmdMDTM |MDTM   | Used if "Receive one file" and "get last modification    |
+|         |       | time of file on remote machine" operations to retrieve   |
+|         |       | date and time of file on server.                         |
+|         |       | Read year, month, day, hour, min, sec fields of result   |
+|         |       | using "ServerDateFormat" (see techinfo N26 for details). |
+|         |       |                                                          |
+|xcmdRETR |RETR   | Used in "Receive one file" operation.                    |
+|         |       |                                                          |
+|xcmdREST |REST   | Used in "Receive file from offset" operation.            |
+|         |       |                                                          |
+|xcmdCWD  |CWD    | Used in "Change directory" operation to change directory |
+|         |       | when user select folder on FTP panel.                    |
+|         |       |                                                          |
+|xcmdXCWD |XCWD   | Used in "Change directory" operation as alternative      |
+|         |       | command when server does not support CWD command.        |
+|         |       |                                                          |
+|xcmdDELE |DELE   | Used in "Delete a single file" operation.                |
+|         |       |                                                          |
+|xcmdRNFR |RNFR   | "Rename from" operation.                                 |
+|         |       |                                                          |
+|xcmdRNTO |RNTO   | "Rename to" operation                                    |
+|         |       |                                                          |
+|xcmdLIST |LIST   | Used in "Get a directory listing of remote files"        |
+|         |       | operation.                                               |
+|         |       |                                                          |
+|xcmdNLIST|NLIST  | Used in "Get a directory listing of remote files"        |
+|         |       | operation when server does not support LIST operation.   |
+|         |       |                                                          |
+|xcmdUSER |USER   | Used in "Send new user information (re-login)" operation.|
+|         |       |                                                          |
+|xcmdPASS |PASS   | --`--                                                    |
+|         |       |                                                          |
+|xcmdACCT |ACCT   | --`--                                                    |
+|         |       |                                                          |
+|xcmdPWD  |PWD    | Used in "Print working directory" operation.             |
+|         |       |                                                          |
+|xcmdXPWD |XPWD   | Used in "Print working directory" operation              |
+|         |       | when server does not support PWD operation.              |
+|         |       |                                                          |
+|xcmdMKD  |MKD    | Used in "Make a directory" operation.                    |
+|         |       |                                                          |
+|xcmdXMKD |XMKD   | Used in "Make a directory" operation                     |
+|         |       | when server does not support MKD operation.              |
+|         |       |                                                          |
+|xcmdRMD  |RMD    | Used in "Remove a directory" operation.                  |
+|         |       |                                                          |
+|xcmdXRMD |XRMD   | Used in "Remove a directory" operation                   |
+|         |       | when server does not support RMD operation.              |
+|         |       |                                                          |
+|xcmdSITE |SITE   | Used in "Query site information" operation.              |
+|         |       |                                                          |
+|xcmdCHMOD|CHMOD  | Used in "Change file access" operation.                  |
+|         |       |                                                          |
+|xcmdUMASK|UMASK  | Not used by plugin yet                                   |
+|         |       |                                                          |
+|xcmdIDLE |IDLE   | Not used by plugin yet                                   |
+|         |       |                                                          |
+|xcmdHELP |HELP   | Not used by plugin yet                                   |
+|         |       |                                                          |
+|xcmdQUIT |QUIT   | Not used by plugin yet                                   |
+|         |       |                                                          |
+|xcmdCDUP |CDUP   | Not used by plugin yet                                   |
+|         |       |                                                          |
+|xcmdXCUP |XCUP   | Not used by plugin yet                                   |
+|         |       |                                                          |
+|xcmdSYST |SYST   | Used in "Query remote system info" operation.            |
+|         |       |                                                          |
+|xcmdSIZE |SIZE   | Used in "Get size of file" operation.                    |
+|         |       |                                                          |
+|xcmdSTAT |STAT   | Used in "Show status on remote machine" operation.       |
++---------+-------+----------------------------------------------------------+

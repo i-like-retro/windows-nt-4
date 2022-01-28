@@ -1,0 +1,8 @@
+NAME = Align
+
+LINK_OBJS = $(INTDIR)\Align.obj
+
+!include ..\makefile_vc_def_inc
+!include ..\makefile_vc_target_inc
+
+$(INTDIR)\Align.obj: Align.cpp AlignLng.hpp version.hpp guid.hpp $(COMINC)\plugin.hpp $(COMINC)\PluginSettings.hpp $(COMINC)\DlgBuilder.hpp

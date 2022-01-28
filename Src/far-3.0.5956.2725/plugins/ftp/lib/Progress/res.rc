@@ -1,0 +1,10 @@
+#pragma code_page(65001)
+
+#include "version.hpp"
+
+#define PLUGIN_BUILD 1
+#define PLUGIN_DESC "Copy progress dialog FTP plugin"
+#define PLUGIN_NAME "ftpProgress"
+#define PLUGIN_FILENAME "ftpProgress.fll"
+
+#include <plugin_version.rc>

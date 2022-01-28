@@ -1,0 +1,20 @@
+EXPORTS
+  GetGlobalInfoW
+  SetStartupInfoW
+  GetPluginInfoW
+  AnalyseW
+  CloseAnalyseW
+  OpenW
+  ClosePanelW
+  GetOpenPanelInfoW
+  SetDirectoryW
+  GetFindDataW
+  FreeFindDataW
+  GetFilesW
+  PutFilesW
+  DeleteFilesW
+  MakeDirectoryW
+  ProcessHostFileW
+  ProcessPanelInputW
+  ConfigureW
+  ExitFARW

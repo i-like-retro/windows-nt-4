@@ -1,0 +1,436 @@
+#The following variables can be set by the user:
+#
+#DEBUG - set if a debug build is needed
+#
+#LINK_ULINK - set if you want to use ulink for linking
+#
+#VC - set Visual C++ version (VC=15 for 2017, VC=16 for 2019, default is 15, we try to autodetect if not set)
+#
+#AMD64 or CPU=AMD64 - set for x64 build
+#ARM64 or CPU=ARM - for ARM64 build
+#ARM or CPU=ARM - for ARM build
+#
+#(we try to autodetect if not set)
+#
+#
+#USE_ANALYZE - for /analyze
+#
+#DISABLE_WOW64_HOOK - set to disable the wow64 hook
+#
+#DEFFILE - name of user file to include
+#
+#NO_RELEASE_LTCG - set to disable link-time code generation in Release mode
+#
+#LTCG_STATUS - specifies whether the linker displays a progress indicator that shows what percentage of the link is complete
+#
+#MP_LIMIT - specifies the maximum number of processes that the compiler can create
+#
+#ENABLE_TESTS - Enable unit tests in Release mode (always enabled in Debug)
+#
+#DEFUSERFLAGS -
+
+#include for user defines if needed
+!ifdef DEFFILE
+!include $(DEFFILE)
+!endif
+
+ROOTDIR = ..
+
+!include $(ROOTDIR)\_build\vc\config\common.mak
+
+!ifdef DEBUG
+ENABLE_TESTS=1
+!endif
+
+!ifdef CLANG
+OUTDIR=$(OUTDIR).clang
+!endif
+
+FARINCLUDE=Include
+
+M4=tools\m4 -P -DFARBIT=$(DIRBIT) -DBUILD_TYPE=$(FARMANAGER_BUILD_TYPE) -DSCM_REVISION=$(FARMANAGER_SCM_REVISION)
+GAWK=tools\gawk
+
+BOOTSTRAPDIR=$(INTDIR)/include/bootstrap/
+
+DEPFILE=$(BOOTSTRAPDIR)far.vc.dep
+
+RES_FILE = "$(INTDIR)\far.res"
+
+PCH_NAME = headers
+PCH_FILE = "$(INTDIR)\$(PCH_NAME).pch"
+
+LINK_OBJS = \
+	"$(INTDIR)\sqlite.obj" \
+	"$(INTDIR)\cache.obj" \
+	"$(INTDIR)\cddrv.obj" \
+	"$(INTDIR)\char_width.obj" \
+	"$(INTDIR)\clipboard.obj" \
+	"$(INTDIR)\cmdline.obj" \
+	"$(INTDIR)\codepage_selection.obj" \
+	"$(INTDIR)\colormix.obj" \
+	"$(INTDIR)\common.tests.obj" \
+	"$(INTDIR)\components.obj" \
+	"$(INTDIR)\config.obj" \
+	"$(INTDIR)\configdb.obj" \
+	"$(INTDIR)\console.obj" \
+	"$(INTDIR)\console_session.obj" \
+	"$(INTDIR)\constitle.obj" \
+	"$(INTDIR)\copy.obj" \
+	"$(INTDIR)\copy_progress.obj" \
+	"$(INTDIR)\ctrlobj.obj" \
+	"$(INTDIR)\cvtname.obj" \
+	"$(INTDIR)\datetime.obj" \
+	"$(INTDIR)\delete.obj" \
+	"$(INTDIR)\desktop.obj" \
+	"$(INTDIR)\dialog.obj" \
+	"$(INTDIR)\dirinfo.obj" \
+	"$(INTDIR)\dirmix.obj" \
+	"$(INTDIR)\diskmenu.obj" \
+	"$(INTDIR)\dizlist.obj" \
+	"$(INTDIR)\dlgedit.obj" \
+	"$(INTDIR)\drivemix.obj" \
+	"$(INTDIR)\edit.obj" \
+	"$(INTDIR)\editcontrol.obj" \
+	"$(INTDIR)\editor.obj" \
+	"$(INTDIR)\eject.obj" \
+	"$(INTDIR)\elevation.obj" \
+	"$(INTDIR)\encoding.obj" \
+	"$(INTDIR)\eol.obj" \
+	"$(INTDIR)\exception.obj" \
+	"$(INTDIR)\exception_handler.obj" \
+	"$(INTDIR)\exception_handler_test.obj" \
+	"$(INTDIR)\execute.obj" \
+	"$(INTDIR)\FarDlgBuilder.obj" \
+	"$(INTDIR)\farversion.obj" \
+	"$(INTDIR)\fastfind.obj" \
+	"$(INTDIR)\file_io.obj" \
+	"$(INTDIR)\fileattr.obj" \
+	"$(INTDIR)\fileedit.obj" \
+	"$(INTDIR)\filefilter.obj" \
+	"$(INTDIR)\filefilterparams.obj" \
+	"$(INTDIR)\filelist.obj" \
+	"$(INTDIR)\filemasks.obj" \
+	"$(INTDIR)\fileowner.obj" \
+	"$(INTDIR)\filepanels.obj" \
+	"$(INTDIR)\filestr.obj" \
+	"$(INTDIR)\filesystemwatcher.obj" \
+	"$(INTDIR)\filetype.obj" \
+	"$(INTDIR)\fileview.obj" \
+	"$(INTDIR)\findfile.obj" \
+	"$(INTDIR)\flink.obj" \
+	"$(INTDIR)\fnparce.obj" \
+	"$(INTDIR)\format.obj" \
+	"$(INTDIR)\foldtree.obj" \
+	"$(INTDIR)\global.obj" \
+	"$(INTDIR)\grabber.obj" \
+	"$(INTDIR)\headers.obj" \
+	"$(INTDIR)\help.obj" \
+	"$(INTDIR)\hilight.obj" \
+	"$(INTDIR)\history.obj" \
+	"$(INTDIR)\hmenu.obj" \
+	"$(INTDIR)\hotplug.obj" \
+	"$(INTDIR)\imports.obj"\
+	"$(INTDIR)\infolist.obj" \
+	"$(INTDIR)\interf.obj" \
+	"$(INTDIR)\keybar.obj" \
+	"$(INTDIR)\keyboard.obj" \
+	"$(INTDIR)\language.obj" \
+	"$(INTDIR)\locale.obj" \
+	"$(INTDIR)\lockscrn.obj" \
+	"$(INTDIR)\log.obj" \
+	"$(INTDIR)\macro.obj" \
+	"$(INTDIR)\main.obj" \
+	"$(INTDIR)\manager.obj" \
+	"$(INTDIR)\map_file.obj" \
+	"$(INTDIR)\memcheck.obj" \
+	"$(INTDIR)\menubar.obj" \
+	"$(INTDIR)\message.obj" \
+	"$(INTDIR)\mix.obj" \
+	"$(INTDIR)\mkdir.obj" \
+	"$(INTDIR)\modal.obj" \
+	"$(INTDIR)\namelist.obj" \
+	"$(INTDIR)\network.obj" \
+	"$(INTDIR)\new_handler.obj" \
+	"$(INTDIR)\notification.obj" \
+	"$(INTDIR)\nsUniversalDetectorEx.obj" \
+	"$(INTDIR)\palette.obj" \
+	"$(INTDIR)\panel.obj" \
+	"$(INTDIR)\panelmix.obj" \
+	"$(INTDIR)\pathmix.obj" \
+	"$(INTDIR)\pipe.obj" \
+	"$(INTDIR)\platform.obj" \
+	"$(INTDIR)\platform.chrono.obj" \
+	"$(INTDIR)\platform.com.obj" \
+	"$(INTDIR)\platform.concurrency.obj" \
+	"$(INTDIR)\platform.env.obj" \
+	"$(INTDIR)\platform.fs.obj" \
+	"$(INTDIR)\platform.memory.obj" \
+	"$(INTDIR)\platform.process.obj" \
+	"$(INTDIR)\platform.reg.obj" \
+	"$(INTDIR)\platform.security.obj" \
+	"$(INTDIR)\platform.version.obj" \
+	"$(INTDIR)\plclass.obj" \
+	"$(INTDIR)\plist.obj" \
+	"$(INTDIR)\plugapi.obj" \
+	"$(INTDIR)\PluginA.obj" \
+	"$(INTDIR)\plugins.obj" \
+	"$(INTDIR)\plugsettings.obj" \
+	"$(INTDIR)\poscache.obj" \
+	"$(INTDIR)\preservelongname.obj" \
+	"$(INTDIR)\preservestyle.obj" \
+	"$(INTDIR)\print.obj" \
+	"$(INTDIR)\processname.obj" \
+	"$(INTDIR)\qview.obj" \
+	"$(INTDIR)\refreshwindowmanager.obj" \
+	"$(INTDIR)\RegExp.obj" \
+	"$(INTDIR)\savescr.obj" \
+	"$(INTDIR)\scantree.obj" \
+	"$(INTDIR)\scrbuf.obj" \
+	"$(INTDIR)\scrobj.obj" \
+	"$(INTDIR)\scrsaver.obj" \
+	"$(INTDIR)\setattr.obj" \
+	"$(INTDIR)\setcolor.obj" \
+	"$(INTDIR)\shortcuts.obj" \
+	"$(INTDIR)\sqlitedb.obj" \
+	"$(INTDIR)\stddlg.obj" \
+	"$(INTDIR)\string_sort.obj" \
+	"$(INTDIR)\string_utils.obj" \
+	"$(INTDIR)\strmix.obj" \
+	"$(INTDIR)\tinyxml.obj" \
+	"$(INTDIR)\taskbar.obj" \
+	"$(INTDIR)\testing.obj" \
+	"$(INTDIR)\tracer.obj" \
+	"$(INTDIR)\treelist.obj" \
+	"$(INTDIR)\tvar.obj" \
+	"$(INTDIR)\usermenu.obj" \
+	"$(INTDIR)\viewer.obj" \
+	"$(INTDIR)\vmenu.obj" \
+	"$(INTDIR)\vmenu2.obj" \
+	"$(INTDIR)\window.obj" \
+	"$(INTDIR)\wm_listener.obj" \
+	"$(INTDIR)\xlat.obj" \
+!if "$(BUILD_PLATFORM)" == "X86" && !defined(DISABLE_WOW64_HOOK)
+	"$(INTDIR)\hook_wow64.obj" \
+!endif
+!ifndef LINK_ULINK
+!if "$(BUILD_PLATFORM)" == "X86" || "$(BUILD_PLATFORM)" == "AMD64"
+	"$(INTDIR)\vc_crt_fix.obj" \
+!endif
+	"$(INTDIR)\vc_crt_fix_impl.obj" \
+!else
+	"$(INTDIR)\vc_crt_fix_ulink.obj"
+!endif
+
+TEST_OBJS = "$(INTDIR)\api_test_c.testobj" "$(INTDIR)\api_test_c++.testobj"
+
+ADDINCLUDE=/I $(BOOTSTRAPDIR)..
+
+CPPFLAGS = $(CPPFLAGS) $(ADDINCLUDE)
+RFLAGS = $(RFLAGS) $(ADDINCLUDE) /fo"$(RES_FILE)"
+LINKFLAGS = $(LINKFLAGS) /out:"$(OUTDIR)\Far.exe"
+
+!ifdef ENABLE_TESTS
+CPPFLAGS = $(CPPFLAGS) /D "ENABLE_TESTS"
+!endif
+
+ALL: AllDirs lng depfile include docs $(TEST_OBJS)
+	$(MAKE) /nologo /f makefile_vc build USEDEPS=1
+
+.PHONY: lng
+lng: $(BOOTSTRAPDIR)farlang.templ
+	@echo Generating language files
+	tools\lng.generator.exe -nc -i "$(BOOTSTRAPDIR)lang.ini" -oh "$(BOOTSTRAPDIR)" -ol "$(OUTDIR)" "$(BOOTSTRAPDIR)farlang.templ"
+
+.PHONY: depfile
+depfile:
+	@echo Rebuilding dependencies...
+	set BOOTSTRAPDIR=$(BOOTSTRAPDIR)
+	set FORCEINCLUDELIST=$(PCH_NAME).hpp memcheck.hpp
+	scripts\list_deps.cmd | $(GAWK) -f scripts\mkdep.awk - > $(DEPFILE)
+
+.PHONY: include
+include: \
+	"$(FARINCLUDE)\PluginW.pas" \
+	"$(FARINCLUDE)\FarColorW.pas" \
+	"$(FARINCLUDE)\farcolor.hpp" \
+	"$(FARINCLUDE)\plugin.hpp" \
+	"$(FARINCLUDE)\vc_crt_fix_impl.cpp" \
+	"$(FARINCLUDE)\vc_crt_fix.asm" \
+	"$(FARINCLUDE)\vc_crt_fix_ulink.cpp"
+
+HLFS = \
+	"$(OUTDIR)\FarEng.hlf" \
+	"$(OUTDIR)\FarRus.hlf" \
+	"$(OUTDIR)\FarHun.hlf" \
+	"$(OUTDIR)\FarPol.hlf" \
+	"$(OUTDIR)\FarGer.hlf" \
+	"$(OUTDIR)\FarUkr.hlf" \
+	"$(OUTDIR)\FarCze.hlf" \
+	"$(OUTDIR)\FarSky.hlf" \
+
+.PHONY: docs
+docs: \
+	$(HLFS) \
+	"$(OUTDIR)\File_id.diz"\
+	"$(OUTDIR)\Far.exe.example.ini"
+
+.PHONY: build
+build: "$(OUTDIR)\Far.exe"
+
+.PHONY: AllDirs
+AllDirs:
+	if not exist "$(OUTDIR)\" mkdir "$(OUTDIR)"
+	if not exist "$(FARINCLUDE)\" mkdir "$(FARINCLUDE)"
+	if not exist "$(INTDIR)\" mkdir "$(INTDIR)"
+	if not exist "$(BOOTSTRAPDIR)" mkdir "$(BOOTSTRAPDIR)"
+
+"$(OUTDIR)\Far.exe": $(PCH_FILE) $(LINK_OBJS) $(RES_FILE) $(BOOTSTRAPDIR)copyright.inc $(BOOTSTRAPDIR)farversion.inc
+	@echo Linking $@
+!ifndef LINK_ULINK
+	$(LINK) @<<
+	$(LINKFLAGS) $(LINK_OBJS) $(RES_FILE) $(LINK_LIBS)
+<<
+!else
+	$(ULINK) +- @+<<
+	$(ULINKFLAGS) $(LINK_OBJS)
+	,"$(OUTDIR)\Far.exe","$(OUTDIR)\Far.map"
+	,$(LINK_LIBS)
+	,far.def,"$(RES_FILE)"
+<<
+!endif
+!if "$(BUILD_PLATFORM)" == "X86" || "$(BUILD_PLATFORM)" == "AMD64"
+	@echo Fixing subsystem version
+	editbin /nologo /subsystem:console,$(OS_VERSION) /osversion:$(OS_VERSION) $(OUTDIR)\Far.exe > $(INTDIR)\version_fix.log
+!endif
+!ifdef ENABLE_TESTS
+	@echo Running unit tests
+	$(OUTDIR)\Far.exe /service:test
+!endif
+
+$(PCH_FILE): $(PCH_NAME).cpp $(PCH_NAME).hpp
+	@echo Making precompiled headers
+	$(CPP) $(CPPFLAGS) $(PCH_NAME).cpp /Yc$(PCH_NAME).hpp /Fp$(PCH_FILE)
+
+$(INTDIR)\vc_crt_fix_impl.obj: vc_crt_fix_impl.cpp
+	$(CPP) $(CPPFLAGS) /Zc:threadSafeInit- vc_crt_fix_impl.cpp
+
+$(INTDIR)\vc_crt_fix_ulink.obj: vc_crt_fix_ulink.cpp
+	$(CPP) $(CPPFLAGS) vc_crt_fix_ulink.cpp
+
+!ifdef NOBATCH
+.c{$(INTDIR)}.obj:
+	@echo $(@B).c
+!else
+.c{$(INTDIR)}.obj::
+!endif
+	$(CPP) @<<
+	$(CPPFLAGS) $<
+<<
+
+!ifdef NOBATCH
+.cpp{$(INTDIR)}.obj:
+	@echo $(@B).cpp
+!else
+.cpp{$(INTDIR)}.obj::
+!endif
+	$(CPP) @<<
+	$(CPPFLAGS) /Yu$(PCH_NAME).hpp /Fp$(PCH_FILE) /FI $(PCH_NAME).hpp /FI memcheck.hpp $<
+<<
+
+#Do not use $(AS) here - nmake incorrectly substitutes ml64 when compiling in amd64_x86 environment
+.asm{$(INTDIR)}.obj:
+	$(MASM) $(AFLAGS) $<
+
+$(RES_FILE): far.rc $(BOOTSTRAPDIR)far.rc.inc $(BOOTSTRAPDIR)Far.exe.manifest Far.ico Far.red.ico Far.black.ico Far.hack.ico Far.mono.ico Far.msg.ico
+	@echo far.rc
+	$(RC) $(RFLAGS) far.rc
+
+!ifdef USEDEPS
+!include "$(DEPFILE)"
+!endif
+
+$(INTDIR)\api_test_c.testobj: $(FARINCLUDE)/plugin.hpp $(FARINCLUDE)/farcolor.hpp api_test.c
+	@echo Testing C plugin API
+	$(CPP) /nologo /c /Fo"$@" /TC api_test.c
+
+$(INTDIR)\api_test_c++.testobj: $(FARINCLUDE)/plugin.hpp $(FARINCLUDE)/farcolor.hpp api_test.c
+	@echo Testing C++ plugin API
+	$(CPP) /nologo /c /Fo"$@" /TP api_test.c
+
+MSG=@echo Generating $@
+
+VERSION_DEPS=farversion.m4 tools.m4 vbuild.m4
+
+$(BOOTSTRAPDIR)Far.exe.manifest \
+$(BOOTSTRAPDIR)copyright.inc \
+$(BOOTSTRAPDIR)farversion.inc \
+$(BOOTSTRAPDIR)farlang.templ \
+$(BOOTSTRAPDIR)far.rc.inc \
+$(OUTDIR)\File_id.diz: $(@F).m4 $(VERSION_DEPS)
+	$(MSG)
+	$(M4) $(@F).m4 > $@
+
+$(HLFS): $(VERSION_DEPS)
+
+.SUFFIXES: .hlf.m4
+.hlf.m4{$(OUTDIR)}.hlf:
+	$(MSG)
+	$(GAWK) -f scripts\mkhlf.awk $< | $(M4) > $@
+
+$(OUTDIR)\Far.exe.example.ini: $(@F)
+	$(MSG)
+	copy /Y $(@F) $@ > nul
+
+$(FARINCLUDE)\vc_crt_fix_impl.cpp \
+$(FARINCLUDE)\plugin.hpp \
+$(FARINCLUDE)\farcolor.hpp \
+$(FARINCLUDE)\PluginW.pas \
+$(FARINCLUDE)\FarColorW.pas: $(@F) $(VERSION_DEPS)
+	$(MSG)
+	$(M4) -DINPUT=$(@F) headers.m4 > $@
+
+$(FARINCLUDE)\vc_crt_fix.asm \
+$(FARINCLUDE)\vc_crt_fix_ulink.cpp: $(@F)
+	$(MSG)
+	copy /Y $(@F) $@ > nul
+
+.PHONY: CLEAN
+CLEAN:
+	@echo Cleaning
+	for %%i in (\
+	"$(BOOTSTRAPDIR)"\
+	"$(CODDIR)"\
+	"$(INTDIR)"\
+	"$(OUTDIR)\Far.exe"\
+	"$(OUTDIR)\Far.exp"\
+	"$(OUTDIR)\Far.lib"\
+	"$(OUTDIR)\Far.map"\
+	"$(OUTDIR)\Far.pdb"\
+	"$(OUTDIR)\*.hlf"\
+	"$(OUTDIR)\*.lng"\
+	"$(OUTDIR)\File_id.diz"\
+	"$(OUTDIR)\Far.exe.example.ini"\
+	"Include\*.*"\
+	) do @if exist %%i del /q /f %%i
+
+!ifdef INSTALLDIR
+
+HPPINSTDIR=$(INSTALLDIR)\PluginSDK\Headers.c
+PASINSTDIR=$(INSTALLDIR)\PluginSDK\Headers.pas
+
+.PHONY: install
+install: instdir
+	@echo Installing to $(INSTALLDIR)
+	@copy /Y "$(FARINCLUDE)\*.hpp" "$(HPPINSTDIR)\" > nul
+	@copy /Y "$(FARINCLUDE)\..\..\plugins\common\unicode\DlgBuilder.hpp" "$(HPPINSTDIR)\" > nul
+	@copy /Y "$(FARINCLUDE)\*.pas" "$(PASINSTDIR)\" > nul
+	for %%i in (changelog "$(OUTDIR)\Far.*" "$(OUTDIR)\*.lng" "$(OUTDIR)\File_id.diz" "$(OUTDIR)\*.hlf" "$(OUTDIR)\Far.exe.example.ini") do @copy /Y %%i "$(INSTALLDIR)\" > nul
+
+.PHONY: instdir
+instdir:
+	@if not exist "$(INSTALLDIR)\$(NULL)" mkdir "$(INSTALLDIR)"
+	@if not exist "$(HPPINSTDIR)\$(NULL)" mkdir "$(HPPINSTDIR)"
+	@if not exist "$(PASINSTDIR)\$(NULL)" mkdir "$(PASINSTDIR)"
+
+!endif

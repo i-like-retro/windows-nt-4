@@ -1,0 +1,564 @@
+﻿/*
+language.cpp
+
+Работа с lng файлами
+*/
+/*
+Copyright © 1996 Eugene Roshal
+Copyright © 2000 Far Group
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of the authors may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+// BUGBUG
+#include "platform.headers.hpp"
+
+// Self:
+#include "language.hpp"
+
+// Internal:
+#include "lang.hpp"
+#include "vmenu.hpp"
+#include "vmenu2.hpp"
+#include "manager.hpp"
+#include "message.hpp"
+#include "config.hpp"
+#include "filestr.hpp"
+#include "interf.hpp"
+#include "string_utils.hpp"
+#include "pathmix.hpp"
+#include "exception.hpp"
+#include "global.hpp"
+#include "log.hpp"
+
+// Platform:
+#include "platform.fs.hpp"
+
+// Common:
+#include "common/function_traits.hpp"
+#include "common/scope_exit.hpp"
+#include "common/string_utils.hpp"
+
+// External:
+#include "format.hpp"
+
+//----------------------------------------------------------------------------
+
+static const auto LangFileMask = L"*.lng"sv;
+
+std::tuple<os::fs::file, string, uintptr_t> OpenLangFile(string_view const Path, string_view const Mask, string_view const Language)
+{
+	FN_RETURN_TYPE(OpenLangFile) CurrentFileData, EnglishFileData;
+
+	for (const auto& FindData: os::fs::enum_files(path::join(Path, Mask)))
+	{
+		const auto CurrentFileName = path::join(Path, FindData.FileName);
+
+		auto& [CurrentFile, CurrentLngName, CurrentCodepage] = CurrentFileData;
+
+		CurrentFile = os::fs::file(CurrentFileName, FILE_READ_DATA, FILE_SHARE_READ, nullptr, OPEN_EXISTING);
+		if (!CurrentFile)
+			continue;
+
+		CurrentCodepage = GetFileCodepage(CurrentFile, encoding::codepage::oem(), nullptr, false);
+
+		if (!GetLangParam(CurrentFile, L"Language"sv, CurrentLngName, CurrentCodepage))
+			continue;
+
+		const auto [LngName, LngDescription] = split(CurrentLngName, L',');
+		if (!LngDescription.empty())
+			CurrentLngName.resize(LngName.size());
+
+		if (equal_icase(CurrentLngName, Language))
+			return CurrentFileData;
+
+		if (equal_icase(CurrentLngName, L"English"sv))
+		{
+			EnglishFileData = std::move(CurrentFileData);
+		}
+	}
+
+	if (std::get<0>(EnglishFileData))
+		return EnglishFileData;
+
+	return CurrentFileData;
+}
+
+
+bool GetLangParam(const os::fs::file& LangFile, string_view const ParamName, string& Param, uintptr_t CodePage)
+{
+	const auto strFullParamName = concat(L'.', ParamName);
+	const auto CurFilePos = LangFile.GetPointer();
+	SCOPE_EXIT{ LangFile.SetPointer(CurFilePos, nullptr, FILE_BEGIN); };
+
+	os::fs::filebuf StreamBuffer(LangFile, std::ios::in);
+	std::istream Stream(&StreamBuffer);
+	Stream.exceptions(Stream.badbit | Stream.failbit);
+
+	for (const auto& i: enum_lines(Stream, CodePage))
+	{
+		if (starts_with_icase(i.Str, strFullParamName))
+		{
+			const auto EqPos = i.Str.find(L'=', strFullParamName.size());
+			if (EqPos == string::npos)
+				continue;
+
+			Param = i.Str.substr(EqPos + 1);
+			inplace::trim_right(Param);
+			return true;
+		}
+
+		if (starts_with(i.Str, L'"'))
+		{
+			// '"' indicates some meaningful string.
+			// Parameters can be only in the header, no point to go deeper
+			return false;
+		}
+	}
+
+	return false;
+}
+
+static bool SelectLanguage(bool HelpLanguage, string& Dest)
+{
+	lng Title;
+	string_view Mask;
+
+	if (HelpLanguage)
+	{
+		Title = lng::MHelpLangTitle;
+		Mask=Global->HelpFileMask;
+	}
+	else
+	{
+		Title = lng::MLangTitle;
+		Mask=LangFileMask;
+	}
+
+	const auto LangMenu = VMenu2::create(msg(Title), {}, ScrY - 4);
+	LangMenu->SetMenuFlags(VMENU_WRAPMODE);
+	LangMenu->SetPosition({ ScrX / 2 - 8 + 5 * HelpLanguage, ScrY / 2 - 4 + 2 * HelpLanguage, 0, 0 });
+
+	for (const auto& FindData: os::fs::enum_files(path::join(Global->g_strFarPath, Mask)))
+	{
+		const os::fs::file LangFile(path::join(Global->g_strFarPath, FindData.FileName), FILE_READ_DATA, FILE_SHARE_READ, nullptr, OPEN_EXISTING);
+		if (!LangFile)
+			continue;
+
+		const auto Codepage = GetFileCodepage(LangFile, encoding::codepage::oem(), nullptr, false);
+
+		string LangParamValue;
+		if (!GetLangParam(LangFile, L"Language"sv, LangParamValue, Codepage))
+			continue;
+
+		string strEntryName;
+		if (HelpLanguage && (
+			GetLangParam(LangFile, L"PluginContents"sv, strEntryName, Codepage) ||
+			GetLangParam(LangFile, L"DocumentContents"sv, strEntryName, Codepage)
+		))
+			continue;
+
+		const auto [LangName, LangDescription] = split(LangParamValue, L',');
+		MenuItemEx LangMenuItem(!LangDescription.empty()? LangDescription : LangName);
+
+		// No duplicate languages
+		if (LangMenu->FindItem(0, LangMenuItem.Name, LIFIND_EXACTMATCH) != -1)
+			continue;
+
+		LangMenuItem.SetSelect(equal_icase(Dest, LangName));
+		LangMenuItem.ComplexUserData = string(LangName);
+		LangMenu->AddItem(LangMenuItem);
+	}
+
+	LangMenu->AssignHighlights();
+	LangMenu->Run();
+
+	if (LangMenu->GetExitCode()<0)
+		return false;
+
+	Dest = *LangMenu->GetComplexUserDataPtr<string>();
+	return true;
+}
+
+bool SelectInterfaceLanguage(string& Dest) {return SelectLanguage(false, Dest);}
+bool SelectHelpLanguage(string& Dest) {return SelectLanguage(true, Dest);}
+
+static wchar_t extract(string_view::const_iterator& Iterator, string_view::const_iterator const End)
+{
+	switch (*Iterator)
+	{
+	case L'\\':
+		if (++Iterator == End)
+			return L'\\';
+
+		switch (*Iterator)
+		{
+		case L'\\': return L'\\';
+		case L'"':  return L'"';
+		case L'n':  return L'\n';
+		case L'r':  return L'\r';
+		case L'b':  return L'\b';
+		case L't':  return L'\t';
+
+		default:
+			--Iterator;
+			return L'\\';
+		}
+
+	case L'"':
+		if (++Iterator != End && *Iterator != L'"')
+			--Iterator;
+		return L'"';
+
+	default:
+		return *Iterator;
+	}
+}
+
+static string ConvertString(const string_view Src)
+{
+	const auto SpecialPos = Src.find_first_of(L"\\\""sv);
+	if (SpecialPos == Src.npos)
+		return string(Src);
+
+	string Result;
+	Result.reserve(Src.size());
+
+	Result = Src.substr(0, SpecialPos);
+
+	for (auto i = Src.begin() + SpecialPos, End = Src.end(); i != End; ++i)
+	{
+		Result.push_back(extract(i, End));
+		if (i == End)
+			break;
+	}
+
+	return Result;
+}
+
+enum class lng_line_type
+{
+	none,
+	label,
+	text,
+	both
+};
+
+static lng_line_type parse_lng_line(const string_view str, bool ParseLabels, string_view& Label, string_view& Data)
+{
+	Label = {};
+	Data = {};
+
+	//-- "Text"
+	if (starts_with(str, L'"'))
+	{
+		Data = str.substr(1, str.size() - (ends_with(str, L'"')? 2 : 1));
+		return lng_line_type::text;
+	}
+
+	//-- //[Label]
+	if (ParseLabels)
+	{
+		const auto Prefix = L"//["sv, Suffix = L"]"sv;
+		if (starts_with(str, Prefix) && ends_with(str, Suffix))
+		{
+			Label = str.substr(Prefix.size(), str.size() - Prefix.size() - Suffix.size());
+			return lng_line_type::label;
+		}
+	}
+
+	//-- MLabel="Text"
+	if (ParseLabels && ends_with(str, L'"') && std::iswalpha(str.front()))
+	{
+		auto [Name, Value] = split(str);
+		inplace::trim(Name);
+		inplace::trim(Value);
+
+		if (!Name.empty() && Value.size() > 1 && starts_with(Value, L'"'))
+		{
+			Label = Name;
+			Data = Value.substr(1, Value.size() - 2);
+			return lng_line_type::both;
+		}
+	}
+
+	return lng_line_type::none;
+}
+
+class language_data final: public i_language_data
+{
+public:
+	std::unique_ptr<i_language_data> create() override { return std::make_unique<language_data>(); }
+
+	void reserve(size_t Size) override { return m_Messages.reserve(Size); }
+	void add(string&& Str) override { m_Messages.emplace_back(std::move(Str)); }
+	void set_at(size_t Index, string&& Str) override { m_Messages[Index] = std::move(Str); }
+	size_t size() const override { return m_Messages.size(); }
+
+	const string& at(size_t Index) const { return m_Messages[Index]; }
+
+private:
+	std::vector<string> m_Messages;
+};
+
+static void LoadCustomStrings(string_view const FileName, unordered_string_map<string>& Strings)
+{
+	const os::fs::file CustomFile(FileName, FILE_READ_DATA, FILE_SHARE_READ, nullptr, OPEN_EXISTING);
+	if (!CustomFile)
+		return;
+
+	const auto CustomFileCodepage = GetFileCodepage(CustomFile, encoding::codepage::oem(), nullptr, false);
+
+	string SavedLabel;
+
+	os::fs::filebuf StreamBuffer(CustomFile, std::ios::in);
+	std::istream Stream(&StreamBuffer);
+	Stream.exceptions(Stream.badbit | Stream.failbit);
+
+	const auto LastSize = Strings.size();
+
+	for (const auto& i: enum_lines(Stream, CustomFileCodepage))
+	{
+		string_view Label, Text;
+		switch (parse_lng_line(trim(i.Str), true, Label, Text))
+		{
+		case lng_line_type::label:
+			SavedLabel = Label;
+			break;
+
+		case lng_line_type::text:
+			Strings.emplace(std::move(SavedLabel), ConvertString(Text));
+			SavedLabel.clear();
+			break;
+
+		case lng_line_type::both:
+			Strings.emplace(Label, ConvertString(Text));
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	LOGINFO(L"Loaded {} strings from {}"sv, Strings.size() - LastSize, FileName);
+}
+
+void language::load(string_view const Path, string_view const Language, int CountNeed)
+{
+	SCOPED_ACTION(os::last_error_guard);
+
+	auto Data = m_Data->create();
+
+	const auto [LangFile, LangFileName, LangFileCodePage] = OpenLangFile(Path, LangFileMask, Language);
+	if (!LangFile)
+	{
+		throw MAKE_FAR_KNOWN_EXCEPTION(format(FSTR(L"Cannot find any language files in \"{}\""sv), Path));
+	}
+
+	Data->m_FileName = LangFile.GetName();
+
+	if (CountNeed != -1)
+	{
+		Data->reserve(CountNeed);
+	}
+
+	// try to load Far<LNG>.lng.custom file(s)
+	unordered_string_map<string> CustomStrings;
+
+	const auto CustomLngInSameDir = Data->m_FileName + L".custom"sv;
+	const auto CustomLngInProfileDir = path::join(Global->Opt->ProfilePath, ExtractFileName(CustomLngInSameDir));
+
+	// LoadCustomStrings uses map.emplace (does not overwrite existing entires) so the high priority location should come first.
+	// If for whatever reason it will use insert_or_assign one day - change the order here.
+	LoadCustomStrings(CustomLngInProfileDir, CustomStrings);
+	LoadCustomStrings(CustomLngInSameDir, CustomStrings);
+
+	const auto LoadLabels = !CustomStrings.empty();
+
+	string SavedLabel;
+
+	os::fs::filebuf StreamBuffer(LangFile, std::ios::in);
+	std::istream Stream(&StreamBuffer);
+	Stream.exceptions(Stream.badbit | Stream.failbit);
+
+	for (const auto& i: enum_lines(Stream, LangFileCodePage))
+	{
+		string_view Label, Text;
+		switch (parse_lng_line(trim(i.Str), LoadLabels, Label, Text))
+		{
+		case lng_line_type::label:
+			SavedLabel = Label;
+			break;
+
+		case lng_line_type::text:
+			if (LoadLabels)
+			{
+				const auto Iterator = CustomStrings.find(SavedLabel);
+				if (Iterator != CustomStrings.cend())
+				{
+					Text = Iterator->second;
+				}
+				SavedLabel.clear();
+			}
+
+			Data->add(ConvertString(Text));
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	//   Проведем проверку на количество строк в LNG-файлах
+	if (CountNeed != -1 && static_cast<size_t>(CountNeed) != Data->size())
+	{
+		throw MAKE_FAR_KNOWN_EXCEPTION(format(
+			FSTR(L"Language file \"{}\" is malformed: expected {} items, found {}"sv),
+			Data->m_FileName,
+			CountNeed,
+			Data->size()));
+	}
+
+	m_Data = std::move(Data);
+}
+
+bool i_language_data::validate(size_t MsgId) const
+{
+	if (MsgId < size())
+		return true;
+
+	if (!Global || !Global->WindowManager || Global->WindowManager->ManagerIsDown())
+		return false;
+
+	if (Message(MSG_WARNING,
+		msg(lng::MError),
+		{
+			msg(lng::MBadLanguageFile),
+			m_FileName,
+			format(msg(lng::MLanguageStringNotFound), MsgId)
+		},
+		{ lng::MOk, lng::MQuit }) == message_result::second_button)
+	{
+		Global->WindowManager->ExitMainLoop(FALSE);
+	}
+
+	return false;
+}
+
+plugin_language::plugin_language(string_view const Path, string_view const Language):
+	language(std::make_unique<language_data>())
+{
+	load(Path, Language);
+}
+
+const wchar_t* plugin_language::Msg(intptr_t Id) const
+{
+	return m_Data->validate(Id)? static_cast<const language_data&>(*m_Data).at(Id).c_str() : L"";
+}
+
+
+far_language::far_language():
+	language(std::make_unique<language_data>())
+{
+}
+
+bool far_language::is_loaded() const
+{
+	return static_cast<const language_data&>(*m_Data).size() != 0;
+}
+
+const string& far_language::Msg(lng Id) const
+{
+	return static_cast<const language_data&>(*m_Data).at(static_cast<size_t>(Id));
+}
+
+
+const string& msg(lng Id)
+{
+	return far_language::instance().Msg(Id);
+}
+
+#ifdef ENABLE_TESTS
+
+#include "testing.hpp"
+
+TEST_CASE("language.parser")
+{
+	static const struct
+	{
+		string_view Line, Label, Data;
+		lng_line_type Result;
+	}
+	Tests[]
+	{
+		{ L"\"Text\""sv,      {},          L"Text"sv,  lng_line_type::text,  },
+		{ L"\"Text"sv,        {},          L"Text"sv,  lng_line_type::text,  },
+		{ L"//[Label]"sv,     L"Label"sv,  {},         lng_line_type::label, },
+		{ L"//[Lab"sv,        {},          {},         lng_line_type::none,  },
+		{ L"foo = \"bar\""sv, L"foo"sv,    L"bar"sv,   lng_line_type::both,  },
+		{ L"foo=\"bar"sv,     {},          {},         lng_line_type::none,  },
+		{ L"foo=bar\""sv,     {},          {},         lng_line_type::none,  },
+		{ L"foo=bar"sv,       {},          {},         lng_line_type::none,  },
+		{ L"foo="sv,          {},          {},         lng_line_type::none,  },
+		{ L"foo"sv,           {},          {},         lng_line_type::none,  },
+	};
+
+	for (const auto& i: Tests)
+	{
+		string_view Label, Data;
+		const auto Result = parse_lng_line(i.Line, true, Label, Data);
+		REQUIRE(i.Result == Result);
+		REQUIRE(i.Label == Label);
+		REQUIRE(i.Data == Data);
+	}
+}
+
+TEST_CASE("language.escape")
+{
+	static const struct
+	{
+		string_view Str, Result;
+	}
+	Tests[]
+	{
+		{ {},          {},         },
+		{ L"y"sv,      L"y"sv,     },
+		{ L"\\y"sv,    L"\\y"sv,   },
+		{ L"\\"sv,     L"\\"sv,    },
+		{ L"\\x"sv,    L"\\x"sv,   },
+		{ L"\\r"sv,    L"\r"sv,    },
+		{ L"\\n"sv,    L"\n"sv,    },
+		{ L"\\t"sv,    L"\t"sv,    },
+		{ L"\""sv,     L"\""sv,    },
+		{ L"\\\\"sv,   L"\\"sv,    },
+		{ L"\\b"sv,    L"\b"sv,    },
+	};
+
+	for (const auto& i: Tests)
+	{
+		const auto Result = ConvertString(i.Str);
+		REQUIRE(i.Result == Result);
+	}
+}
+#endif

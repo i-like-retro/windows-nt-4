@@ -1,0 +1,86 @@
+NAME = luamacro
+
+LUAVER = 51
+
+SRCS = \
+	luafar/luaplug.c \
+
+DOCS = \
+	luamacro.example.ini \
+
+USERC = \
+	-Iluasdk/include \
+	-DEXPORT_OPEN \
+	-DEXPORT_CONFIGURE \
+	-DEXPORT_PROCESSEDITOREVENT \
+	-DEXPORT_PROCESSVIEWEREVENT \
+	-DEXPORT_PROCESSDIALOGEVENT \
+	-DEXPORT_PROCESSEDITORINPUT \
+	-DEXPORT_PROCESSCONSOLEINPUT \
+	-DEXPORT_ANALYSE \
+	-DEXPORT_CLOSEPANEL \
+	-DEXPORT_COMPARE \
+	-DEXPORT_DELETEFILES \
+	-DEXPORT_GETFILES \
+	-DEXPORT_GETFINDDATA \
+	-DEXPORT_GETOPENPANELINFO \
+	-DEXPORT_MAKEDIRECTORY \
+	-DEXPORT_PROCESSHOSTFILE \
+	-DEXPORT_PROCESSPANELEVENT \
+	-DEXPORT_PROCESSPANELINPUT \
+	-DEXPORT_PUTFILES \
+	-DEXPORT_SETDIRECTORY \
+	-DEXPORT_SETFINDLIST \
+	-DEXPORT_GETCONTENTDATA \
+	-DRUN_LUAFAR_INIT \
+
+USERC += \
+	-Wno-cast-align \
+	-Wno-missing-declarations \
+	-Wno-missing-prototypes \
+	-Wno-strict-prototypes \
+
+ifdef CLANG
+USERC += \
+	-Wno-dll-attribute-on-redeclaration \
+	-Wused-but-marked-unused \
+
+endif
+
+USERLIBS = \
+	$(OBJDIR)/luafar3.lib \
+	luasdk/$(DIRBIT)/lua$(LUAVER).lib \
+
+USERTARGETS = \
+	lualib \
+	lualegacy \
+
+DEF_NAME = -
+
+include ../makefile_gcc_def_inc
+include ../makefile_gcc_target_inc
+
+ifndef FAR_WORKDIR
+ifndef DEBUG
+FAR_DIRNAME=Release
+else
+FAR_DIRNAME=Debug
+endif
+FAR_WORKDIR := $(FARDIR)\$(FAR_DIRNAME).$(DIRBIT).gcc
+endif
+
+.PHONY: lualib
+lualib:
+	@$(MAKE) -f makefile_lib_gcc $(MK_FLAGS) DLLDIR=$(FAR_WORKDIR) LUAVER=$(LUAVER)
+
+.PHONY: lualegacy
+lualegacy:
+ifeq ($(DIRBIT),32)
+	@$(MKDIR) $(FAR_WORKDIR)/Legacy
+	@$(CP) luasdk/32/legacy/lua51.dll $(FAR_WORKDIR)/Legacy
+endif
+
+.PHONY: clean
+clean::
+	@$(RM) $(OBJS) $(DEPS) $(DLLDIR)/*
+	@$(MAKE) -f makefile_lib_gcc $(MK_FLAGS) DLLDIR=$(FAR_WORKDIR) clean

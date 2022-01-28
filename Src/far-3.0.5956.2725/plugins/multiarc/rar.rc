@@ -1,0 +1,10 @@
+#pragma code_page(65001)
+
+#include "multiarcversion.hpp"
+
+#define PLUGIN_BUILD 30
+#define PLUGIN_DESC FMTDESCRIPTION
+#define PLUGIN_NAME "rar"
+#define PLUGIN_FILENAME "rar.fmt"
+
+#include <plugin_version.rc>

@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<title>Boolean object states - Macros</title>
+<meta http-equiv="Content-Type" Content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="../../../styles/styles.css">
+</head>
+
+<body>
+
+<h1>Boolean object states</h1>
+<div class="navbar">
+<a href="../../index.html">main</a> |
+<a href="../index.html">Macros</a> |
+<a href="index.html">Macro-language</a>
+</div>
+
+<p>It is allowed to use the following keywords within the <a href="if.html">$If</a> and <a href="while.html">$While</a> conditional expression:
+<table class="cont">
+  <tr class="cont">
+    <th class="cont" width="40%">State</th>
+    <th class="cont" width="60%">Description</th>
+  </tr>
+  <tr class="cont">
+    <th class="cont" width="100%" colspan="2">detection of the current area of execution of the macro
+    command</th>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Shell">Shell</a></td>
+    <td class="cont" width="60%">file panels</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Viewer">Viewer</a></td>
+    <td class="cont" width="60%">internal viewer</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Editor">Editor</a></td>
+    <td class="cont" width="60%">internal editor</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Dialog">Dialog</a></td>
+    <td class="cont" width="60%">dialog boxes</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Search">Search</a></td>
+    <td class="cont" width="60%">quick file search</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Disks">Disks</a></td>
+    <td class="cont" width="60%">drive selection menu</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="MainMenu">MainMenu</a></td>
+    <td class="cont" width="60%">main menu</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Menu">Menu</a></td>
+    <td class="cont" width="60%">other menus</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Help">Help</a></td>
+    <td class="cont" width="60%">help system</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Info">Info</a></td>
+    <td class="cont" width="60%">informational panel</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="QView">QView</a></td>
+    <td class="cont" width="60%">quick view panel</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Tree">Tree</a></td>
+    <td class="cont" width="60%">folder tree panel</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="FindFolder">FindFolder</a></td>
+    <td class="cont" width="60%">folder search panel</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="UserMenu">UserMenu</a></td>
+    <td class="cont" width="60%">user menu</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Other">Other</a></td>
+    <td class="cont" width="60%">screen capturing mode</td>
+  </tr>
+  <tr class="cont">
+    <th class="cont" width="100%" colspan="2">panel object states</th>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Bof">APanel.Bof</a><br>
+    <a name="PPanel.Bof">PPanel.Bof</a></td>
+    <td class="cont" width="60%">true if the current panel item is the first</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Eof">APanel.Eof</a><br>
+    <a name="PPanel.Eof">PPanel.Eof</a></td>
+    <td class="cont" width="60%">true if the current panel item is the last</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Empty">APanel.Empty</a><br>
+    <a name="PPanel.Empty">PPanel.Empty</a></td>
+    <td class="cont" width="60%">true if the panel is empty</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.LFN">APanel.LFN</a><br>
+    <a name="PPanel.LFN">PPanel.LFN</a></td>
+    <td class="cont" width="60%">true if LFN (long file names) is enabled for the panel</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Selected">APanel.Selected</a><br>
+    <a name="PPanel.Selected">PPanel.Selected</a></td>
+    <td class="cont" width="60%">true if there are any files or folders selected on the panel</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Root">APanel.Root</a><br>
+    <a name="PPanel.Root">PPanel.Root</a></td>
+    <td class="cont" width="60%">true if the panel folder is root</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Visible">APanel.Visible</a><br>
+    <a name="PPanel.Visible">PPanel.Visible</a></td>
+    <td class="cont" width="60%">true if the panel is visible</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Plugin">APanel.Plugin</a><br>
+    <a name="PPanel.Plugin">PPanel.Plugin</a></td>
+    <td class="cont" width="60%">true if the panel is a plugin panel</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Folder">APanel.Folder</a><br>
+    <a name="PPanel.Folder">PPanel.Folder</a></td>
+    <td class="cont" width="60%">true if the current element is a folder</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.Left">APanel.Left</a><br>
+    <a name="PPanel.Left">PPanel.Left</a></td>
+    <td class="cont" width="60%">true if the panel is a left panel</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="APanel.FilePanel">APanel.FilePanel</a><br>
+    <a name="PPanel.FilePanel">PPanel.FilePanel</a></td>
+    <td class="cont" width="60%">true if the panel is a file panel</td>
+  </tr>
+  <tr class="cont">
+    <th class="cont" width="100%" colspan="2">command line object states</th>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="CmdLine.Bof">CmdLine.Bof</a></td>
+    <td class="cont" width="60%">true if the cursor is at the beginning of the command line</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="CmdLine.Eof">CmdLine.Eof</a></td>
+    <td class="cont" width="60%">true if the cursor is at the end of the command line</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="CmdLine.Empty">CmdLine.Empty</a></td>
+    <td class="cont" width="60%">true if the command line is empty</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="CmdLine.Selected">CmdLine.Selected</a></td>
+    <td class="cont" width="60%">true if there is a selected block of text within the command line</td>
+  </tr>
+  <tr class="cont">
+    <th class="cont" width="100%" colspan="2">execution context dependent object states</th>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Bof">Bof</a></td>
+    <td class="cont" width="60%">beginning of file is reached in the editor, viewer; in QView/Info/Tree panels -
+      beginning of file is reached in the viewing area, in other "panels" - cursor is at the beginning of the command line;
+      in dialog input lines - cursor is at the beginning of the line; in lists/menus - cursor is set on the first item.</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Eof">Eof</a></td>
+    <td class="cont" width="60%">end of file is reached in the editor, viewer; in QView/Info/Tree panels -
+      end of file is reached in the viewing area, in other "panels" - cursor is at the end of the command line;
+      in dialog input lines - cursor is at the end of the line; in lists/menus - cursor is set on the last item.</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Empty">Empty</a></td>
+    <td class="cont" width="60%">in QView/Info/Tree panels - viewing area is empty, in other panels - command line is empty;
+      dialog input line is empty; in viewer/editor - the file is empty; menu/list is empty.</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Selected">Selected</a></td>
+    <td class="cont" width="60%">a block is selected in dialog input lines, in the editor or viewer, in the viewing are of QView/Info/Tree panels, in other
+      panels - a block is selected in the command line (current area is Shell)</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="IClip">IClip</a></td>
+    <td class="cont" width="60%">true if FAR Manager is working with the internal clipboard (See '<ahref="iclip.html">$IClip</a>')</td>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="Windowed">Windowed</a></td>
+    <td class="cont" width="60%">true if FAR Manager is in the windowed mode</td>
+  </tr>
+  <tr class="cont">
+    <th class="cont" width="100%" colspan="2">state of macro command parameters</th>
+  </tr>
+  <tr class="cont">
+    <td class="cont" width="40%"><a name="DisableOutput">DisableOutput</a></td>
+    <td class="cont" width="60%">true if the screen output is disabled</td>
+  </tr>
+</table>
+
+<h3>Notes</h3>
+<div class=descr>
+<ol>
+<li>It is impossible to use macro-language elements while <a href="../macrokey/record.html">recording</a>
+  a macro in a usual way. Macro-language elements can be added to the sequence only by editing
+  the registry manually or by using special applications or FAR plugins.</li>
+</ol>
+</div>
+
+</body>
+
+</html>

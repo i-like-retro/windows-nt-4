@@ -1,0 +1,36 @@
+ROOTDIR = ..\..\..
+
+NAME = example
+
+PRECOMPILED_HEADER=headers
+
+LINK_OBJS = \
+	$(INTDIR)\module.obj \
+
+!include $(ROOTDIR)\makefile_vc_def_inc
+
+!ifndef BUILD
+
+.PHONY: all
+all: depfile
+	$(MAKE) -nologo -f makefile_vc -$(MAKEFLAGS) all BUILD=1
+
+.PHONY: depfile
+depfile:
+	if not exist "$(INTDIR)\$(NULL)" mkdir "$(INTDIR)"
+	@echo Rebuilding dependencies
+	dir /b *.cpp *.hpp *.rc | "$(FARDIR)\tools\gawk" -f $(FARDIR)\scripts\mkdep.awk - > $(INTDIR)\$(NAME).dep
+
+clean:
+	$(MAKE) -nologo -f makefile_vc -$(MAKEFLAGS) clean BUILD=1
+
+!else
+
+!include $(INTDIR)\$(NAME).dep
+
+
+CPPFLAGS = $(CPPFLAGS)
+
+!include $(ROOTDIR)\makefile_vc_target_inc
+
+!endif

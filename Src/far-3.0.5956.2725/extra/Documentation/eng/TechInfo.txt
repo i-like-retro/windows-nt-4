@@ -1,0 +1,111 @@
+﻿
+                    The Far File and Archive Manager
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                         Technical Information
+                         ~~~~~~~~~~~~~~~~~~~~~
+
+Contents:
+
+I. Far Manager: advanced settings.
+  1.1. General/miscellaneous.
+  1.2. System.
+  1.3. Executor.
+  1.4. Policies.
+  1.5. Interface.
+  1.6. Panel.
+  1.7. Dialog.
+  1.8. Editor.
+  1.9. XLat.
+II. Windows: settings that apply to Far Manager.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+I. Far Manager: advanced settings.
+===============================================================================
+   This section describes the advanced technical information, not  included  in
+the main help file, that is actual for the current Far Manager version.
+
+
+
+=====================
+  1.1. General/miscellaneous.
+=====================
+
+
+1.1.0.(TechInfo #0)
+~~~~~~~~~~~~~~~~~~~
+   Key "/u <username>"
+   The  data   from  [HKCU\Software\Far Manager]     is     copied     into
+   [HKCU\Software\Far Manager\Users]  only if the following registry branch
+   doesn't exist:
+   [HKCU\Software\Far Manager\Users\<username>]. Only the following branches
+   are not copied:
+   [HKCU\Software\Far Manager\Users] and [HKCU\Software\Far Manager\PluginsCache].
+   That means that changing parameters  described  below  will  not  affect
+   existing user profiles.  Setting  for  "<username>"  should  be  changed
+   relative to the branch [HKCU\Software\Far Manager\Users\<username>].
+
+
+
+II. Windows: settings that apply to Far Manager.
+===============================================================================
+   This section describes the additional technical information  that  has  some
+appliance to Far Manager.
+
+
+2.0.(TechInfo #57)
+~~~~~~~~~~~~~~~~~~
+   If the  [HKEY_CLASSES_ROOT\Directory\shellex\CopyHookHandlers]  registry
+   key is empty Far removes it when started.
+   If this key is empty then Far will crash  when  deleting  files  to  the
+   recycle bin.
+
+2.1.(TechInfo #58)
+~~~~~~~~~~~~~~~~~~
+   [HKEY_CURRENT_USER\Control Panel\Desktop]
+   "AutoEndTasks":REG_DWORD
+   System: Automatically Close Hung Applications.
+   This option is used to force Windows to automatically close without  any
+   warning applications that have hung.
+
+   Can be one of the following values:
+     0 - off.
+     1 - allow to automatically close hung applications.
+   Default value is 0 (off).
+
+   Setting the key to "1" allows to eliminate the problem  of  closing  the
+   internal modal editor (e.g. editing a file inside an archive) using  the
+   standard "Close" button of the console window.
+   For details see: http://www.winguides.com/registry/display.php/199/
+
+2.2.(TechInfo #59)
+~~~~~~~~~~~~~~~~~~
+   [HKEY_CURRENT_USER\Software\Microsoft\Command Processor]
+   "DisableUNCCheck":REG_DWORD
+   (applies only to NT4/2k/XP/2003/Vista/2008 and cmd.exe)
+   The CMD.EXE normally disallows UNC names from being used for the current
+   directory. When Far tries to execute a command of  the  command  process
+   and the current path is UNC then the following  error  message  will  be
+   written to the console:
+
+     "CMD.EXE was started with the above path as the current directory.
+     UNC paths are not supported.  Defaulting to Windows directory."
+
+   (the output might be different for NT4/W2k/XP/2003/Vista/2008)
+
+   The key "DisableUNCCheck" allows to resolve this problem.
+   The following values can be used:
+     0 - output a warning message and set the  current  path  to  Windows
+         system folder.
+     1 - output no warning and try to set the current path to the UNC path.
+
+   The default value is 0.
+   Recommended value is 1.
+
+   For details see: http://www.winguides.com/registry/display.php/1247/
+                    or Microsoft Article - Q156276
+
+
+                                     [ Far Manager development group ]

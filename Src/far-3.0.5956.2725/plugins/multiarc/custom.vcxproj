@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectName>custom</ProjectName>
+    <ProjectGuid>{9CF69DBB-650D-4423-8FD2-D291A71B6CC9}</ProjectGuid>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+
+  <PropertyGroup Label="UserMacros">
+    <ProjectSpecificOutDirName>Plugins\MultiArc\Formats</ProjectSpecificOutDirName>
+    <ProjectSpecificIntDirName>Plugins\MultiArc\$(ProjectName)</ProjectSpecificIntDirName>
+  </PropertyGroup>
+
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.main.props" />
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.rules.crt_fix.props" />
+  </ImportGroup>
+  <PropertyGroup>
+    <TargetExt>.fmt</TargetExt>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\libpcre;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(IntDir)..\pcre;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libpcre.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ClCompile Include="$(ProjectName).cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(ProjectName).vc.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="$(ProjectName).rc">
+      <AdditionalIncludeDirectories>..\common\ascii;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="libpcre\pcre.vcxproj">
+      <Project>{50FCE411-DA6E-432A-8224-265D52D09058}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(ProjectDir)..\..\_build\vc\config\common.targets" />
+</Project>

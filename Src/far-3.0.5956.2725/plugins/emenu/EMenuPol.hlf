@@ -1,0 +1,168 @@
+﻿.Language=Polish,Polish (Polski)
+.PluginContents=EMenu
+
+
+@Contents
+$ #EMenu - menu kontekstowe#
+^#Opis#
+
+    Wtyczka pozwala skorzystać z menu kontekstowego Eksploratora Windows
+dla bieżącego lub wskazanego pliku/foldera. Wtyka może działać w panelu
+plików, panelu drzewa, folderze tymczasowym lub w przeglądarce sieciowej.
+
+    Wtyczka pozwala pokazywać menu w wersji tekstowej lub graficznej (GUI),
+zależnie od ustawień w ~oknie konfiguracji~@Config@.
+
+^#Jak używać EMenu#
+
+    EMenu może być uruchomione na dwa sposoby:
+
+    #1) Z menu wtyczek.#
+
+    Wybierz w panelu plik, folder lub linię .. (folder nadrzędny), wciśnij F11
+i wybierz pozycję EMenu. Możesz zaznaczyć kilka plików lub folderów i skorzystać
+z menu tak jak w Eksploratorze. Menu kontekstowe dla linii .. (folder nadrzędny)
+pokaże menu dla bieżącego folderu.
+    Dla Waszej wygody do wtyczki dołączone jest makro obsługujące trzy skróty
+klawiszowe, aby pokazać menu:
+
+ #Apps#       Pokazuje menu tekstowe
+ #Shift-Apps# Pokazuje menu graficzne
+ #Ctrl-Apps#  Pokazuje menu wyboru pomiędzy menu tekstowym a graficznym
+
+    Aby zainstalować makro należy zaimportować plik Hotkey.farconfig i uruchomić ponownie program Far.
+
+    #2) Używając przedrostków w linii poleceń#
+
+ #rclk:      [pliki]#             Pokazuje menu kontekstowe.
+ #rclk_txt:  [pliki]#             Pokazuje tekstowe menu kontekstowe.
+ #rclk_gui:  [pliki]#             Pokazuje graficzne menu kontekstowe.
+ #rclk_cmd:  <polecenie> [pliki]# Wykonuje podane polecenie menu.
+ #rclk_item: <pozycja> [pliki]#   Wykonuje podaną pozycję menu.
+
+    Pliki są rozdzielane spacjami. Pliki mogą zawierać pełną ścieżkę lub nazwy plików
+(wtedy przyjmuje bieżący folder). Jeżeli pominięto pliki - to użyte zostanie zaznaczenie
+z bieżącego panelu.
+    Jeżeli dowolna część z linii poleceń zawiera spacje - należy użyć cudzysłowów.
+    Linia poleceń może zawierać zmienne systemowe ujęte w %. Zmienne zostaną rozwinięte
+w ich pełne wartości.
+
+
+@Config
+$ #EMenu - okno konfiguracji#
+^#Pokaż komunikat po wykonaniu#
+
+    Włącz tę opcję, jeżeli chcesz zobaczyć komunikat po zakończeniu pracy przez wtyczkę.
+Komunikat może być wymagany przez Windows 9x, gdzie mogą występować problemy po uruchomieniu
+niektórych poleceń równolegle pracujących z Far.
+
+    Domyślna wartość: #wyłączone#.
+
+^#Pokaż menu graficzne#
+
+    Niektóre pozycje z menu kontekstowych nie są samym tekstem - mogą być z elementami graficznymi.
+Takie pozycje nie będą prawidłowo wyświetlane w menu Far (ale będą prawidłowo uruchamiane).
+Aby zobaczyć menu jak w Eksploratorze, można włączyć menu graficzne.
+    Opcja może przyjąć następujące wartości:
+
+ #[ ]# Pokaż menu tekstowe
+ #[x]# Pokaż menu graficzne
+ #[?]# Pozwala wybrać pomiędzy menu tekstowym i graficznym, przy każdym uruchomieniu wtyczki.
+
+    Domyślna wartość: #[?]#.
+
+^#Usuń używając Far#
+
+    Po włączeniu tej opcji, polecenie "Usuń" z menu działa tak jak klawisz F8 w Far.
+
+    Domyślna wartość: #wyłączone#.
+
+^#Wyczyść zaznaczenie po uruchomieniu polecenia#
+
+    Po włączeniu tej opcji zaznaczenie plików/folderów w wybranym panelu jest czyszczone
+po wykonaniu pozycji z menu.
+
+    Domyślna wartość: #włączone#.
+
+^#Tryb cichy (nie pokazuj żadnego komunikatu)#
+
+    Po włączeniu tej opcji wtyczka nie pokaże żadnego komunikatu.
+
+    Domyślna wartość: #wyłączone#.
+
+^#Dodatkowe informacje w menu tekstowym#
+
+    Ta grupa kontroluje dodatkowe informacje o pozycjach menu,
+które mogą być wyświetlane w nawiasach zaraz za pozycją menu.
+
+ #( ) Brak#                     Nie pokazuje żadnej dodatkowej informacji.
+ #( ) Pokaż pomoc#              Wyświetlana jest pomoc. Wyświetlany jest opis
+                              danej pozycji, jaki Eksplorator wyświetla
+                              na pasku statusu po wybraniu zaznaczonego polecenia.
+ #( ) Pokaż polecenie#          Wyświetlane są polecenia. Użyteczne, jeżeli chcesz
+                              wiedzieć jakie polecenie chcesz wpisać w wierszu
+                              poleceń po przedrostku "rclk_cmd:" lub w makrach.
+ #[ ] Ukryj jeżeli takie same#  Ukryj dodatkowe informacje, jeżeli zawierają te same
+                              informacje co pozycja menu.
+
+^#Pozycja menu GUI#
+
+    To proste.
+
+ #( ) W miejscu kursora myszy#
+ #( ) Na środku okna FAR#
+
+
+@Main
+$ #Główne menu EMenu#
+    W głównym menu możesz wybrać, czy ma być wyświetlane menu kontekstowe
+elementów panelu czy menu dla elementu "Mój komputer".
+
+    #Menu kontekstowe# Pokazuje menu kontekstowe dla aktywnych pozycji w panelu.
+
+    #Mój Komputer# Wybierz, dla którego z elementów poziomu "Mój komputer" ma być
+wyświetlone menu kontekstowe.
+
+
+@ChooseMenuType
+$ #Wybór typu menu#
+    Wybór pomiędzy menu wyświetlanym w trybie tekstowym lub graficznym.
+Wybór można zmienić w ~oknie konfiguracyjnym~@Config@.
+
+
+@MyComp
+$ #Mój Komputer#
+    Wybierz element, dla którego chcesz uzyskać menu kontekstowe.
+
+
+@ContextMenu
+$ #Menu kontekstowe#
+    Jest to menu kontekstowe wyświetlane przez wtyczkę ~EMenu~@Contents@.
+
+
+@Error0
+$ #Nie mogę pokazać menu, ponieważ pliki pochodzą z różnych folderów.#
+    Komunikat ten jest wyświetlany, gdy zaznaczone pliki są umieszczone
+w różnych folderach.
+
+
+@Error1
+$ #Nie mogę pokazać menu.#
+    Komunikat ten jest wyświetlany, gdy EMenu nie potrafi wyświetlić menu
+kontekstowego.
+
+
+@Error2
+$ #Nie mogę przetworzyć polecenia menu.#
+    Komunikat ten jest wyświetlany, gdy wystąpi błąd podczas wywoływania
+polecenia menu.
+
+
+@Close
+$ #Wciśnij "OK", aby kontynuować...#
+    W niektórych przypadkach należy poczekać na zakończenie wykonywania poleceń
+z menu, i dopiero wtedy można kontynuować pracę z Far. Przykładowym poleceniem
+jest "wklejanie" w Windows 9x dla plików ze ścieżkami zawierającymi znaki
+narodowe (np. polskie "ogonki").
+
+    Komunikat ten może być wyłączony w ~oknie konfiguracyjnym~@Config@.

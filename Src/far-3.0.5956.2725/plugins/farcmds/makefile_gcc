@@ -1,0 +1,9 @@
+NAME = FARCmds
+
+SRCS = \
+	FARCmds.cpp \
+	Mix.cpp \
+	OpenCmd.cpp
+
+include ../makefile_gcc_def_inc
+include ../makefile_gcc_target_inc

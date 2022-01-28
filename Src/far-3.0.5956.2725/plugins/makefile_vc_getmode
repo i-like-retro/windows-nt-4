@@ -1,0 +1,40 @@
+!ifdef __MAKE__
+_MKDO_=/D
+_MKHIDE=-s
+!else
+_MKHIDE=/nologo
+!endif
+
+!ifdef ANSI
+_MDEFS=$(_MDEFS) $(_MKDO_)ANSI=1
+!endif
+
+!ifdef DEBUG
+_MDEFS=$(_MDEFS) $(_MKDO_)DEBUG=1
+!endif
+
+!ifdef NO_ULINK
+_MDEFS=$(_MDEFS) $(_MKDO_)NO_ULINK=1
+!elseif defined(ULINK)
+_MDEFS=$(_MDEFS) $(_MKDO_)ULINK=1
+!endif
+
+!ifdef AMD64
+_MDEFS=$(_MDEFS) $(_MKDO_)AMD64=1
+!endif
+
+!ifdef IA64
+_MDEFS=$(_MDEFS) $(_MKDO_)IA64=1
+!endif
+
+!ifdef VC
+_MDEFS=$(_MDEFS) $(_MKDO_)VC=$(VC)
+!endif
+
+!ifdef SHOW
+_MDEFS=$(_MDEFS) $(_MKDO_)SHOW=1
+!endif
+
+!ifdef ROOTDIR
+_MDEFS=$(_MDEFS) $(_MKDO_)ROOTDIR=$(ROOTDIR)
+!endif

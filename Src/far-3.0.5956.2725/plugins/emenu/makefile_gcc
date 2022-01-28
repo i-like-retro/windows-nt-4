@@ -1,0 +1,12 @@
+NAME = EMenu
+
+SRCS = \
+	auto_sz.cpp \
+	EMenu.cpp \
+	FarMenu.cpp \
+	OleThread.cpp \
+	Pidl.cpp \
+	Plugin.cpp
+
+include ../makefile_gcc_def_inc
+include ../makefile_gcc_target_inc

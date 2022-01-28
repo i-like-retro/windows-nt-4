@@ -1,0 +1,514 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>What's new in Far Manager Encyclopedia?</title>
+<meta http-equiv="Content-Type" Content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="../styles/styles.css">
+</head>
+<body>
+
+<h1>What's new in Far Manager Encyclopedia 1.75 SR2555?</h1>
+<div class=navbar>
+<a href="index.html">main</a>
+</div>
+
+<h3>7 October 2009</h3>
+<ul>
+  <li>Macro: <a href="macro/macrocmd/functions.html#checkhotkey">checkhotkey</a> function refined.
+    <br><br>
+</ul>
+
+<h3>8 June 2009</h3>
+<ul>
+  <li>Process of going out of limits of "just API description" has begun...<br>
+      New file names FarEncyclopedia.en.chm and FarEncyclopedia.ru.chm.
+    <br><br>
+</ul>
+
+<h3>1 April 2009</h3>
+<ul>
+  <li>Added flags <a href="dialogapi/structures/farlistitem.html#LIF_HIDDEN">LIF_HIDDEN</a>, <a href="dialogapi/structures/farlistitem.html#LIF_GRAYED">LIF_GRAYED</a>,
+  <a href="structures/farmenuitemex.html#MIF_HIDDEN">MIF_HIDDEN</a>, <a href="structures/farmenuitemex.html#MIF_GRAYED">MIF_GRAYED</a>.
+    <br><br>
+
+  <li><a href="defs/farcolors.html">Color palette</a> now contains 10 more colors.
+    <br><br>
+</ul>
+
+<h3>4 March 2009</h3>
+<ul>
+  <li>Macro: <a href="macro/macrocmd/functions.html#eval">Eval</a> function now has a second parameter, allowing just to check macro sequence for correctness.
+    Also, function return codes are described.
+    <br><br>
+</ul>
+
+<h3>3 March 2009</h3>
+<ul>
+  <li>Macro: <a href="macro/macrocmd/functions.html#menu.select">Menu.Select</a> function returns -1, if not called from the menu.
+    <br><br>
+</ul>
+
+<h3>2 March 2009</h3>
+<ul>
+  <li>Macro: macros can be assigned to mouse buttons. These constants can be used in macro sequences: MsX, MsY, MsButton, MsCtrlState.
+    <br><br>
+</ul>
+
+<h3>24 February 2009</h3>
+<ul>
+  <li>Macro: new function <a href="macro/macrocmd/functions.html#atoi">atoi</a> - converts number from string representation into numeric.
+    <br><br>
+</ul>
+
+<h3>23 January 2009</h3>
+<ul>
+  <li>Macro: additions and adjustments in <a href="macro/macrocmd/functions.html#editor.sel">editor.sel</a> function - it now works in the editor, dialog edit lines, and command line.
+    <br><br>
+
+  <li>Fixed errors in <a href="service_functions/editorcontrol.html#ECTL_SELECT">ECTL_SELECT</a>:
+     <ul>
+     <li>block highlight was always cleared, even if parameters were incorrect
+     <li>block highlight was always cleared, even if specified string (BlockStartLine) was absent (BlockStartLine was greater than number of strings in editor)
+     <li>if BlockHeight was greater than number of strings in editor (i.e. try to highlight a block by specifying the last line,
+         with BlockHeight equal to 10), EditorControl returned FALSE, though the block was highlighted.
+     <li>when BlockWidth was equal to -1, the block highlight transaction for BTYPE_COLUMN was incoplete - that could cause various problems with blocks.
+     </ul>
+
+    <br><br>
+</ul>
+
+<h3>16 January 2009</h3>
+<ul>
+  <li>Macro: <a href="macro/macrocmd/functions.html#waitkey">waitkey</a> function has a second optional parameter - type of returned value
+    <br><br>
+
+  <li>Macro: new function <a href="macro/macrocmd/functions.html#editor.sel">editor.sel</a> handles blocks in text.
+    <br><br>
+
+  <li>Macro: new function <a href="macro/macrocmd/functions.html#key">key</a> converts the value V into string equivalent of the key name.
+    <br><br>
+
+  <li>Macro: Named keys (i.e. CtrlK) can be present in any expressions; in this case they are treated as numbers.
+    <br><br>
+</ul>
+
+<h3>26 November 2008</h3>
+<ul>
+  <li>A new color was added to the palette - <a href="defs/farcolors.html#COL_EDITORSCROLLBAR">COL_EDITORSCROLLBAR</a>.
+    <br><br>
+</ul>
+
+<h3>6 November 2008</h3>
+<ul>
+  <li>Dialogs with FDLG_SMALLDIALOG flag are drawn with shadow now. To disable shadow drawing, set FDLG_NODRAWSHADOW flag.
+    <br><br>
+</ul>
+
+<h3>24 September 2008</h3>
+<ul>
+  <li>New flags for <a href="fsf/mklink.html">MkLink</a> function: FLINK_SYMLINKFILE, FLINK_SYMLINKDIR allow Windows Vista/2008 symbolic links creation. FLINK_SYMLINK flag renamed into FLINK_JUNCTION.
+    <br><br>
+</ul>
+
+<h3>11 August 2008</h3>
+<ul>
+  <li>User screen color is added to <a href="defs/farcolors.html">color palette</a>.
+    <br><br>
+</ul>
+
+<h3>06 August 2008</h3>
+<ul>
+  <li>Macro: CtrlBreak combination breaks macro execution.
+    <br><br>
+  <li>Macro: Added function <a href="macro/macrocmd/functions.html#trim">S=trim(S[,Mode])</a> - removes all whitespace symbols.
+    <br><br>
+  <li>Viewer API: <a href="service_functions/viewercontrol.html#VCTL_GETINFO">VCTL_GETINFO</a> command returned WindowSizeY value that was less by 1 than the real value.
+    <br><br>
+</ul>
+
+<h3>19 June 2008</h3>
+<ul>
+  <li>Macro: Now <a href="macro/macrocmd/states.html#Dlg.ItemType">Dlg.ItemType</a> returns the same value as Dlg.GetValue(XXX,1).
+    <br><br>
+</ul>
+
+<h3>17 June 2008</h3>
+<ul>
+  <li>Viewer API: added two events <a href="exported_functions/processviewerevent.html#VE_GOTFOCUS">VE_GOTFOCUS</a> and <a href="exported_functions/processviewerevent.html#VE_KILLFOCUS">VE_KILLFOCUS</a>.
+    <br><br>
+</ul>
+
+
+<h3>15 May 2008</h3>
+<ul>
+  <li>New constants in <a href="defs/fardialogsettings.html">FarDialogSettings</a> enum:
+  FDIS_DELREMOVESBLOCKS ("Del removes blocks in edit controls") and
+  FDIS_MOUSECLICKOUTSIDECLOSESDIALOG ("Mouse click outside a dialog closes it").
+    <br><br>
+</ul>
+
+<h3>3 April 2008</h3>
+<ul>
+  <li>Macro: added functions to handle stack bookmarks <a href="macro/macrocmd/functions.html">BM.XXX()</a>.
+    <br><br>
+</ul>
+
+<h3>30 March 2008</h3>
+<ul>
+  <li>6 new EditorControl commands for navigation positions ("stack bookmarks") control in editor:<br>
+  <a href="service_functions/editorcontrol.html#ECTL_ADDSTACKBOOKMARK">ECTL_ADDSTACKBOOKMARK</a>,
+  <a href="service_functions/editorcontrol.html#ECTL_CLEARSTACKBOOKMARKS">ECTL_CLEARSTACKBOOKMARKS</a> and
+  <a href="service_functions/editorcontrol.html#ECTL_DELETESTACKBOOKMARK">ECTL_DELETESTACKBOOKMARK</a>
+  - creating and deleting navigation positions,<br>
+  <a href="service_functions/editorcontrol.html#ECTL_GETSTACKBOOKMARKS">ECTL_GETSTACKBOOKMARKS</a>
+  - receiving navigation positions information,<br>
+  <a href="service_functions/editorcontrol.html#ECTL_NEXTSTACKBOOKMARK">ECTL_NEXTSTACKBOOKMARK</a> and
+  <a href="service_functions/editorcontrol.html#ECTL_PREVSTACKBOOKMARK">ECTL_PREVSTACKBOOKMARK</a>
+  - navigation in editor
+    <br><br>
+</ul>
+
+<h3>29 March 2008</h3>
+<ul>
+  <li>new panel flag: <a href="structures/panelinfo.html#PFLAGS_PANELLEFT">PFLAGS_PANELLEFT</a>.
+    <br><br>
+</ul>
+
+<h3>27 March 2008</h3>
+<ul>
+  <li>Macro: added "Consts" macro area to store <a href="macro/macrocmd/consts.html">named constants</a>.
+    <br><br>
+</ul>
+
+<h3>25 March 2008</h3>
+<ul>
+  <li>Colors for long string markers in menus, lists and combo lists were added to <a href="defs/farcolors.html">color palette</a>.
+    <br><br>
+
+  <li>Macro: Added "<a href="macro/macrocmd/states.html#Editor.RealPos">Editor.RealPos</a>" constant - current cursor position in the string in editor (tab size independent).
+    <br><br>
+
+  <li>Macro: Some functions can have optional parameters.
+    <br><br>
+
+  <li>Macro: New <a href="macro/macrocmd/functions.html#prompt">prompt</a> function - allows to input one text string.
+    <br><br>
+</ul>
+
+<h3>11 March 2008</h3>
+<ul>
+  <li>
+    <br><br>
+
+  <li>Macro: New <a href="macro/macrocmd/functions.html#akey">V=akey(N)</a> function - returns name or code of the key that initiated the macro.
+    <br><br>
+</ul>
+
+<h3>31 December 2007</h3>
+<ul>
+  <li>API: New command <a href="service_functions/advcontrol.html#ACTL_REDRAWALL">ACTL_REDRAWALL</a> - redraw all FAR windows.
+    <br><br>
+</ul>
+
+<h3>23 December 2007</h3>
+<ul>
+  <li>Plugins menu can be opened from a dialog.
+    <br><br>
+
+  <li>Plugin can export <a href="exported_functions/processdialogevent.html">ProcessDialogEvent</a> function to process dialog events.
+    <br><br>
+
+</ul>
+
+<h3>14 December 2007</h3>
+<ul>
+  <li>Macro: Added function <a href="macro/macrocmd/functions.html#replace">Result=replace(Str,Find,Replace,Cnt)</a>.
+    <br><br>
+
+  <li>API: New <a href="structures/actlkeymacro.html#MCMD_GETSTATE">MCMD_GETSTATE</a> command for <a href="service_functions/advcontrol.html#ACTL_KEYMACRO">ACTL_KEYMACRO</a>, returns macro engine work status.
+    <br><br>
+
+  <li>Macro: <a href="macro/macrocmd/functions.html#menu.select">Menu.Select</a> function now has two parameters.
+    <br><br>
+
+</ul>
+
+<h3>6 December 2007</h3>
+<ul>
+  <li>2 new events for panel plugins: <a href="exported_functions/processevent.html#FE_GOTFOCUS">FE_GOTFOCUS</a> and <a href="exported_functions/processevent.html#FE_KILLFOCUS">FE_KILLFOCUS</a>.
+    <br><br>
+
+  <li>2 new events for editor plugins: <a href="exported_functions/processeditorevent.html#EE_GOTFOCUS">EE_GOTFOCUS</a> and <a href="exported_functions/processeditorevent.html#EE_KILLFOCUS">EE_KILLFOCUS</a>.
+    <br><br>
+
+  <li>In dialogs, immediately after <a href="dialogapi/dmsg/dn_initdialog.html">DN_INITDIALOG</a>, <a href="dialogapi/dmsg/dn_gotfocus.html">DN_GOTFOCUS</a> is fired for the element with Focus=1.
+    <br><br>
+
+</ul>
+
+<h3>4 December 2007</h3>
+<ul>
+  <li>Macro: Added function <a href="macro/macrocmd/functions.html#mod">n=mod(n1,n2)</a>.
+    <br><br>
+
+  <li>Macro: Added function <a href="macro/macrocmd/functions.html#menu.select">N=Menu.Select(S)</a>. Selects the first item that contains S.
+    <br><br>
+
+  <li>New flag <a href="dialogapi/flags/dif_noautocomplete.html">DIF_NOAUTOCOMPLETE</a> for edit strings - disables autocomplete.
+    <br><br>
+
+</ul>
+
+
+<h3>12 October 2007</h3>
+<ul>
+  <li>Macro: Added constant "<a href="macro/macrocmd/states.html#MacroArea">MacroArea</a>" - returns the name of current Macro area.
+    <br><br>
+
+  <li>Macro: Bof/Eof/Empty/Selected in panels like QView/Info/Tree return values for these types of panels. For regular panels, values are returned for command line.
+    <br><br>
+</ul>
+
+<h3>13 September 2007</h3>
+<ul>
+  <li>Now when DI_COMBOBOX is open, DN_KEY or DN_MOUSEEVENT events are sent to the dialog procedure.
+    This behavior can be controlled using events <a href="dialogapi/dmsg/dm_setcomboboxevent.html">DM_SETCOMBOBOXEVENT</a>
+    and <a href="dialogapi/dmsg/dm_getcomboboxevent.html">DM_GETCOMBOBOXEVENT</a>.
+    <br><br>
+</ul>
+
+
+<h3>30 August 2007</h3>
+<ul>
+  <li>Bug: Macro: If menu item does not contain hot key, <a href="macro/macrocmd/functions.html">GetHotkey()</a> returns "0" instead of "".
+    <br><br>
+
+  <li>Macro: Added command <a href="macro/macrocmd/selword.html">$SelWord</a> - selects a word.
+    <br><br>
+
+  <li>Bug: Macro: Some variables did not work in QuickView and Infopanel: ItemCount, CurPos, Selected, Bof, Eof were always equal to 0; Empty was always equal to 1.
+    <br><br>
+
+</ul>
+
+<h3>7 August 2007</h3>
+<ul>
+  <li>Bug: If a plug-in disabled the mouse cursor tracking reaction
+    (<a href="dialogapi/dmsg/dm_listsetmousereaction.html#LMRT_NEVER">LMRT_NEVER</a>) for a list,
+    the dialog procedure did not get DN_MOUSECLICK event for mouse double click (Mantis#0000309).
+    <br><br>
+
+  <li>In the <a href="structures/pluginpanelitem.html">PluginPanelItem</a> structure, <a href="defs/far_find_data.html">FAR_FIND_DATA</a>
+    structure was used instead of <a href="winapi/win32_find_data.html">WIN32_FIND_DATA</a>.
+    <a href="defs/_far_use_win32_find_data.html">_FAR_USE_WIN32_FIND_DATA</a> macro should be used instead of _FAR_USE_FARFINDDATA.
+    <br><br>
+
+</ul>
+
+<h3>23 July 2007</h3>
+<ul>
+  <li>Added commands <a href="dialogapi/dmsg/dm_geteditposition.html">DM_GETEDITPOSITION</a> and <a href="dialogapi/dmsg/dm_seteditposition.html">DM_SETEDITPOSITION</a> - line position control within edit strings and dialogs.
+    <br><br>
+
+</ul>
+
+<h3>5 July 2007</h3>
+<ul>
+  <li>Macro: Added function <a href="macro/macrocmd/functions.html#gethotkey">gethotkey</a>.
+    <br><br>
+
+  <li>Macro: Variables beginning with a number (such as %3DO) were not processed.
+    <br><br>
+
+  <li>Bug: <a href="dialogapi/dmsg/dm_listgetcurpos.html">DM_LISTGETCURPOS</a> retrned wrong value after opening a ComboBox, moving through the list and cancelling (pressing Esc).
+    <br><br>
+
+</ul>
+
+
+<h3>31 May 2007</h3>
+<ul>
+  <li>Macro: Added function <a href="macro/macrocmd/functions.html#panel.setposidx">Panel.SetPosIdx</a> - File panel positioning using index.
+    <br><br>
+
+</ul>
+
+<h3>10 May 2007</h3>
+<ul>
+  <li>Macro: new functions <a href="macro/macrocmd/functions.html#asc">asc()</a> and
+    <a href="macro/macrocmd/functions.html#chr">chr</a>.
+    <br><br>
+
+</ul>
+
+<h3>23 March 2007</h3>
+<ul>
+  <li>Macros in the Registry can have REG_MULTI_SZ type.
+    <br><br>
+  <li>Added flag <a href="structures/actlkeymacro.html#KSFLAGS_REG_MULTI_SZ">KSFLAGS_REG_MULTI_SZ</a>.
+    <br><br>
+
+</ul>
+
+<h3>14 March 2007</h3>
+<ul>
+  <li>After calling <a href="service_functions/editorcontrol.html#ECTL_SELECT">EditorControl(ECTL_SELECT)</a>
+    with <a href="structures/editorselect.html">BlockStartLine</a> = -1, next call to
+    <a href="service_functions/editorcontrol.html#ECTL_GETINFO">ECTL_GETINFO</a> also returned -1 in <a href="structures/editorinfo.html">BlockStartLine</a>.
+    <br><br>
+
+</ul>
+
+<h3>13 March 2007</h3>
+<ul>
+  <li>Macro: new functions <a href="macro/macrocmd/functions.html#waitkey">waitkey()</a> and
+     <a href="macro/macrocmd/functions.html#eval">eval</a>.
+    <br><br>
+
+</ul>
+
+<h3>20 February 2007</h3>
+<ul>
+  <li>Added flag <a href="dialogapi/flags/dif_notcvtusercontrol.html">DIF_NOTCVTUSERCONTROL</a> for <a href="dialogapi/controls/di_usercontrol.html">DI_USERCONTROL</a>.
+    <br><br>
+
+</ul>
+<h3>7 February 2007</h3>
+<ul>
+  <li>Macro: new words <a href="macro/macrocmd/states.html#APanel.ColumnCount">APanel.ColumnCount</a>
+    and <a href="macro/macrocmd/states.html#PPanel.ColumnCount">PPanel.ColumnCount</a>.
+    <br><br>
+
+</ul>
+
+<h3>30 January 2007</h3>
+<ul>
+  <li>New command: <a href="service_functions/control.html#FCTL_GETUSERSCREEN">FCTL_GETUSERSCREEN</a>.
+  <br><br>
+</ul>
+
+<h3>25 January 2007</h3>
+<ul>
+  <li>For <a href="dialogapi/controls/di_vtext.html">DI_VTEXT</a> element, added handling of flags: DIF_CENTERGROUP, DIF_SEPARATOR, DIF_SEPARATOR2, DIF_SHOWAMPERSAND.
+    <br><br>
+
+  <li>In <a href="dialogapi/defdlgproc.html">DefDlgProc</a> handler, <a href="dialogapi/flags/dif_btnnoclose.html">DIF_BTNNOCLOSE</a> flag was not handled for <a href="dialogapi/dmsg/dn_btnclick.html">DN_BTNCLICK</a> event.
+    <br><br>
+
+  <li>Incorrect <a href="dialogapi/controls/di_text.html">DI_TEXT</a> element drawing for conditions: DIF_CENTERTEXT + DIF_SEPARATOR + X1 not equal to "-1"
+    <br><br>
+
+</ul>
+
+
+<h3>24 January 2007</h3>
+<ul>
+  <li>Rules regarding X2 and Y2 coordinates in the dialog elements are hardened. Y2 should be always set, do not use 0.
+    <br><br>
+
+</ul>
+
+<h3>18 January 2007</h3>
+<ul>
+  <li><a href="exported_functions/processeditorevent.html#EE_CLOSE">EE_CLOSE</a> event was not fired for "?New File?".
+    <br><br>
+
+  <li>Incorrect color drawing for information dialog when FMSG_WARNING flag was used in a <a href="service_functions/message.html">Message</a> function without buttons.
+    <br><br>
+</ul>
+
+<h3>27 December 2006</h3>
+<ul>
+  <li>Macro: New states <a href="macro/macrocmd/states.html#Help.FileName">Help.FileName</a>,
+     <a href="macro/macrocmd/states.html#Help.Topic">Help.Topic</a> and
+     <a href="macro/macrocmd/states.html#Help.SelTopic">Help.SelTopic</a>.
+    <br><br>
+
+  <li>The command <a href="service_functions/advcontrol.html#ACTL_GETWINDOWINFO">ACTL_GETWINDOWINFO</a> now fills the Name field for help windows
+      - contains the full path to the HLF file.
+    <br><br>
+</ul>
+
+<h3>01 December 2006</h3>
+<ul>
+  <li>Viewer API: Structure member <a href="structures/viewermode.html">ViewerMode</a>.TypeWrap renamed to ViewerMode.WordWrap
+    <br><br>
+
+  <li>Viewer API: Added command <a href="service_functions/viewercontrol.html#VCTL_SETMODE">VCTL_SETMODE</a>.
+    <br><br>
+</ul>
+
+
+<h3>23 November 2006</h3>
+<ul>
+  <li>Macro: <a href="macro/macrocmd/akey.html">$AKey</a>.
+    <br><br>
+</ul>
+
+<h3>21 November 2006</h3>
+<ul>
+  <li>Bringing the API to 64bit compatibility:
+     <ul>
+     <li>DlgProc: long Param2 -> LONG_PTR Param2 and returns LONG_PTR instead of long
+     <li>SendDlgMessage: long Param2 -> LONG_PTR Param2 and returns LONG_PTR instead of long
+     <li>DefDlgProc: long Param2 -> LONG_PTR Param2 and returns LONG_PTR instead of long
+     <li>DialogEx: long Param -> LONG_PTR Param
+     <li>FarMenuItemEx: DWORD UserData -> DWORD_PTR UserData
+     <li>PluginPanelItem: DWORD UserData -> DWORD_PTR UserData
+     <li>AdvControl: returns INT_PTR instead of int
+     <li>OpenPlugin: int Item -> INT_PTR Item
+     </ul>
+    <br><br>
+</ul>
+
+<h3>20 September 2006</h3>
+<ul>
+  <li>Macro: <a href="macro/macrocmd/functions.html#fexist">fexist()</a> understands file mask symbols '*' and '?'.
+    <br><br>
+
+  <li>Macro: If the name contains '*' or '?', then <a href="macro/macrocmd/functions.html#fattr">fattr()</a> will return the attributes of the first found file.
+    <br><br>
+
+  <li>Macro: fexist() and fattr() do not longer work with the panels, new functions were added to work with the panels: <a href="macro/macrocmd/functions.html#panel.fexist">panel.fexist()</a> and <a href="macro/macrocmd/functions.html#panel.fattr">panel.fattr()</a>.
+    <br><br>
+
+</ul>
+
+<h3>25 August 2006</h3>
+<ul>
+  <li>Corrected the description of the <a href="dialogapi/dmsg/dn_btnclick.html">DN_BTNCLICK</a> event for <a href="dialogapi/controls/di_radiobutton.html">DI_RADIOBUTTON</a>.
+    <br><br>
+</ul>
+
+<h3>29 July 2006</h3>
+<ul>
+  <li>New function: <a href="fsf/snprintf.html">FSF.snprintf</a>.
+    <br><br>
+</ul>
+
+<h3>20 June 2006</h3>
+<ul>
+<li>Macro function "<a href="macro/macrocmd/functions.html#sleep">N=sleep(N)</a>".
+    <br><br>
+
+<li>Macro constant "<a href="macro/macrocmd/states.html#Far.Height">Far.Height</a>".
+    <br><br>
+
+<li>Macro constant "<a href="macro/macrocmd/states.html#Far.Title">Far.Title</a>".
+    <br><br>
+
+<li>Macro constant "<a href="macro/macrocmd/states.html#Title">Title</a>".
+    <br><br>
+
+<li>Macro constant "<a href="macro/macrocmd/states.html#Drv.ShowPos">Drv.ShowPos</a>".
+    <br><br>
+
+<li>Macro constant "<a href="macro/macrocmd/states.html#Drv.ShowMode">Drv.ShowMode</a>".
+    <br><br>
+</ul>
+
+<a href="history.html">Long history</a>,
+<a href="historyapi.html">API history</a>
+
+</body>
+</html>

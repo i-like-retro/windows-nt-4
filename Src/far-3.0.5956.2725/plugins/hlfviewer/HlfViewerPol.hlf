@@ -1,0 +1,107 @@
+﻿.Language=Polish,Polish (Polski)
+.PluginContents=HlfViewer - podgląd plików pomocy
+.Options CtrlStartPosChar=^<wrap>
+
+
+@Contents
+$ #HlfViewer - podgląd plików pomocy#
+   Wtyczka HlfViewer została utworzona, aby pomóc osobom które tworzą lub edytują pliki pomocy
+(HLF) lub chcą obejrzeć pliki HLF.
+
+   ~Używanie HlfViewer w edytorze~@editor@
+   ~Używanie HlfViewer w linii poleceń~@cmd@
+   ~Używanie wtyczki w makrach~@MacroCallPlugin@
+   ~Ustawienia~@Config@
+
+
+@cmd
+$ #HlfViewer: składnia linii poleceń
+   #hlf:GUID# [#temat#]
+   #hlf:nazwa_pliku# [#temat#]
+   #hlf:temat#
+
+   #GUID#        - ^<wrap>GUID wtyczki w bieżącej sesji Far Manager, której należy wyświetlić plik pomocy.
+                 ^<wrap>Aby pokazać temat z własnej pomocy Far, można podać GUID
+#00000000-0000-0000-0000-000000000000#
+
+   #nazwa_pliku# - ^<wrap>Nazwa pliku HLF.
+                 ^<wrap>Jeśli nazwa pliku zawiera spacje, to musi być ujęta w cudzysłów.
+                 ^<wrap>Jeśli nazwa pliku jest określona bez ścieżki, kolejność wyszukiwania jest następująca:
+               - bieżący folder;
+               - folder %FARHOME%;
+               - ścieżki wtyczek w bieżącej sesji Far Manager.
+
+   #temat#       - ^<wrap>pokaż rozdział pomocy o nazwie "temat", jeśli ten parametr
+nie jest określony, wyświetlana jest zawartość rozdziału "Contents" (zawartość).
+                 ^<wrap>Nazwa rozdziału może być poprzedzona symbolem "@@".
+                 ^<wrap>Aby wyświetlić pomoc dla programu Far, dozwolone jest użycie
+samej nazwy rozdziału (bez nazwy pliku).
+
+   ~Zawartość~@Contents@
+
+
+@editor
+$ #HlfViewer: praca w edytorze#
+   Wywołanie polecenia z menu wtyczek w edytorze wyświetli rozdział #aktualnie edytowany#,
+jest plik w edytorze jest plikiem pomocy Far.
+
+   Notatka 1:
+
+     ^<wrap>Plik jest sprawdzany pod kątem obecności kluczowych elementów formatu hlf:
+     - ^<wrap>na początku pliku znajduje się linia określająca język: ".Language="
+     - ^<wrap>odszukanie dowolnego wystąpienia sekwencji znaków "@@litery-cyfry",
+które nie zawierają znaku "=".
+
+     ^<wrap>Dodatkowo, w ~Ustawieniach~@Config@ można ograniczyć listę przetwarzanych
+plików, ustawiając maskę.
+
+   Notatka 2:
+
+     ^<wrap>Wtyczkę można skonfigurować w taki sposób, aby rozdział nie był
+pokazywany przez polecenie menu, ale po naciśnięciu #F1# (lub innej kombinacji
+klawiszy określonej w ~Ustawieniach~@Config@).
+
+     ^<wrap>W takim przypadku element wywoływania #HlfViewer# nie jest dodawany
+do menu wtyczek.
+
+   ~Zawartość~@Contents@
+
+
+@Config
+$ #HlfViewer: Ustawienia#
+   Po włączeniu opcji "#Klawisz skrótu w edytorze#" i naciśnięciu wybranej
+kombinacji klawiszy w edytorze, na ekranie pokaże się bieżący temat
+pliku pomocy (HLF), który właśnie jest edytowany. Klawisz skrótu działa
+tylko jeżeli plik HLF jest edytowany. Domyślny klawisz to #F1#.
+   Dodatkowo po włączeniu tej opcji, pozycja HlfViewer nie jest widoczna
+w menu wtyczek (F11), ponieważ jest już zintegrowana z programem Far.
+
+   Opcja #Sprawdź wg maski plików# ma na celu ograniczenie pracy wtyczki
+z plikami innymi niż wymienione. Opcja jest domyślnie włączona.
+
+   Aby kontrolować, czy plik pomocy jest zapisany przed pokazanie rozdziału,
+można użyć opcji "#Pokaż plik HLF otwarty w edytorze:#".
+Może ona posiadać jedną z następujących wartości:
+
+   #Pokaż ostatni#   - zostanie pokazana ostatnia zapisana wersja
+   #zapisany plik#     (tak jak w poprzednich wersjach HlfViewer)
+
+   #Pokaż zmieniony# - zostaną pokazane wszystkie niezapisane zmiany
+   #plik#              w rozdziałach (plik HLF zostanie zapisany
+                     w folderze tymczasowym)
+
+   #Zapisz i pokaż#  - przed pokazaniem pliku HLF, wszystkie zmiany
+   #zmieniony plik#    zostaną zapisane
+
+   ~Zawartość~@Contents@
+
+
+@MacroCallPlugin
+$ #Wywoływanie wtyczki w makrach#
+   W edytorze wtyczkę można wywołać z makra za pomocą funkcji makra Plugin.Call:
+
+      #Plugin.Call("1AF0754D-5020-49CB-9474-1F82691C84C1")#
+
+   Równoważna akcja - ~wywołanie wtyczki z menu~@editor@.
+
+   ~Zawartość~@Contents@

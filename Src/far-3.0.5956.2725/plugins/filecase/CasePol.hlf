@@ -1,0 +1,32 @@
+﻿.Language=Polish,Polish (Polski)
+.PluginContents=Konwersja wielkości znaków w nazwach plików
+
+
+@Contents
+$ #Konwersja wielkości znaków w nazwach plików#
+    Polecenie pozwala zmienić wielkość znaków w nazwach zaznaczonych
+plików na jeden z dostępnych formatów.
+
+   Należy wybrać odpowiedni rodzaj konwersji dla #Nazwy# i #Rozszerzenia#.
+Jeżeli wybrana opcję #Brak#, to wtyczka nie będzie przetwarzała odpowiadającej
+części nazwy pliku.
+
+ #Omiń mieszane#               Wtyczka nie będzie przetwarzać plików
+ #nazwy plików#                i folderów z mieszanymi wielkościami znaków.
+
+ #Przetwarzaj podfoldery#      Jeżeli zaznaczone obiekty plików obejmują foldery,
+                             to wtyczka będzie przetwarzać także pliki i podfoldery
+                             w wybranym folderze.
+
+ #Przetwarzaj nazwy folderów#  Jeżeli kursor znajduje się na folderze, a opcja
+                             #Przetwarzaj podfoldery# jest włączona, wtyczka
+                             będzie przetwarzała także nazwę tego folderu
+                             i wszystkich podfolderów.
+
+ #Tylko bieżące uruchomienie#  Stosuje opcje określone w oknie dialogowym
+                             wyłącznie do bieżącej sesji konwersji.
+
+ #Rozdzielenie słów#           Znaki użyte do oddzielania słów do konwersji
+                             wielkości liter. Przycisk #Resetuj# przywraca
+                             ogranicznikom wartości domyślne:"# _#"
+                             (spacja i podkreślenie).

@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ArchiveItem">
+		<param name="Name" value="ArchiveItem">
+		<param name="Local" value="html\structures\ArchiveItem.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ArchiveFormatInfo">
+		<param name="Name" value="ArchiveFormatInfo">
+		<param name="Local" value="html\structures\ArchiveFormatInfo.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ArchivePluginInfo">
+		<param name="Name" value="ArchivePluginInfo">
+		<param name="Local" value="html\structures\ArchivePluginInfo.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ArchiveModuleInfo">
+		<param name="Name" value="ArchiveModuleInfo">
+		<param name="Local" value="html\structures\ArchiveModuleInfo.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ArchiveModuleVersion">
+		<param name="Name" value="ArchiveModuleVersion">
+		<param name="Local" value="html\structures\ArchiveModuleVersion.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="QueryArchiveStruct">
+		<param name="Name" value="QueryArchiveStruct">
+		<param name="Local" value="html\structures\QueryArchiveStruct.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="GetDefaultCommandStruct">
+		<param name="Name" value="GetDefaultCommandStruct">
+		<param name="Local" value="html\structures\GetDefaultCommandStruct.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ExtractStruct">
+		<param name="Name" value="ExtractStruct">
+		<param name="Local" value="html\structures\ExtractStruct.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="AddStruct">
+		<param name="Name" value="AddStruct">
+		<param name="Local" value="html\structures\AddStruct.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="DeleteStruct">
+		<param name="Name" value="DeleteStruct">
+		<param name="Local" value="html\structures\DeleteStruct.html">
+		</OBJECT>
+</UL>
+</BODY></HTML>

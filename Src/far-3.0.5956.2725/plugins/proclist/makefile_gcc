@@ -1,0 +1,20 @@
+NAME = Proclist
+
+SRCS = \
+	Proclist.cpp \
+	fileio.cpp \
+	format.cpp \
+	handles.cpp \
+	Pcfg.cpp \
+	Pclass.cpp \
+	perfthread.cpp \
+	Plist.cpp \
+	Pmix.cpp \
+	wmi.cpp \
+	wmi_init.cpp
+
+USERCPP = -I "$(FARDIR)/common" -I "$(FARDIR)/thirdparty/fmt"
+USERLIBS = -lversion -lmpr -lole32 -loleaut32 -lpsapi
+
+include ../makefile_gcc_def_inc
+include ../makefile_gcc_target_inc

@@ -1,0 +1,15 @@
+NAME = EMenu
+
+LINK_OBJS = \
+	$(INTDIR)\EMenu.obj \
+	$(INTDIR)\auto_sz.obj \
+	$(INTDIR)\FarMenu.obj \
+	$(INTDIR)\OleThread.obj \
+	$(INTDIR)\Pidl.obj \
+	$(INTDIR)\Plugin.obj
+
+!include ..\makefile_vc_def_inc
+!include ..\makefile_vc_target_inc
+
+$(RES): resource.h
+$(INTDIR)\Plugin.obj: FarMenu.h HMenu.h OleThread.h Pidl.h Plugin.h resource.h guid.hpp version.hpp

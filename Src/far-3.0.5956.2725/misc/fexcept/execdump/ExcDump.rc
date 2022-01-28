@@ -1,0 +1,20 @@
+#define VERSIONINFO_1   1
+
+VERSIONINFO_1 VERSIONINFO
+FILEOS 4
+FILETYPE 2 {
+ BLOCK "StringFileInfo" {
+  BLOCK "000004E4" {
+   VALUE "CompanyName",      "Mag`n`Gla\000\000"
+   VALUE "FileDescription",  "Exception logger library\000"
+   VALUE "InternalName",     "ExcDump\000"
+   VALUE "LegalCopyright",   "Copyright © Jouri Mamaev\000\000"
+   VALUE "OriginalFilename", "ExcDump.dll\000"
+   VALUE "FileVersion",      "build 29.05.2009\000\000"
+   VALUE "Comments",         "Developer: JouriM<at>uran.ru. Far Group build.\000\000"
+  }
+ }
+ BLOCK "VarFileInfo" {
+  VALUE "Translation", 0, 0x4e4
+ }
+}

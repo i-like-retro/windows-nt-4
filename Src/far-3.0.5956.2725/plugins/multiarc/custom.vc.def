@@ -1,0 +1,10 @@
+EXPORTS
+	IsArchive
+	OpenArchive
+   GetArcItem
+   CloseArchive
+   GetFormatName
+   GetDefaultCommands
+   GetSFXPos
+   LoadFormatModule
+   SetFarInfo

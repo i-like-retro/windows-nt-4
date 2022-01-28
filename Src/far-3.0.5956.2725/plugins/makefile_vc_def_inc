@@ -1,0 +1,219 @@
+#The following variables can be set by the user:
+#
+#NAME - the name of the plugin (project name|dll name).
+#
+#EXT - extension of the plugin executable (dll by default).
+#
+#DOCS - a list of additional files that need to copied to the target folder.
+#
+#ADDOUTDIR - you can set it to /dir if the target folder for the plugin
+#            is a folder inside the default target folder.
+#            This is used in multiarc for building *.fmt.
+#
+#USERCPP - user defined switches for the compiler (added after the default
+#          ones).
+#
+#ADDOBJDIR - you can set it to /dir if the temporary folder for the plugin
+#            compiled files is a folder inside the default temporary folder.
+#            This is used in ftp for building *.fll.
+#
+#DEF_NAME - name of DEF-file (maybe with path, but always without extension).
+#           If unspecifiedn used $(NAME).
+#           This is used in ftp for building *.fll.
+#
+#RC_NAME  - name of RC-file (maybe with path, but always without extension).
+#           If unspecifiedn used $(NAME).
+#           This is used in ftp for building *.fll.
+#
+#LINK_OBJS - a list of target *.obj files
+#
+#LINK_DEP - additional dependents for link rule (e.g. prebuild library)
+#
+#USERLIBS - specify additional libs you need (added after the default ones).
+#
+#DEBUG - set if a debug build is needed
+#
+#ANSI - set for ansi build
+#
+#ULINK - set if you want to use ulink for linking
+#
+#NOENTRY - set if you want to use the /noentry link flag
+#
+#NODEFLIB - set if you want to use the /nodefaultlib link flag
+#
+#INCLUDECRT - set if you want to link with common/crt lib.
+#
+#AMD64 - set for x64 build
+#  or
+#CPU=AMD64 - for x64 build
+#
+#IA64 - set for IA64 build
+#  or
+#CPU=IA64 - for IA64 build
+#
+#(we try to autodetect if not set)
+#
+#VC - set Visual C++ version (VC=15 - 2017, VC=16 - 2019) (we try to autodetect if not set)
+#
+#NO_RELEASE_PDB - set to disable pdb generation for release
+#
+#GEN_IMPLIB - set when link with ulink and implib must be generated
+#
+
+!ifndef ROOTDIR
+ROOTDIR = ..\..
+!endif
+
+!if exists($(ROOTDIR)\make_vc_defs)
+!include $(ROOTDIR)\make_vc_defs
+!endif
+
+!ifndef TREEDIR
+TREEDIR=$(ROOTDIR)
+!endif
+!include $(TREEDIR)\_build\vc\config\common.mak
+
+!ifndef RC_NAME
+RC_NAME=$(NAME)
+!endif
+
+!ifndef DEF_NAME
+DEF_NAME=$(NAME)
+!endif
+
+!ifdef INSTALL
+!ifndef INSTALL_TO_ROOT
+OUTDIR=$(INSTALL)\$(NAME)
+!else
+OUTDIR=$(INSTALL)
+!endif
+!endif
+
+INTDIR = $(INTDIR)$(ADDOBJDIR)
+!ifndef COMMON
+COMMON = $(ROOTDIR)\plugins\common
+!endif
+!ifdef ANSI
+COMINC = $(COMMON)\ascii
+!else
+COMINC = $(COMMON)\unicode
+CPP_WIDE = /DUNICODE /D_UNICODE
+RC_WIDE = /dUNICODE
+!endif
+!ifndef EXT
+EXT = dll
+!endif
+DLLNAME = $(NAME).$(EXT)
+DLLFULLNAME = $(OUTDIR)$(ADDOUTDIR)\$(DLLNAME)
+!if "$(DEF_NAME)" != ""
+DEFFILE = $(DEF_NAME).vc$(ULN_DEF).def
+DEFOPT = /def:$(DEFFILE)
+!endif
+MAP = $(OUTDIR)$(ADDOUTDIR)\$(NAME).map
+RES = $(INTDIR)\$(NAME).res
+
+CPPFLAGS = $(CPPFLAGS) /LD /I"$(COMMON)" /I"$(COMINC)" $(ENV_INC_OPT) $(CPP_WIDE) /D_CRT_NON_CONFORMING_WCSTOK /D_CRT_NONSTDC_NO_WARNINGS /D_CRT_NON_CONFORMING_SWPRINTFS $(USERCPP)
+
+CPPFLAGS = $(CPPFLAGS) /Zc:threadSafeInit-
+FIXCRT_CPPFLAGS = /Zc:threadSafeInit-
+
+RFLAGS = /nologo /I"$(COMMON)" /I"$(COMINC)" $(ENV_INC_OPT) $(RC_WIDE)
+
+!if "$(BUILD_PLATFORM)" == "AMD64"
+ULOUT=-Tpd+
+!elseif "$(BUILD_PLATFORM)" == "IA64"
+ULOUT=-Tpd+
+!else
+ULOUT=-Tpd -Rv
+!endif
+
+!ifdef INCLUDECRT
+!if "$(BUILD_PLATFORM)" == "AMD64"
+COMMONLIB = $(COMMON)\libCRT64.lib
+!elseif "$(BUILD_PLATFORM)" == "IA64"
+COMMONLIB = $(COMMON)\libCRTIA64.lib
+!else
+COMMONLIB = $(COMMON)\libCRT.lib
+!endif
+!endif
+
+LIBS = $(COMMONLIB) $(LINK_LIBS) $(USERLIBS)
+
+!ifdef _BIN_PATH_
+!ifndef _ML_PATH_
+_ML_PATH_=$(_BIN_PATH_)
+!endif
+!ifndef _CL_PATH_
+_CL_PATH_=$(_BIN_PATH_)
+!endif
+!ifndef _RC_PATH_
+_RC_PATH_=$(_BIN_PATH_)
+!endif
+!ifndef _LINK_PATH_
+_LINK_PATH_=$(_BIN_PATH_)
+!endif
+!endif
+
+
+!ifndef ULINK
+LNK=$(_LINK_PATH_)link.exe
+!ifdef NOENTRY
+NOENTRY_FLAG = /noentry
+!endif
+!ifdef NODEFLIB
+NODEFLIB_FLAG = /nodefaultlib
+!endif
+LINKFLAGS = $(LINKFLAGS) /dll /implib:$(INTDIR)/$(NAME).lib $(NOENTRY_FLAG) $(NODEFLIB_FLAG) $(ENV_LIB_OPT) $(DEFOPT) /map:"$(MAP)" /out:"$(DLLFULLNAME)"
+!else
+LNK=$(_ULINK_PATH_)ulink.exe +-
+!ifdef NOENTRY
+NOENTRY_FLAG = -e-
+!endif
+!ifdef NODEFLIB
+NODEFLIB_FLAG = -n
+!endif
+!ifdef DEFFILE
+LINK_DEF_OPT=/ZD:"$(DEFFILE)"
+!endif
+!ifdef GEN_IMPLIB
+LINK_GEN_IMPLIB=-Gic -l$(INTDIR)
+!endif
+LINKFLAGS=-q -V5.0 -W5.0 -b* $(ULOUT) $(ULN_DELAY) -Gz -m- -Gh -Gh- $(NOENTRY_FLAG) $(NODEFLIB_FLAG) $(LINK_DEF_OPT) /ZM:"$(MAP)" /ZO:"$(DLLFULLNAME)" $(LINK_GEN_IMPLIB) $(ENV_LIB_OPT)
+!ifdef DEBUG
+LINKFLAGS=$(LINKFLAGS) -v
+!elseif !defined(NO_RELEASE_PDB)
+LINKFLAGS=$(LINKFLAGS) -vv -ZT.
+!endif
+!endif
+
+!ifndef AS
+AS=$(_ML_PATH_)ml.exe
+!endif
+
+!ifndef CC
+CC=$(_CL_PATH_)cl.exe
+!endif
+
+!ifndef CPP
+CPP=$(CC)
+!endif
+
+!ifndef LIBR
+LIBR=$(_LINK_PATH_)lib.exe
+!endif
+
+!ifndef RC
+RC=$(_RC_PATH)rc.exe
+!endif
+
+!if !defined(SRC_PATHS_DEFINED) && defined(__MAKE__)
+.path.asm=.
+.path.cpp=.
+.path.c=.
+.path.hpp=.
+.path.h=.
+.path.rc=.
+.path.def=.
+!endif
+
+DOCS = nul *.hlf *.lng *.lua *.farconfig changelog $(DOCS)

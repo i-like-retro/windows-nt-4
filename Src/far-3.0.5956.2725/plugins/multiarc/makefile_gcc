@@ -1,0 +1,38 @@
+ANSI = 1
+NAME = MultiArc
+
+SRCS = \
+	MultiArc.cpp \
+	arccfg.cpp \
+	arccmd.cpp \
+	arcget.cpp \
+	ArcMix.cpp \
+	ArcPlg.cpp \
+	ArcProc.cpp \
+	arcput.cpp \
+	arcread.cpp \
+	arcreg.cpp \
+	global.cpp
+
+DOCS = \
+	MultiArc.TryIfNoOther.reg
+
+include ../makefile_gcc_def_inc
+include ../makefile_gcc_target_inc
+
+all: fmt
+
+$(RES): multiarcversion.hpp
+
+fmt:
+	$(MAKE) -f makefile_gcc_libpcre
+	$(MAKE) -f makefile_gcc_fmt FMT=custom
+	$(MAKE) -f makefile_gcc_fmt FMT=ace
+	$(MAKE) -f makefile_gcc_fmt FMT=arc
+	$(MAKE) -f makefile_gcc_fmt FMT=arj
+	$(MAKE) -f makefile_gcc_fmt FMT=cab
+	$(MAKE) -f makefile_gcc_fmt FMT=ha
+	$(MAKE) -f makefile_gcc_fmt FMT=lzh
+	$(MAKE) -f makefile_gcc_fmt FMT=rar
+	$(MAKE) -f makefile_gcc_fmt FMT=targz
+	$(MAKE) -f makefile_gcc_fmt FMT=zip

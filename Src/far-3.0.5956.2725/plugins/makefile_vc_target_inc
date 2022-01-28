@@ -1,0 +1,88 @@
+!ifndef NODEFLIB
+!if "$(BUILD_PLATFORM)" =="X86"
+!ifndef ULINK
+LINK_OBJS = $(LINK_OBJS) $(INTDIR)\vc_crt_fix.obj $(INTDIR)\vc_crt_fix_impl.obj
+!else
+LINK_OBJS = $(LINK_OBJS) $(INTDIR)\vc_crt_fix_ulink.obj
+!endif
+!endif
+!endif
+
+ALL: dirs $(INSTALL) $(DLLFULLNAME)
+
+!ifdef PRECOMPILED_HEADER
+
+$(INTDIR)\$(PRECOMPILED_HEADER).pch: $(PRECOMPILED_HEADER).cpp $(PRECOMPILED_HEADER).hpp
+	@echo Making precompiled headers
+	$(CPP) $(CPPFLAGS) $(PRECOMPILED_HEADER).cpp -Yc$(PRECOMPILED_HEADER).hpp -Fp$(INTDIR)\$(PRECOMPILED_HEADER).pch
+
+PCHFLAGS = -Yu$(PRECOMPILED_HEADER).hpp -Fp$(INTDIR)\$(PRECOMPILED_HEADER).pch -FI$(PRECOMPILED_HEADER).hpp
+
+$(LINK_OBJS): $(INTDIR)\$(PRECOMPILED_HEADER).pch
+
+LINK_LIBS = $(LINK_LIBS) $(INTDIR)\$(PRECOMPILED_HEADER).obj
+
+!endif
+
+$(DLLFULLNAME) : $(LINK_OBJS) $(RES) $(LINK_DEP)
+!ifndef __MAKE__
+	$(LNK) @<<
+	$(LINKFLAGS) $(LIBS) $(LINK_OBJS) $(RES)
+<<
+!else
+	$(LNK) $(LINKFLAGS) $(LIBS) $(LINK_OBJS) $(RES)
+!endif
+
+!ifdef DOCS
+!ifndef __MAKE__
+	for %%i in ($(DOCS)) do @if exist %%i copy /Y %%i $(OUTDIR)$(ADDOUTDIR) > nul
+!else
+	for %i in ($(DOCS)) do @if exist %i copy /Y %i $(OUTDIR)$(ADDOUTDIR) > nul
+!endif
+!endif
+
+!ifndef __MAKE__
+.cpp{$(INTDIR)}.obj::
+	$(CC) @<<
+	$(PCHFLAGS) $(CPPFLAGS) $<
+<<
+
+{$(COMMON)}.cpp{$(INTDIR)}.obj::
+	$(CC) @<<
+	$(PCHFLAGS) $(CPPFLAGS) $<
+<<
+!else
+.cpp{$(INTDIR)}.obj:
+	$(CC) $(PCHFLAGS) $(CPPFLAGS) { $< }
+
+{$(COMMON)}.cpp{$(INTDIR)}.obj:
+	$(CC) $(PCHFLAGS) $(CPPFLAGS) { $< }
+!endif
+
+.asm{$(INTDIR)}.obj:
+	$(MASM) $(AFLAGS) $<
+
+{$(COMMON)}.asm{$(INTDIR)}.obj:
+	$(MASM) $(AFLAGS) $<
+
+$(RES): $(RC_NAME).rc $(COMMON)\farversion.hpp $(COMINC)\plugin.hpp
+	$(RC) $(RFLAGS) /fo"$(RES)" $(RC_NAME).rc
+
+$(INTDIR)\vc_crt_fix.obj: $(COMMON)\vc_crt_fix.asm
+	$(MASM) $(AFLAGS) $(COMMON)\vc_crt_fix.asm
+
+$(INTDIR)\vc_crt_fix_impl.obj: $(COMMON)\vc_crt_fix_impl.cpp
+	$(CPP) $(CPPFLAGS) $(FIXCRT_CPPFLAGS) $(COMMON)\vc_crt_fix_impl.cpp
+
+
+.PHONY: dirs
+dirs:
+	if not exist "$(OUTDIR)\$(NULL)" mkdir "$(OUTDIR)"
+	if not exist "$(OUTDIR)$(ADDOUTDIR)\$(NULL)" mkdir "$(OUTDIR)$(ADDOUTDIR)"
+	if not exist "$(INTDIR)\$(NULL)" mkdir "$(INTDIR)"
+
+.PHONY: clean
+clean:
+	if exist "$(INTDIR)\$(NULL)" rmdir /s /q "$(INTDIR)"
+	if exist "$(OUTDIR)$(ADDOUTDIR)\$(NULL)" rmdir /s /q "$(OUTDIR)$(ADDOUTDIR)"
+	if exist "$(OUTDIR)\$(NULL)" rmdir /s /q "$(OUTDIR)"

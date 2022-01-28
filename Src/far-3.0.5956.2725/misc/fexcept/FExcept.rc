@@ -1,0 +1,12 @@
+#pragma code_page(65001)
+
+#include "farversion.hpp"
+
+#define PLUGIN_BUILD 13
+#define PLUGIN_DESC "Exception catcher for FAR manager"
+#define PLUGIN_NAME "FExcept"
+#define PLUGIN_FILENAME "FExcept.dll"
+#define PLUGIN_COPYRIGHT_INITIAL "© Jouri Mamaev, 2002. "
+#define PLUGIN_COPYRIGHT_CURRENT_FROM 2008
+
+#include <plugin_version.rc>

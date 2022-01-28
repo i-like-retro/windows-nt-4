@@ -1,0 +1,24 @@
+﻿.Language=Spanish,Spanish
+
+"Comandos FAR"
+
+"Separador comando/objeto"
+
+"&Ocultar salida de comando externo"
+"&Mantener salida de comando externo"
+"D&uplicar salida interceptada a pantalla"
+
+"Interceptar am&bos stdout y stderr"
+"Interceptar std&out solamente"
+"Interceptar std&err solamente"
+"Interceptar stdout &y stderr separadamente"
+"Ver/editar archivos &vacíos"
+
+"Editar archivos &nuevos"
+
+"El &tamaño de lectura de datos"
+"<stdout>:"
+"<stderr>:"
+
+"&Aceptar"
+"Cancelar"

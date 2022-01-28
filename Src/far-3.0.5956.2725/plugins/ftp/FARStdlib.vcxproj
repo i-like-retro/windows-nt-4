@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>FARStdlib</ProjectName>
+    <ProjectGuid>{6A6E122A-4151-4AF2-BBCB-2B4603CF029F}</ProjectGuid>
+    <RootNamespace>FARStdlib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0'">v140</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)debug.32.vc$(VisualStudioVersion)\obj\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)debug.64.vc$(VisualStudioVersion)\obj\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)final.32.vc$(VisualStudioVersion)\obj\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)final.64.vc$(VisualStudioVersion)\obj\</OutDir>
+    <IntDir>$(OutDir)</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+    <TargetName>FsdLib</TargetName>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>.\FStdLib;..\common\ascii;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <StringPooling>true</StringPooling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalOptions> /J</AdditionalOptions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CallingConvention>FastCall</CallingConvention>
+      <DisableSpecificWarnings>4985;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)' &gt;= '14.0'">/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
+    <ClCompile>
+      <EnableEnhancedInstructionSet Condition="'$(VisualStudioVersion)' &gt; '10.0'">NoExtensions</EnableEnhancedInstructionSet>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>__NOMEM__=1;__USEASSERT__=1;DEBUG;CRT_SECURE_NO_WARNINGS;CRT_NONSTDC_NO_WARNINGS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>__NOMEM__=1;__USEASSERT__=1;DEBUG;CRT_SECURE_NO_WARNINGS;CRT_NONSTDC_NO_WARNINGS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>__NOMEM__=1;__USEASSERT__=1;NDEBUG;CRT_SECURE_NO_WARNINGS;CRT_NONSTDC_NO_WARNINGS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <DebugInformationFormat Condition="'$(VisualStudioVersion)'!= '10.0'">None</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>__NOMEM__=1;__USEASSERT__=1;NDEBUG;CRT_SECURE_NO_WARNINGS;CRT_NONSTDC_NO_WARNINGS;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <DebugInformationFormat Condition="'$(VisualStudioVersion)' != '10.0'">None</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ClCompile Include="..\common\vc_crt_fix_impl.cpp">
+      <ExcludedFromBuild Condition="'$(Platform)'=='x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="FStdLib\FARStdlib\fstd_Arg.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_asrt.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_ClpS.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_Con.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_crc32.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_Dialog.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_err.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_exit.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_exSCAT.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_exSCMP.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_exSCPY.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_exSPCH.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_exSPS.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_FMsg.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_FUtils.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_ilist.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_INProc.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_log.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_menu.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_mesg.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_mklog.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_Msg.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_OEM.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_Patt.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_per.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_plg.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_Reg.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_SCol.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_scr.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_stdlibCS.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_SText.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_String.cpp" />
+    <ClCompile Include="FStdLib\FARStdlib\fstd_Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FStdLib\FARStdlib\fstd_String.h" />
+    <ClInclude Include="FStdLib\FARStdlib\funi.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="..\common\vc_crt_fix.asm">
+      <ExcludedFromBuild Condition="'$(Platform)'=='x64'">true</ExcludedFromBuild>
+    </MASM>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

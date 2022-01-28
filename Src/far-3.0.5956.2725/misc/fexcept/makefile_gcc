@@ -1,0 +1,6 @@
+NAME = FExcept
+SRCS = FExcept.cpp
+DOCS = demangle32.dll
+
+include ../../plugins/makefile_gcc_def_inc
+include ../../plugins/makefile_gcc_target_inc

@@ -1,0 +1,121 @@
+#The following variables can be set by the user:
+#
+#NAME - the name of the plugin (project name|dll name).
+#
+#EXT - extension of the plugin executable (dll by default).
+#
+#ADDOUTDIR - you can set it to /dir if the target folder for the plugin
+#            is a folder inside the default target folder.
+#            This is used in multiarc for building *.fmt.
+#
+#USERC, USERCPP - user defined switches for the compiler (added after the default
+#          ones).
+#
+#USERLIBS - specify additional libs you need in the form -llib
+#           (added after the default ones).
+#
+#USERLIBSFIRST - same as USERLIBS but added before the default libs
+#                (libraries order is important for gcc).
+#
+#USERRC - user defined switches for windres
+#
+#NOENTRY - set if you want to use the -nostartfiles link flag
+#
+#NODEFLIB - set if you want to use the -nodefaultlibs link flag
+#
+#INCLUDECRT - set if you want to link with common/crt lib.
+#
+#SRCS - a list of the *.cpp source files.
+#
+#DOCS - a list of additional files that need to copied to the target folder.
+#
+#ANSI - set for ansi build
+#
+
+.SILENT:
+
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+MAKEFILE_DIR := $(dir $(MAKEFILE_PATH))
+
+DEP_FILTER := $(MAKEFILE_DIR)dep_filter.awk
+
+include $(MAKEFILE_DIR)../far/makefile_gcc_common
+
+ifdef ANSI
+WIDE = -U UNICODE -U _UNICODE
+endif
+
+ifndef DEBUG
+DIRNAME := Release
+C_DEBUG := -O3 -fomit-frame-pointer -DNDEBUG
+ifndef USE_OBJDUMP_MAPS
+L_DEBUG := -s
+endif
+else
+DIRNAME := Debug
+C_DEBUG := -g -D_DEBUG
+L_DEBUG :=
+endif
+
+BASEDIR = ./$(DIRNAME).$(DIRBIT).gcc
+OBJDIR := $(BASEDIR)/obj
+REOBJDIR = \.\/$(DIRNAME)\.$(DIRBIT)\.gcc\/obj\/
+DLLDIR ?= $(BASEDIR)$(ADDOUTDIR)
+COMMON ?= $(MAKEFILE_DIR)/common
+COMINC = $(COMMON)/$(if $(ANSI),ascii,unicode)
+EXT ?= dll
+DLLNAME = $(NAME).$(EXT)
+DLLFULLNAME = $(DLLDIR)/$(DLLNAME)
+
+ifeq ($(DIRBIT),32)
+DEF_DEF = $(NAME).gcc
+DLLTOOL_M = i386
+else
+#for x64 vc.def is good enough
+DEF_DEF = $(NAME).vc
+DLLTOOL_M = i386:x86-64
+endif
+
+ifndef DEF_NAME
+DEF_NAME = $(DEF_DEF)
+endif
+ifeq ($(DEF_NAME),-)
+DEF =
+DEF_OPT =
+else
+DEF = $(DEF_NAME).def
+DEF_OPT = -d $(DEF)
+endif
+
+RC_NAME ?= $(NAME)
+RES = $(OBJDIR)/$(NAME).res.o
+
+NOSTART = $(if $(NOENTRY),-nostartfiles,)
+NODEFLIBS = $(if $(NODEFLIB),-nodefaultlibs,)
+
+ifdef INCLUDECRT
+ifeq ($(DIRBIT),32)
+COMMONLIB = -L $(COMMON) -lCRT
+else
+COMMONLIB = -L $(COMMON) -lCRT64
+endif
+else
+COMMONLIB = 
+endif
+
+CFLAGS  += -I $(COMMON) -I $(COMINC) $(WIDE) $(USERC)
+CPPFLAGS += -Wno-old-style-cast $(USERCPP)
+LNKFLAGS += $(USERLIBS)
+RCFLAGS  += -I $(COMMON) -I $(COMINC) $(WIDE) $(USERRC)
+
+C_OBJS = $(patsubst %.c,$(OBJDIR)/%.o,$(filter %.c,$(SRCS)))
+CPP_OBJS = $(patsubst %.cpp,$(OBJDIR)/%.o,$(filter %.cpp,$(SRCS)))
+OBJS = $(strip $(C_OBJS) $(CPP_OBJS) $(RES))
+ifndef DISABLEAUTODEPS
+C_DEPS = $(patsubst %.c,$(OBJDIR)/%.d,$(filter %.c,$(SRCS)))
+CPP_DEPS = $(patsubst %.cpp,$(OBJDIR)/%.d,$(filter %.cpp,$(SRCS)))
+DEPS = $(strip $(C_DEPS) $(CPP_DEPS))
+endif
+MAP = $(patsubst %.$(EXT),%.map,$(DLLFULLNAME))
+
+DOCS := $(shell $(LS) *.hlf *.lng *.lua *.farconfig changelog $(DOCS) 2>$(DEVNULL))

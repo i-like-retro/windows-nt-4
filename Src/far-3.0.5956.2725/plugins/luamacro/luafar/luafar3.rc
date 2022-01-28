@@ -1,0 +1,11 @@
+#pragma code_page(65001)
+
+#include "version.h"
+
+#define PLUGIN_DESC "LuaFar library"
+#define PLUGIN_NAME "LuaFar"
+#define PLUGIN_FILENAME "luafar3.dll"
+#define PLUGIN_COPYRIGHT_INITIAL "© Shmuel Zeigerman, 2007-2012. "
+#define PLUGIN_COPYRIGHT_CURRENT_FROM 2012
+
+#include <plugin_version.rc>

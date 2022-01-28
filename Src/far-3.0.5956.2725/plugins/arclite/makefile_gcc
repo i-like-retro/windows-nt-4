@@ -1,0 +1,71 @@
+NAME = arclite
+
+PRECOMPILED_HEADER=headers
+DISABLEAUTODEPS = 1
+
+SRCS = \
+	archive.cpp \
+	attr.cpp \
+	cmdline.cpp \
+	common.cpp \
+	delete.cpp \
+	extract.cpp \
+	farutils.cpp \
+	msearch.cpp \
+	open.cpp \
+	options.cpp \
+	Patch7zCP.cpp \
+	pathutils.cpp \
+	plugin.cpp \
+	rsrc.cpp \
+	sfx.cpp \
+	SimpleXML.cpp \
+	strutils.cpp \
+	sysutils.cpp \
+	test.cpp \
+	ui.cpp \
+	update.cpp
+
+ifdef DEBUG_7Z
+ifeq (32,$(DIRBIT))
+7ZDLL = 7z/src/CPP/7zip/Bundles/Format7zF/Debug/7z.dll
+else
+7ZDLL = 7z/src/CPP/7zip/Bundles/Format7zF/x64/Debug/7z.dll
+endif
+else
+7ZDLL = 7z/dll/$(DIRBIT)/7z.dll
+endif
+
+DOCS = \
+	7z/sfx/*.sfx \
+	arclite.xml \
+	$(7ZDLL) \
+
+include ../makefile_gcc_def_inc
+
+ifndef BUILD
+
+.PHONY: all
+all: depfile
+	$(MAKE) -f makefile_gcc $(MK_FLAGS) all BUILD=1 USEDEP=1
+
+.PHONY: depfile
+depfile:
+	$(MKDIR) -p $(OBJDIR)
+	@echo Rebuilding dependencies
+	$(LS) *.cpp *.hpp *.rc | $(GAWK) -f $(FARDIR)/scripts/mkdep.awk -v compiler=gcc - > $(OBJDIR)/$(NAME).dep
+
+clean:
+	$(MAKE) -f makefile_gcc $(MK_FLAGS) clean BUILD=1
+
+else
+
+ifdef USEDEP
+include $(OBJDIR)/$(NAME).dep
+endif
+
+CPPFLAGS += -I"$(FARDIR)/common" -Wno-non-virtual-dtor
+
+include ../makefile_gcc_target_inc
+
+endif

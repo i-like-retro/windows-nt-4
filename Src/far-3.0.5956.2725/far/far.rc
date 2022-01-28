@@ -1,0 +1,77 @@
+#include <windows.h>
+
+#pragma code_page(65001)
+
+#include "res.hpp"
+
+#include "bootstrap/far.rc.inc"
+
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+FAR_ICON        ICON "Far.ico"
+FAR_ICON_RED    ICON "Far.red.ico"
+FAR_ICON_BLACK  ICON "Far.black.ico"
+FAR_ICON_HACK   ICON "Far.hack.ico"
+FAR_ICON_MONO   ICON "Far.mono.ico"
+FAR_ICON_MSG    ICON "Far.msg.ico"
+
+VS_VERSION_INFO VERSIONINFO
+FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+FILEFLAGS 0
+
+#ifdef _DEBUG
+| VS_FF_PRERELEASE | VS_FF_DEBUG
+#endif
+
+#if RC_PRERELEASE
+| VS_FF_PRERELEASE
+#endif
+
+#if RC_SPECIAL
+| VS_FF_SPECIALBUILD
+#endif
+
+#if RC_PRIVATE
+| VS_FF_PRIVATEBUILD
+#endif
+
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+
+
+FILEVERSION RC_MAJOR, RC_MINOR, RC_BUILD, RC_REVISION
+PRODUCTVERSION RC_MAJOR, RC_MINOR, RC_BUILD, RC_REVISION
+{
+	BLOCK "StringFileInfo"
+	{
+		BLOCK "040904B0"
+		{
+			VALUE "CompanyName", "Eugene Roshal & Far Group"
+			VALUE "FileDescription", "File and archive manager"
+			VALUE "FileVersion", RC_FULLVERSION
+			VALUE "InternalName", "Far"
+			VALUE "LegalCopyright", "© Eugene Roshal, 1996-2000. © Far Group, 2000-" RC_COPYRIGHTYEAR
+			VALUE "OriginalFilename", "Far.exe"
+			VALUE "ProductName", "Far Manager"
+			VALUE "ProductVersion", RC_FULLVERSION
+#if RC_SPECIAL
+			VALUE "SpecialBuild", RC_SPECIAL_STRING
+			VALUE "Comments", RC_SPECIAL_STRING
+#endif
+
+#if RC_PRIVATE
+
+#define RC_PRIVATE_STRING "Unofficial private build"
+
+			VALUE "PrivateBuild", RC_PRIVATE_STRING
+			VALUE "Comments", RC_PRIVATE_STRING
+#endif
+		}
+	}
+	BLOCK "VarFileInfo"
+	{
+		VALUE "Translation", 0x0409, 1200
+	}
+}
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "bootstrap/Far.exe.manifest"

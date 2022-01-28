@@ -1,0 +1,5 @@
+NAME = HelloWorld
+SRCS = HelloWorld.cpp
+
+include ../makefile_gcc_def_inc
+include ../makefile_gcc_target_inc

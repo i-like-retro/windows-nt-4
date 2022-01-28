@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectName>luafar3</ProjectName>
+    <ProjectGuid>{9FF87075-F1E1-410B-818C-2823396FE24F}</ProjectGuid>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+
+  <PropertyGroup Label="UserMacros">
+    <ProjectSpecificOutDirName>Plugins\..</ProjectSpecificOutDirName>
+    <ProjectSpecificIntDirName>Plugins\luamacro\$(ProjectName)</ProjectSpecificIntDirName>
+    <DirBit Condition="'$(Platform)'=='Win32'">32</DirBit>
+    <DirBit Condition="'$(Platform)'=='x64'">64</DirBit>
+    <DirBit Condition="'$(Platform)'=='ARM64'">ARM64</DirBit>
+    <LuaLib>lua51</LuaLib>
+  </PropertyGroup>
+
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.main.props" />
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.rules.crt_fix.props" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>luasdk/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILD_DLL;LUADLL="$(LuaLib).dll";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(LuaLib).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>luasdk/$(DirBit)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile />
+    </Link>
+    <PreBuildEvent>
+      <Command>nmake -logo -f makefile_lib_vc luafar\flags.c luafar\keysandcolors.c</Command>
+      <Message>Generate sources</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="luafar\bit64.c" />
+    <ClCompile Include="luafar\exported.c" />
+    <ClCompile Include="luafar\flags.c" />
+    <ClCompile Include="luafar\keysandcolors.c" />
+    <ClCompile Include="luafar\lflua.c" />
+    <ClCompile Include="luafar\lregex.c" />
+    <ClCompile Include="luafar\luamacro.c" />
+    <ClCompile Include="luafar\lusercontrol.c" />
+    <ClCompile Include="luafar\reg.c" />
+    <ClCompile Include="luafar\service.c" />
+    <ClCompile Include="luafar\slnunico.c" />
+    <ClCompile Include="luafar\lutf8lib.c" />
+    <ClCompile Include="luafar\uliolib51.c" />
+    <ClCompile Include="luafar\uloadlib51.c" />
+    <ClCompile Include="luafar\ustring.c" />
+    <ClCompile Include="luafar\util.c" />
+    <ClCompile Include="luafar\win.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="luafar\luafar.h" />
+    <ClInclude Include="luafar\reg.h" />
+    <ClInclude Include="luafar\unidata.h" />
+    <ClInclude Include="luafar\ustring.h" />
+    <ClInclude Include="luafar\util.h" />
+    <ClInclude Include="luafar\version.h" />
+    <ClInclude Include="luasdk\include\lauxlib.h" />
+    <ClInclude Include="luasdk\include\lua.h" />
+    <ClInclude Include="luasdk\include\lualib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="luasdk\$(DirBit)\$(LuaLib).dll" />
+    <CopyFileToFolders Include="luasdk\$(DirBit)\lpeg.dll" />
+    <CopyFileToFolders Include="luasdk\32\legacy\$(LuaLib).dll">
+      <ExcludedFromBuild Condition="'$(Platform)'!='Win32'">true</ExcludedFromBuild>
+    </CopyFileToFolders>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ResourceCompile Include="luafar\luafar3.rc" />
+  </ItemGroup>
+  <Import Project="$(ProjectDir)..\..\_build\vc\config\common.targets" />
+</Project>

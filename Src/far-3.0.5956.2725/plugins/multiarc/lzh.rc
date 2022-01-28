@@ -1,0 +1,10 @@
+#pragma code_page(65001)
+
+#include "multiarcversion.hpp"
+
+#define PLUGIN_BUILD 28
+#define PLUGIN_DESC FMTDESCRIPTION
+#define PLUGIN_NAME "lzh"
+#define PLUGIN_FILENAME "lzh.fmt"
+
+#include <plugin_version.rc>

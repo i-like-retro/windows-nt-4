@@ -1,0 +1,16 @@
+#include <windows.h>
+
+#pragma code_page(65001)
+
+#include "version.hpp"
+
+#include <plugin_version.rc>
+
+#include "resource.h"
+
+IDD_NULL DIALOG DISCARDABLE  20, 20, 127, 9
+STYLE DS_MODALFRAME | DS_SETFOREGROUND | WS_POPUP
+CAPTION ""
+FONT 8, "MS Sans Serif"
+BEGIN
+END

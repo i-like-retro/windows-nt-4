@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?include defines.wxi ?>
+<?include guids_$(var.Platform).wxi ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Language="!(loc.Language)" Codepage="UTF-8" Name="$(var.Product)" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.Guid.UpgradeCode)">
+    <Package Id="*" Platform="$(var.Platform)" Languages="$(var.Languages)" Compressed="yes" Manufacturer="$(var.Manufacturer)" Description="$(var.Product) $(var.Version)" InstallerVersion="500" SummaryCodepage="!(loc.Codepage)" />
+    <Property Id="MACHINEINSTALLDIR">
+      <RegistrySearch Id="InstallDir" Root="HKLM" Key="Software\$(var.RegKey)" Name="$(var.InstallDirParam)" Type="directory" Win64="$(var.Win64)" />
+    </Property>
+    <Property Id="USERINSTALLDIR">
+      <RegistrySearch Id="UserInstallDir" Root="HKCU" Key="Software\$(var.RegKey)" Name="$(var.InstallDirParam)" Type="directory" Win64="$(var.Win64)" />
+    </Property>
+    <Property Id="InstallScope" Value="Machine" />
+    <Property Id="ALLUSERS" Value="1" />
+    <Property Id="REINSTALLMODE" Value="amus" />
+    <Property Id="ARPPRODUCTICON" Value="Far.ico" />
+    <Property Id="ARPHELPLINK" Value="https://forum.farmanager.com/" />
+    <Property Id="ARPURLINFOABOUT" Value="https://farmanager.com/" />
+    <Property Id="ARPURLUPDATEINFO" Value="https://farmanager.com/download.php" />
+    <Media Id="1" Cabinet="far.cab" EmbedCab="yes" />
+    <Condition Message="!(loc.LaunchCondition)"><![CDATA[NOT Version9X AND VersionNT >= 500)]]></Condition>
+    <Binary Id="CustomActions.dll" SourceFile="customact.dll" />
+    <CustomAction Id="UpdateFeatureState" BinaryKey="CustomActions.dll" DllEntry="UpdateFeatureState" />
+    <CustomAction Id="SaveShortcutProps" BinaryKey="CustomActions.dll" DllEntry="SaveShortcutProps" Return="ignore" Impersonate="no" />
+    <CustomAction Id="RestoreShortcutProps" BinaryKey="CustomActions.dll" DllEntry="RestoreShortcutProps" Execute="deferred" Return="ignore" Impersonate="no" />
+    <CustomAction Id="LaunchShortcut" BinaryKey="CustomActions.dll" DllEntry="LaunchShortcut" Return="ignore" />
+    <CustomAction Id="LaunchApp" ExeCommand="" FileKey="Far.exe" Return="asyncNoWait" />
+    <CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[INSTALLDIR]" />
+    <CustomAction Id="SetUserInstallScope" Property="InstallScope" Value="User" Execute="firstSequence" />
+    <CustomAction Id="SetUserInstallDir" Property="INSTALLDIR" Value="[USERINSTALLDIR]" Execute="firstSequence" />
+    <CustomAction Id="SetMachineInstallDir" Property="INSTALLDIR" Value="[MACHINEINSTALLDIR]" Execute="firstSequence" />
+    <CustomAction Id="SetInstallPath" Property="INSTALLDIR" Value="[INSTALLPATH]" Execute="firstSequence" />
+    <CustomAction Id="ResetALLUSERS" Property="ALLUSERS" Value="" Execute="firstSequence" />
+    <CustomAction Id="SetALLUSERS1" Property="ALLUSERS" Value="1" Execute="firstSequence" />
+    <CustomAction Id="SetALLUSERS2" Property="ALLUSERS" Value="2" Execute="firstSequence" />
+    <CustomAction Id="SetMSIINSTALLPERUSER" Property="MSIINSTALLPERUSER" Value="1" Execute="firstSequence" />
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="$(var.ProgramFiles)">
+        <Directory Id="INSTALLDIR" Name="$(var.DefMachineInstallDir)">
+          <Component Id="InstallDir" Guid="$(var.Guid.InstallDir)" Win64="$(var.Win64)">
+            <RegistryValue Root="HKMU" Key="Software\$(var.RegKey)" Name="$(var.InstallDirParam)" Value="[INSTALLDIR]" Type="string" KeyPath="yes" />
+          </Component>
+          <Component Id="AppPaths" Guid="$(var.Guid.AppPaths)" Win64="$(var.Win64)">
+            <RegistryKey Root="HKMU" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\Far.exe">
+              <RegistryValue Value="[#Far.exe]" Type="string" KeyPath="yes" />
+              <RegistryValue Name="Path" Value="[INSTALLDIR]" Type="string" />
+            </RegistryKey>
+          </Component>
+          <Component Id="FarHere" Guid="$(var.Guid.FarHere)" Win64="$(var.Win64)">
+            <RegistryValue Root="HKCR" Key="Directory\shell\$(var.Product)" Value="$(var.Product) Here" Type="string" KeyPath="yes" />
+            <RegistryValue Root="HKCR" Key="Directory\shell\$(var.Product)\command" Value="&quot;[#Far.exe]&quot; &quot;%1&quot;" Type="string" />
+            <RegistryValue Root="HKCR" Key="Drive\shell\$(var.Product)" Value="$(var.Product) Here" Type="string" />
+            <RegistryValue Root="HKCR" Key="Drive\shell\$(var.Product)\command" Value="&quot;[#Far.exe]&quot; &quot;%1\&quot;" Type="string" />
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+    <FeatureRef Id="Far" />
+    <Upgrade Id="$(var.Guid.UpgradeCode)">
+      <UpgradeVersion Property="UPGRADE" OnlyDetect="yes" Maximum="$(var.Version)" />
+      <UpgradeVersion Property="DOWNGRADE" OnlyDetect="yes" Minimum="$(var.Version)" IncludeMinimum="no" />
+      <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" MigrateFeatures="yes" Minimum="0.0.0" />
+    </Upgrade>
+    <InstallExecuteSequence>
+      <Custom Action="SetUserInstallDir" Before="FindRelatedProducts">USERINSTALLDIR AND NOT INSTALLPATH</Custom>
+      <Custom Action="SetMachineInstallDir" Before="FindRelatedProducts">MACHINEINSTALLDIR AND NOT INSTALLPATH</Custom>
+      <Custom Action="SetInstallPath" Before="FindRelatedProducts">INSTALLPATH</Custom>
+      <Custom Action="ResetALLUSERS" Before="FindRelatedProducts">USERINSTALLDIR</Custom>
+      <Custom Action="SetALLUSERS1" Before="FindRelatedProducts">MACHINEINSTALLDIR</Custom>
+      <FindRelatedProducts After="AppSearch" />
+      <Custom Action="UpdateFeatureState" Before="InstallValidate" />
+      <Custom Action="SetARPINSTALLLOCATION" After="InstallValidate" />
+      <Custom Action="SaveShortcutProps" Before="RestoreShortcutProps">NOT (REMOVE = "ALL")</Custom>
+      <Custom Action="RestoreShortcutProps" After="CreateShortcuts">NOT (REMOVE = "ALL")</Custom>
+      <RemoveExistingProducts After="InstallFinalize" />
+      <Custom Action="LaunchShortcut" After="RemoveExistingProducts"><![CDATA[LAUNCHAPP AND NOT Installed AND UILevel < 5]]></Custom>
+    </InstallExecuteSequence>
+    <InstallUISequence>
+      <Custom Action="SetUserInstallScope" After="LaunchConditions">NOT Privileged</Custom>
+      <Custom Action="SetUserInstallDir" Before="FindRelatedProducts">USERINSTALLDIR AND NOT INSTALLPATH</Custom>
+      <Custom Action="SetMachineInstallDir" Before="FindRelatedProducts">MACHINEINSTALLDIR AND NOT INSTALLPATH</Custom>
+      <Custom Action="SetInstallPath" Before="FindRelatedProducts">INSTALLPATH</Custom>
+      <Custom Action="ResetALLUSERS" Before="FindRelatedProducts">USERINSTALLDIR</Custom>
+      <Custom Action="SetALLUSERS1" Before="FindRelatedProducts">MACHINEINSTALLDIR</Custom>
+      <FindRelatedProducts After="AppSearch" />
+      <Custom Action="SetMSIINSTALLPERUSER" Before="SetALLUSERS2"><![CDATA[NOT ALLUSERS AND VersionMsi >= "5.00"]]></Custom>
+      <Custom Action="SetALLUSERS2" Before="ExecuteAction"><![CDATA[NOT ALLUSERS AND VersionMsi >= "5.00"]]></Custom>
+    </InstallUISequence>
+    <UIRef Id="WixUI_Mod" />
+    <Icon Id="Far.ico" SourceFile="..\..\far\Far.ico" />
+  </Product>
+</Wix>

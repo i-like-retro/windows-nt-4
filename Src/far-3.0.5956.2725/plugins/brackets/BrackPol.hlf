@@ -1,0 +1,149 @@
+﻿.Language=Polish,Polish (Polski)
+.PluginContents=Dopasowanie nawiasów
+.Options CtrlStartPosChar=^<wrap>
+
+
+@Contents
+$ #Dopasowanie nawiasów#
+  Ta wtyczka pozwala na:
+
+  - znalezienie pasującego nawiasu;
+  - zaznaczenie tekstu zapisanego w nawiasach.
+
+  Wtyczka działa w trzech przypadkach:
+
+  #1. Wewnątrz '()', '{}', '[]', '<>', '«»' i znaki cudzysłowów#
+     To jest prosty przypadek - gdy kursor jest wewnątrz nawiasów,
+     to jest pozycjonowany na pasujący nawias. Dla znaku cudzysłowu
+     jest jeszcze niezbędne określenie kierunku - naprzód czy wstecz.
+
+  #2. Następne po '()', '{}', '[]', '<>' i '«»'#
+     Ten przypadek występuje, jeżeli kursor znajduje się na następnym
+     znaku po nawiasie. Wtyczka podświetla pasujący nawias. Obsługa
+     tej funkcji może być wyłączona w opcjach konfiguracji.
+
+  #3. Podwójne nawiasy#
+     Ten przypadek pozwala obsłużyć (na przykład) blok komentarzy
+     w języku C/C++: '/*' i '*/'. Kursor będzie umieszczony na znaku
+     pasującym do wskazanego nawiasu.
+
+  ~Konfiguracja~@Config@
+  ~Szukaj/wybierz~@Find@
+  ~Szukaj cudzysłowów~@Direct@
+  ~Używanie wtyczki w makrach~@MacroCallPlugin@
+
+
+@Find
+$ #Dopasowanie nawiasów - Szukaj/Wybierz#
+  #Szukaj#     - jeżeli pasujący nawias zostanie znaleziony,
+               to kursor będzie umieszczony na tym nawiasie.
+
+  #Wybierz#    - jeżeli pasujący nawias zostanie znaleziony,
+               to kursor będzie umieszczony na tym nawiasie, a tekst
+               pomiędzy nawiasami (także znaki nawiasów) zostanie
+               zaznaczony.
+
+  ~Zawartość~@Contents@
+  ~Konfiguruj~@Config@
+
+
+@Direct
+$ #Dopasowanie nawiasów - Szukaj cudzysłowów#
+  Jeżeli pasujące nawiasy lub znaki cudzysłowów mają te same znaki,
+wtyczka musi wiedzieć w jakim kierunku pliku ma ich szukać:
+
+  #Naprzód#    - szuka pasującego znaku od bieżącej pozycji kursora
+               do końca tekstu.
+
+  #Wstecz#     - szuka pasującego znaku od bieżącej pozycji kursora
+               do początku tekstu.
+
+  ~Zawartość~@Contents@
+  ~Konfiguruj~@Config@
+
+
+@Config
+$ #Dopasowanie nawiasów - Konfiguracja#
+  Jeżeli nie lubisz domyślnych ustawień wtyczki, możesz je zmienić.
+
+  #>Zasady#
+  Zasady kontrolowania zachowania wtyczki w specyficznych sytuacjach:
+
+   #Ignoruj nawiasy#         Jeżeli opcja jest włączona, wtyczka nie
+   #w cudzysłowach#          szuka znaków nawiasów, które są umieszczone
+                           w cudzysłowach: #'#{#'#.
+                           Znak cudzysłowu jest także konfigurowalny.
+
+   #Nie przeskakuj,#         Jeżeli opcja jest wyłączona, wtyczka
+   #jeżeli poza#             szuka pasującego nawiasu także, gdy kursor
+   #nawiasem#                znajduje się na kolejnym znaku za nawiasem.
+                           Jeżeli opcja jest włączona, wtyczka uruchamia
+                           szukanie tylko wtedy gdy kursor jest dokładnie
+                           na znaku nawiasu.
+
+   #Priorytet - podwójne#    Jeżeli opcja jest włączona, wtyczka najpierw
+   #nawiasy#                 używa reguł dla pojedynczych nawiasów
+                           (np. jeżeli kursor jest na pierwszym znaku
+                           w '#<%#', wtyczka próbuje znaleźć jako pasujący
+                           znak '#>#'. Jeżeli opcja jest wyłączona, wtyczka
+                           spróbuje znaleźć znak '#%>#'.
+
+   #Przejdź do nawiasu#      Gdy zaznaczamy blok pomiędzy nawiasami, ustawia
+   #przy zaznaczaniu#        kursor na znalezionym nawiasie.
+
+   #Dźwięk po znalezieniu#   Wywołuje sygnał dźwiękowy po znalezieniu nawiasu.
+
+  #>Definicje#
+  Ta sekcja pozwala zmienić niektóre ustawienia wtyczki:
+
+   #Znaki cytowania#      Znaki cytowania tekstu dla zasady "Ignoruj
+                        nawiasy w cudzysłowach". Zawiera sekwencję par
+                        dwu-znakowych. Pierwszy znak jest początkiem
+                        cytatu, drugi - końcem. Można wprowadzić maksymalnie
+                        10 par znaków. Uwaga: znaki cytowania nie są brane
+                        pod uwagę bezpośrednio przy wyszukiwaniu nawiasów.
+
+   #Pojedyncze nawiasy#   Definicja pojedynczych nawiasów. Zawiera sekwencję
+                        par dwu-znakowych. Pierwszy jest początkiem nawiasu,
+                        drugi - końcem. Można wprowadzić maksymalnie 10 par
+                        znaków. Pierwszy i drugi znak z pary mogą być takie
+                        same (np. #""# lub #''#).
+
+   #Podwójne nawiasy#     Definicja podwójnych nawiasów. Zawiera sekwencję
+                        cztero-znakową. Dwa pierwsze znaki są początkiem
+                        nawiasu, kolejne dwa - końcem. Można wprowadzić
+                        maksymalnie 10 takich sekwencji.
+
+  ~Zawartość~@Contents@
+
+
+@MacroCallPlugin
+$ #Używanie wtyczki w makrach#
+    ^<wrap>Wtyczkę można wywołać w makrach, używając polecenia Plugin.Call.
+    ^<wrap>Format wywołania:
+
+       #Plugin.Call("B66C436D-E657-419C-86D3-6834B9ACF3D2",<Parametr>)#
+
+    ^<wrap>gdzie:
+       #B66C436D-E657-419C-86D3-6834B9ACF3D2#
+          identyfikator wtyczki
+
+       #<Parametr>#
+          ^<wrap>ciąg lub wartość liczbowa, wskazująca czynność:
+
+          SearchFwd  0 - wyszukaj pasujący nawias naprzód
+          SearchBack 1 - wyszukaj pasujący nawias wstecz
+          SelectFwd  2 - zaznacz blok pomiędzy pasującymi nawiasami naprzód
+          SelectBack 3 - zaznacz blok pomiędzy pasującymi nawiasami wstecz
+          Config     4 - pokaż okno dialogowe konfiguracji
+
+          ^<wrap>Jeśli <Parametr> będzie spoza podanego zakresu - wtyczka zakończy działanie.
+          ^<wrap>Jeśli <Parametr> nie został określony - zostanie wyświetlone menu wtyczki.
+
+          ^<wrap>Różnica między "naprzód" i "wstecz" dotyczą tylko cudzysłowów.
+
+    ^<wrap>Przykład: wyszukaj pasujący nawias wstecz (początek nawiasu):
+
+       Plugin.Call("B66C436D-E657-419C-86D3-6834B9ACF3D2",1)
+
+  ~Zawartość~@Contents@

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectName>luamacro</ProjectName>
+    <ProjectGuid>{06BE01E6-7DC0-4D83-877C-B7ADE32175F8}</ProjectGuid>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.main.props" />
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.rules.copy.props" />
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.rules.crt_fix.props" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>EXPORT_OPEN;EXPORT_PROCESSEDITOREVENT;EXPORT_PROCESSEDITORINPUT;EXPORT_PROCESSCONSOLEINPUT;EXPORT_PROCESSVIEWEREVENT;EXPORT_PROCESSDIALOGEVENT;EXPORT_CONFIGURE;EXPORT_ANALYSE;EXPORT_CLOSEPANEL;EXPORT_COMPARE;EXPORT_DELETEFILES;EXPORT_GETFILES;EXPORT_GETFINDDATA;EXPORT_GETOPENPANELINFO;EXPORT_MAKEDIRECTORY;EXPORT_PROCESSHOSTFILE;EXPORT_PROCESSPANELEVENT;EXPORT_PROCESSPANELINPUT;EXPORT_PUTFILES;EXPORT_SETDIRECTORY;EXPORT_SETFINDLIST;EXPORT_GETCONTENTDATA;RUN_LUAFAR_INIT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>luasdk/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>lua51.lib;luafar3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(IntDir)luafar3;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Platform)'=='x64'">luasdk/64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Platform)'=='Win32'">luasdk/32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Platform)'=='ARM64'">luasdk/ARM64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="luafar\luaplug.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="luafar\luafar.h" />
+    <ClInclude Include="luafar\version.h" />
+    <ClInclude Include="luasdk\include\lauxlib.h" />
+    <ClInclude Include="luasdk\include\lua.h" />
+    <ClInclude Include="luasdk\include\lualib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="luamacro.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="luamacroW.vc.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="luafar3.vcxproj">
+      <Project>{9ff87075-f1e1-410b-818c-2823396fe24f}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(ProjectDir)..\..\_build\vc\config\common.targets" />
+</Project>

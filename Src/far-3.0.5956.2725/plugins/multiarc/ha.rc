@@ -1,0 +1,10 @@
+#pragma code_page(65001)
+
+#include "multiarcversion.hpp"
+
+#define PLUGIN_BUILD 17
+#define PLUGIN_DESC FMTDESCRIPTION
+#define PLUGIN_NAME "ha"
+#define PLUGIN_FILENAME "ha.fmt"
+
+#include <plugin_version.rc>

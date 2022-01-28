@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectName>MultiArc</ProjectName>
+    <ProjectGuid>{7EF4D5DD-4136-42AB-893B-BE75B63A2217}</ProjectGuid>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.main.props" />
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.rules.copy.props" />
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.rules.crt_fix.props" />
+  </ImportGroup>
+  <ItemGroup>
+    <ClCompile Include="$(ProjectName).cpp" />
+    <ClCompile Include="arccfg.cpp" />
+    <ClCompile Include="arccmd.cpp" />
+    <ClCompile Include="arcget.cpp" />
+    <ClCompile Include="ArcMix.cpp" />
+    <ClCompile Include="ArcPlg.cpp" />
+    <ClCompile Include="ArcProc.cpp" />
+    <ClCompile Include="arcput.cpp" />
+    <ClCompile Include="arcread.cpp" />
+    <ClCompile Include="arcreg.cpp" />
+    <ClCompile Include="global.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(ProjectName).vc.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(ProjectName).hpp" />
+    <ClInclude Include="fmt.hpp" />
+    <ClInclude Include="marclng.hpp" />
+    <ClInclude Include="multiarcversion.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="$(ProjectName).rc">
+      <AdditionalIncludeDirectories>..\common\ascii;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <Import Project="$(ProjectDir)..\..\_build\vc\config\common.targets" />
+</Project>

@@ -1,0 +1,96 @@
+#The following variables can be set by the user:
+#
+#INSTALL - the path of top binary directory for all plugins
+#  or
+#DEFINSTALL - same as above, but can be defined in makefile_vc_defs
+#
+#DEBUG - set if a debug build is needed
+#
+#AMD64 - set for x64 build
+#  or
+#CPU=AMD64 - for x64 build
+#
+#IA64 - set for IA64 build
+#  or
+#CPU=IA64 - for IA64 build
+#
+#(we try to autodetect if not set)
+#
+#############################################################################
+
+ALLDIRS = align arclite autowrap brackets compare drawline editcase emenu farcmds \
+          filecase hlfviewer network proclist tmppanel samefolder luamacro \
+#ftp multiarc
+
+#############################################################################
+!if exists(make_vc_defs)
+!include make_vc_defs
+!endif
+!if !defined(INSTALL) && defined(DEFINSTALL)
+INSTALL=$(DEFINSTALL)
+!endif
+
+!include ./makefile_vc_getmode
+
+##########################
+all:    $(OUTPATH) $(ALLDIRS)
+
+!ifdef __MAKE__
+.PHONY: libcrt $(OUTPATH) $(ALLDIRS) clean
+!else
+FICTIVE=_fictive_
+$(FICTIVE):
+
+!endif
+
+##########################
+libcrt: $(FICTIVE)
+	@echo ===========CRT library
+	@cd common\CRT
+	@$(MAKE) /nologo -s -f makefile_lib_vc $(_MDEFS)
+	@cd ..\..
+
+#######
+!ifndef DEBUG
+_ODF_=Release
+_ODN_=Release
+!else
+_ODF_=Debug
+_ODN_=Debug
+!endif
+!if "$(BUILD_PLATFORM)" == "AMD64"
+_ODB_=64
+!else
+_ODB_=32
+!endif
+
+!ifdef INSTALL
+
+OUTPATH=$(INSTALL)
+
+$(OUTPATH):
+	@if not exist "$(OUTPATH)\$(NULL)" mkdir "$(OUTPATH)"
+
+#$(INSTALL):
+#@if not exist "$(INSTALL)\$(NULL)" mkdir "$(INSTALL)"
+
+!endif
+
+$(ALLDIRS): $(FICTIVE) $(OUTPATH)
+	@echo ===========$@
+	@cd $@
+!ifndef INSTALL
+	@$(MAKE) /nologo -s -f makefile_vc $(_MDEFS)
+!else
+	@$(MAKE) /nologo -s -f makefile_vc $(_MDEFS) $(_MKDO_)INSTALL=..\$(OUTPATH)
+!endif
+	@cd ..
+
+fdir=..\far\$(_ODF_).$(DIRBIT).vc
+pdir=%d\$(_ODN_).$(DIRBIT).vc
+pcredir=multiarc\libpcre\obj.$(DIRBIT).vc
+
+clean:
+	@if exist $(fdir)\lua*.* echo del $(fdir)\lua*.*& del /q $(fdir)\lua*.* 1>nul
+	@if exist $(pcredir)\ echo del $(pcredir)\& rd /q /s $(pcredir) 1>nul
+	@for %d in ($(ALLDIRS)) do @if exist $(pdir)\ echo del $(pdir)\& rd /q /s $(pdir) 1>nul

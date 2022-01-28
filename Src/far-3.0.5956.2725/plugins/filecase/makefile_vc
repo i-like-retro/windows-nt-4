@@ -1,0 +1,15 @@
+NAME = FileCase
+
+LINK_OBJS = \
+	$(INTDIR)\FileCase.obj \
+	$(INTDIR)\filecvt.obj \
+	$(INTDIR)\FileMix.obj \
+	$(INTDIR)\ProcessName.obj
+
+!include ..\makefile_vc_def_inc
+!include ..\makefile_vc_target_inc
+
+$(INTDIR)\FileCase.obj: FileCase.cpp FileCase.hpp FileLng.hpp version.hpp guid.hpp $(COMINC)\plugin.hpp $(COMINC)\PluginSettings.hpp $(COMINC)\DlgBuilder.hpp
+$(INTDIR)\filecvt.obj: filecvt.cpp FileCase.hpp FileLng.hpp guid.hpp $(COMINC)\PluginSettings.hpp $(COMINC)\DlgBuilder.hpp
+$(INTDIR)\FileMix.obj: FileMix.cpp FileCase.hpp guid.hpp
+$(INTDIR)\ProcessName.obj: ProcessName.cpp FileCase.hpp

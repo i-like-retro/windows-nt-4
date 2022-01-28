@@ -1,0 +1,8 @@
+NAME = SameFolder
+
+LINK_OBJS = $(INTDIR)\SameFolder.obj
+
+!include ..\makefile_vc_def_inc
+!include ..\makefile_vc_target_inc
+
+$(INTDIR)\SameFolder.obj: SameFolder.cpp Lang.hpp guid.hpp version.hpp $(COMINC)\plugin.hpp $(COMINC)\PluginSettings.hpp $(COMINC)\DlgBuilder.hpp

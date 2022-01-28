@@ -1,0 +1,169 @@
+ANSI = 1
+NAME = FarFtp
+
+DOCS = \
+	*.reg \
+	*.txt
+
+FSTDLIB=$(INTDIR)\FsdLib.lib
+LIBSRC=FStdLib\FARStdLib
+
+LINK_DEP=$(FSTDLIB)
+
+FLLLIST = DirList Progress
+!ifndef INSTALL
+FLLLIST = $(FLLLIST) Notify
+!endif
+
+All: dirs
+
+!include ..\makefile_vc_def_inc
+
+##########
+
+LINK_OBJS = \
+$(INTDIR)\AskOver.obj \
+$(INTDIR)\Cfg.obj \
+$(INTDIR)\CmdLine.obj \
+$(INTDIR)\cnDownload.obj \
+$(INTDIR)\cnInit.obj \
+$(INTDIR)\cnUpload.obj \
+$(INTDIR)\Connect.obj \
+$(INTDIR)\ConnectCmds.obj \
+$(INTDIR)\ConnectIO.obj \
+$(INTDIR)\ConnectMain.obj \
+$(INTDIR)\ConnectNB.obj \
+$(INTDIR)\ConnectSock.obj \
+$(INTDIR)\DeleteFile.obj \
+$(INTDIR)\EnumHost.obj \
+$(INTDIR)\Event.obj \
+$(INTDIR)\FAR.obj \
+$(INTDIR)\FGet.obj \
+$(INTDIR)\FileList.obj \
+$(INTDIR)\FPut.obj \
+$(INTDIR)\Ftp.obj \
+$(INTDIR)\FtpAPI.obj \
+$(INTDIR)\FTPBlock.obj \
+$(INTDIR)\FTPConnect.obj \
+$(INTDIR)\FtpDlg.obj \
+$(INTDIR)\FTPHost.obj \
+$(INTDIR)\fUtils.obj \
+$(INTDIR)\GetOpenInfo.obj \
+$(INTDIR)\HGet.obj \
+$(INTDIR)\HPut.obj \
+$(INTDIR)\JM.obj \
+$(INTDIR)\Key.obj \
+$(INTDIR)\MakeDir.obj \
+$(INTDIR)\Mem.obj \
+$(INTDIR)\Mix.obj \
+$(INTDIR)\Plugin.obj \
+$(INTDIR)\SetDir.obj \
+$(INTDIR)\Shortcut.obj \
+$(INTDIR)\sock.obj \
+$(INTDIR)\Queque.obj \
+$(INTDIR)\Url.obj
+
+##########
+
+LIB_OBJS = \
+$(INTDIR)\fstd_Arg.obj \
+$(INTDIR)\fstd_asrt.obj \
+$(INTDIR)\fstd_ClpS.obj \
+$(INTDIR)\fstd_crc32.obj \
+$(INTDIR)\fstd_Dialog.obj \
+$(INTDIR)\fstd_err.obj \
+$(INTDIR)\fstd_exSCAT.obj \
+$(INTDIR)\fstd_exSCMP.obj \
+$(INTDIR)\fstd_exSCPY.obj \
+$(INTDIR)\fstd_exSPCH.obj \
+$(INTDIR)\fstd_exSPS.obj \
+$(INTDIR)\fstd_ilist.obj \
+$(INTDIR)\fstd_INProc.obj \
+$(INTDIR)\fstd_log.obj \
+$(INTDIR)\fstd_menu.obj \
+$(INTDIR)\fstd_mesg.obj \
+$(INTDIR)\fstd_mklog.obj \
+$(INTDIR)\fstd_Msg.obj \
+$(INTDIR)\fstd_Patt.obj \
+$(INTDIR)\fstd_per.obj \
+$(INTDIR)\fstd_plg.obj \
+$(INTDIR)\fstd_Reg.obj \
+$(INTDIR)\fstd_SCol.obj \
+$(INTDIR)\fstd_scr.obj \
+$(INTDIR)\fstd_String.obj \
+$(INTDIR)\fstd_stdlibCS.obj \
+$(INTDIR)\fstd_SText.obj \
+$(INTDIR)\fstd_exit.obj \
+$(INTDIR)\fstd_Con.obj \
+$(INTDIR)\fstd_FMsg.obj \
+$(INTDIR)\fstd_OEM.obj \
+$(INTDIR)\fstd_Utils.obj \
+$(INTDIR)\fstd_FUtils.obj \
+
+DEP_HDR=int.h FStdLib\fstdlib.h lib/Plugin.h Plugins.h Cfg.h \
+JM.h var.h Connect.h FtpAPI.h Ftp.h
+
+##########
+!if !defined(VC) || "$(VC)" >= "14"
+NOWRN15=/wd5033 /wd4062 /wd4191 /wd4459 /wd5204
+!endif
+USERCPP=/I.\FStdLib /D__NOMEM__=1 /D__USEASSERT__=1 /wd4996 $(NOWRN15)
+!ifdef DEBUG
+USERCPP=$(USERCPP) /D__FILELOG__=1
+!endif
+
+LIBS=$(FSTDLIB) $(LIBS) wsock32.lib winmm.lib
+
+
+!include ..\makefile_vc_target_inc
+
+All: fstdlib flls
+
+fstdlib: $(FSTDLIB)
+
+$(LINK_OBJS) : $(DEP_HDR)
+
+$(FSTDLIB): $(LIB_OBJS)
+!ifndef __MAKE__
+	@$(LIBR) /nologo /OUT:$@ @<<
+$(LIB_OBJS)
+<<
+!else
+	@$(LIBR) /nologo /OUT:$@ @&&<
+$(LIB_OBJS)
+<
+!endif
+
+!ifndef __MAKE__
+{$(LIBSRC)}.cpp{$(INTDIR)}.obj::
+	@$(CC) @<<
+	$(CPPFLAGS) /Fo$(INTDIR)/ $<
+<<
+!else
+{$(LIBSRC)}.cpp{$(INTDIR)}.obj:
+	@$(CC) $(CPPFLAGS) /Fo$(INTDIR)/ { $< }
+!endif
+
+{$(LIBSRC)}.asm{$(INTDIR)}.obj:
+	@ml /nologo /c /Fo$@ $<
+
+$(RES): version.hpp
+
+##########
+flls: $(FLLLIST)
+
+!include ../makefile_vc_getmode
+
+!ifdef __MAKE__
+.PHONY: $(FLLLIST)
+!else
+FICTIVE=_fictive_
+_fictive_:
+!endif
+
+$(FLLLIST): $(FICTIVE)
+!ifndef INSTALL
+	@$(MAKE) $(_MKHIDE) /f makefile_vc_fll $(_MKDO_)FLL=$@ $(_MDEFS)
+!else
+	@$(MAKE) $(_MKHIDE) /f makefile_vc_fll $(_MKDO_)FLL=$@ $(_MDEFS) INSTALL=$(INSTALL)
+!endif

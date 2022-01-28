@@ -1,0 +1,10 @@
+#pragma code_page(65001)
+
+#include "multiarcversion.hpp"
+
+#define PLUGIN_BUILD 33
+#define PLUGIN_DESC FMTDESCRIPTION
+#define PLUGIN_NAME "zip"
+#define PLUGIN_FILENAME "zip.fmt"
+
+#include <plugin_version.rc>

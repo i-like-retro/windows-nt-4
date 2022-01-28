@@ -1,0 +1,10 @@
+#pragma code_page(65001)
+
+#include "multiarcversion.hpp"
+
+#define PLUGIN_BUILD 32
+#define PLUGIN_DESC FMTDESCRIPTION
+#define PLUGIN_NAME "arc"
+#define PLUGIN_FILENAME "arc.fmt"
+
+#include <plugin_version.rc>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectName>ha</ProjectName>
+    <ProjectGuid>{F208D520-150C-4E92-8DFE-80D44E04162A}</ProjectGuid>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+
+  <PropertyGroup Label="UserMacros">
+    <ProjectSpecificOutDirName>Plugins\MultiArc\Formats</ProjectSpecificOutDirName>
+    <ProjectSpecificIntDirName>Plugins\MultiArc\$(ProjectName)</ProjectSpecificIntDirName>
+  </PropertyGroup>
+
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.main.props" />
+    <Import Project="$(ProjectDir)..\..\_build\vc\config\common.plugins.rules.crt_fix.props" />
+  </ImportGroup>
+  <PropertyGroup>
+    <TargetExt>.fmt</TargetExt>
+  </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="$(ProjectName).cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(ProjectName).vc.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="$(ProjectName).rc">
+      <AdditionalIncludeDirectories>..\common\ascii;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <Import Project="$(ProjectDir)..\..\_build\vc\config\common.targets" />
+</Project>

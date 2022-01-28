@@ -1,0 +1,93 @@
+﻿.Language=Polish,Polish (Polski)
+.PluginContents=Przeglądarka sieci
+
+
+@Contents
+$ #Wtyczka - przeglądarka sieci#
+ Używając wtyczki "Przeglądarka sieci" można poruszać się w zasobach
+sieciowych, przechodzić do zamapowanych i nie zamapowanych dysków sieciowych,
+oraz je mapować i odmapować.
+Należy wcisnąć #F5#, aby zamapować wybrany zasób na pierwszą wolną literę dysku
+lub #F6#, aby wybrać literę dysku. #Shift-F5# i #Shift-F6# działają tak samo
+jak #F5# i #F6#, ale tworzą połączenia tymczasowe.
+Istnieje możliwość przełączenia typu połączenia po najechaniu na wybraną literę
+w menu dysków i wciśnięciu #F6# lub #Shift-F6#.
+Aby ~odłączyć mapowany dysk~@DisconnectDrive@, należy wcisnąć #F8#.
+
+ Możesz otworzyć przeglądarkę sieci z menu dysków,
+wtyczkę można też uruchomić z linii poleceń:
+ #net:#
+ #net:nazwa_serwera#
+ #net:\\nazwa_serwera#
+
+ Jeśli nazwa serwera zostanie określona przy otwieraniu wtyczki z wiersza poleceń,
+to zostanie wyświetlona lista udziałów tego serwera.
+Opcja ta działa tylko w sieciach Microsoft Windows.
+
+ We wtyczce można poruszać się pomiędzy serwerami wpisując polecenie w wierszu
+poleceń:
+
+ #cd \\nazwa_serwera#
+
+Opcja ta działa tylko w sieciach Microsoft Windows.
+
+ Można podać różne dane uwierzytelniające. Aby otworzyć zasoby podając
+inne dane logowania, należy wcisnąć klawisz #F4#.
+
+   ~Konfiguracja przeglądarki sieci~@Config@
+
+
+@Config
+$ #Konfiguracja przeglądarki sieci#
+ W tym oknie dialogowym można zmieniać następujące opcje:
+
+ #Dodaj do menu dysków#
+ Dodaje "Sieć" do listy w menu wyboru dysków.
+
+ #Dodaj do menu wtyczek#
+ Dodaje "Sieć" do listy w menu wyboru wtyczek.
+
+ #Pokaż ".." na liście dostępów#
+ Pokazuje ".." na liście dostępnych zasobów.
+
+ #Pokaż sieć lokalną#
+ Jeżeli opcja jest włączona, to po pierwszym otwarciu przeglądarki
+sieciowej wyświetli się otoczenie sieciowe bieżącego komputera
+(komputery w tej samej domenie lub grupie roboczej). Opcja działa
+tylko w sieciach Microsoft Windows.
+
+ #Pokaż drukarki#
+ Pokazuje drukarki udostępnione przez serwery.
+
+ #Skanuj sieć#
+ Jeżeli opcja jest wyłączona, wtyczka nie skanuje sieci w poszukiwaniu urządzeń.
+
+ #Pokaż pełną nazwę udziału#
+ Jeżeli opcja jest włączona, wyświetlane są nazwy: \\Serwer1 i \\Serwer2, jeżeli wyłączona: Serwer1 i Serwer2.
+
+ #Udziały ukryte#
+ Zasady widoczności ukrytych udziałów (administracyjnych) na serwerze.
+
+ - #Nigdy nie pokazuj#
+   Nie pokazuje ukrytych udziałów.
+ - #Pokazuj jako ukryte#
+   Udziały ukryte są widoczne w panelu z atrybutem 'Ukryte'.
+ - #Zawsze pokazuj#
+   Udziały ukryte są w pełni widoczne w panelu.
+
+ #Przeglądaj do Ulubionych, jeśli to możliwe#
+ Jeżeli przeglądany (przez sieć) komputer został dodany do ulubionych, wtedy przejście na poziom ".." otwiera listę Ulubionych.
+
+
+@DisconnectDrive
+$ #Odłącz dysk sieciowy#
+ Można odłączyć dysk sieciowy wciskając klawisz #Del# lub #F8#
+na liście udziałów komputera.
+
+ Jeżeli opcja #[x] Odłącz dysk sieciowy# jest włączona w konfiguracji
+Far w oknie ~Potwierdzeń~@:ConfirmDlg@, wyświetlone zostanie okno
+umożliwiające potwierdzenie rozłączenia i możliwości wyboru,
+czy rozłączenie ma być na stałe czy tymczasowo.
+
+ Opcja #[x] Podłącz po zalogowaniu# jest włączona tylko dla dysków sieciowych
+podłączonych na stałe (permanentnie).

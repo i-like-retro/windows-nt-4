@@ -1,0 +1,11 @@
+#pragma code_page(65001)
+
+#include "luafar/version.h"
+
+#define PLUGIN_DESC "Lua Macros for Far Manager"
+#define PLUGIN_NAME "LuaMacro"
+#define PLUGIN_FILENAME "luamacro.dll"
+#define PLUGIN_COPYRIGHT_INITIAL "© Shmuel Zeigerman, 2012. "
+#define PLUGIN_COPYRIGHT_CURRENT_FROM 2012
+
+#include <plugin_version.rc>
