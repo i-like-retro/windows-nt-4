@@ -171,10 +171,14 @@ to only provide partial functionality.
 Graphics
 --------
 
+* [ACDSee 2.43](CD/SOFTWARE/GRAPHICS/ACDS243): an image organizer,
+viewer and image editor program for Windows. **NOTE**: this program should
+be purchased for use.
+
 * [ArtIcons 5.52](CD/SOFTWARE/GRAPHICS/AIPRO552) `2019-03-23`: an advanced
 icon maker for Windows. It allows professional and amateur alike to create and
-edit icon images and manage icon files and libraries. **NOTE**: this is a
-shareware program and should be purchased for prolonged use. Visit
+edit icon images and manage icon files and libraries. **NOTE**: this program
+should be purchased for use. Visit
 [the official website](http://www.aha-soft.com/articons/index.htm) for more
 information.
 
