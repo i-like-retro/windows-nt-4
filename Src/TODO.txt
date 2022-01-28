@@ -45,3 +45,13 @@ MSWin32 does not support: :(,prefix:7)common/win32
 Make "ACDSee here..."
 
 pkzipc
+
+jvm
+aida64
+
+fuse?
+
+nes, sega, snes, etc. emulators
+
+xnview?
+

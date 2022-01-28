@@ -189,6 +189,14 @@ Network
 * [PuTTY 0.76](CD/SOFTWARE/NETWORK/PUTTY076.EXE) `2021-07-17`: an SSH and telnet
 client. PuTTY has been compiled for Windows NT from [source code](Src/putty-0.76).
 
+Emulators
+---------
+
+* [DOSBox 0.74-3](CD/SOFTWARE/EMULATOR/DOSBOX74.EXE) `2019-06-26`: DOSBox is an
+emulator that recreates a MS-DOS compatible environment (complete with Sound,
+Input, Graphics and even basic networking). This environment is complete enough
+to run many classic MS-DOS games completely unmodified.
+
 Software Development
 --------------------
 
