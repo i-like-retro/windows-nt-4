@@ -516,7 +516,7 @@ public:
 		BoolOption AllowReedit;
 		BoolOption HistoryClear;
 		BoolOption RemoveSUBST;
-		BoolOption RemoveHotPlug;
+		//BoolOption RemoveHotPlug;
 		BoolOption DetachVHD;
 	};
 

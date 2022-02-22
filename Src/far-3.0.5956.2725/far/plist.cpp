@@ -62,6 +62,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // External:
 #include "format.hpp"
 
+#ifndef DWMWA_CLOAKED
+#define DWMWA_CLOAKED 14
+#endif
+
 //----------------------------------------------------------------------------
 
 struct menu_data

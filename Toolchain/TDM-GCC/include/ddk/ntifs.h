@@ -1536,6 +1536,8 @@ typedef struct _QUERY_PATH_RESPONSE {
     ULONG LengthAccepted;
 } QUERY_PATH_RESPONSE, *PQUERY_PATH_RESPONSE;
 
+#ifndef __TDMGCC_RETRIEVAL_POINTERS_BUFFER
+#define __TDMGCC_RETRIEVAL_POINTERS_BUFFER
 typedef struct _RETRIEVAL_POINTERS_BUFFER {
     ULONG               ExtentCount;
     LARGE_INTEGER       StartingVcn;
@@ -1544,6 +1546,7 @@ typedef struct _RETRIEVAL_POINTERS_BUFFER {
         LARGE_INTEGER   Lcn;
     } Extents[1];
 } RETRIEVAL_POINTERS_BUFFER, *PRETRIEVAL_POINTERS_BUFFER;
+#endif
 
 typedef struct _RTL_SPLAY_LINKS {
     struct _RTL_SPLAY_LINKS *Parent;
@@ -1679,9 +1682,12 @@ typedef struct _SHARED_CACHE_MAP {
 
 #endif
 
+#ifndef __TDMGCC_STARTING_VCN_INPUT_BUFFER
+#define __TDMGCC_STARTING_VCN_INPUT_BUFFER
 typedef struct _STARTING_VCN_INPUT_BUFFER {
     LARGE_INTEGER StartingVcn;
 } STARTING_VCN_INPUT_BUFFER, *PSTARTING_VCN_INPUT_BUFFER;
+#endif
 
 typedef struct _SYSTEM_CACHE_INFORMATION {
     ULONG CurrentSize;

@@ -92,6 +92,7 @@ namespace detail
 	};
 }
 
+#define select xselect
 template<typename container, typename container_ref, typename accessor, typename accessor_ref, typename T>
 class select
 {

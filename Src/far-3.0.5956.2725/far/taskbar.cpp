@@ -96,6 +96,7 @@ private:
 
 	void handler() const
 	{
+		#if 0
 		os::debug::set_thread_name(L"Taskbar processor");
 
 		SCOPED_ACTION(os::com::initialize);
@@ -134,6 +135,7 @@ private:
 				break;
 			}
 		}
+		#endif
 	}
 
 	std::atomic<TBPFLAG> m_State{ TBPF_NOPROGRESS };

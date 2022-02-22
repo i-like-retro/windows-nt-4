@@ -120,7 +120,7 @@ namespace os::chrono
 			Tz.Bias = -Tz.Bias;
 			Tz.StandardBias = -Tz.StandardBias;
 			Tz.DaylightBias = -Tz.DaylightBias;
-			if (SystemTimeToTzSpecificLocalTime(&Tz, &lst, &ust))
+			if (SystemTimeToTzSpecificLocalTime(&Tz, const_cast<SYSTEMTIME*>(&lst), &ust))
 				return true;
 		}
 

@@ -154,9 +154,9 @@ namespace os::version
 
 	static bool get_os_version(OSVERSIONINFOEX& Info)
 	{
-		const auto InfoPtr = edit_as<OSVERSIONINFO*>(&Info);
+		const auto InfoPtr = edit_as<OSVERSIONINFOW*>(&Info);
 
-		if (imports.RtlGetVersion && imports.RtlGetVersion(InfoPtr) == STATUS_SUCCESS)
+		if (imports.RtlGetVersion && imports.RtlGetVersion(reinterpret_cast<RTL_OSVERSIONINFOW*>(InfoPtr)) == STATUS_SUCCESS)
 			return true;
 
 WARNING_PUSH()

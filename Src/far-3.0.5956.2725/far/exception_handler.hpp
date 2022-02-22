@@ -81,6 +81,7 @@ private:
 	PTOP_LEVEL_EXCEPTION_FILTER m_PreviousFilter;
 };
 
+/*
 class purecall_handler
 {
 public:
@@ -104,6 +105,7 @@ public:
 private:
 	_invalid_parameter_handler m_PreviousHandler;
 };
+*/
 
 void restore_system_exception_handler();
 

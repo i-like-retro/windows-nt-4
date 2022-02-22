@@ -154,6 +154,7 @@ static filter_area convert_type(Panel const* const HostPanel, FAR_FILE_FILTER_TY
 	case FFT_PANEL:    return HostPanel == Global->CtrlObject->Cp()->RightPanel().get()? filter_area::panel_right : filter_area::panel_left;
 	case FFT_COPY:     return filter_area::copy;
 	case FFT_FINDFILE: return filter_area::find_file;
+    #undef select
 	case FFT_SELECT:   return filter_area::select;
 	case FFT_CUSTOM:   return filter_area::custom;
 	default:

@@ -274,12 +274,14 @@ BOOL WINAPI imports::stub_SetConsoleKeyShortcuts(BOOL Set, BYTE ReserveKeys, LPV
 	return FALSE;
 }
 
+/*
 BOOL WINAPI imports::stub_GetConsoleScreenBufferInfoEx(HANDLE ConsoleOutput, PCONSOLE_SCREEN_BUFFER_INFOEX ConsoleScreenBufferInfoEx)
 {
 	LOGWARNING(L"Stub call"sv);
 	SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
 	return FALSE;
 }
+*/
 
 BOOL WINAPI imports::stub_QueryFullProcessImageNameW(HANDLE Process, DWORD Flags, LPWSTR ExeName, PDWORD Size)
 {
@@ -295,6 +297,7 @@ BOOL WINAPI imports::stub_TzSpecificLocalTimeToSystemTime(const TIME_ZONE_INFORM
 	return FALSE;
 }
 
+/*
 void WINAPI imports::stub_InitializeSRWLock(PSRWLOCK SRWLock)
 {
 	LOGWARNING(L"Stub call"sv);
@@ -338,6 +341,7 @@ BOOLEAN WINAPI imports::stub_TryAcquireSRWLockShared(PSRWLOCK SRWLock)
 	SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
 	return FALSE;
 }
+*/
 
 void WINAPI imports::stub_GetSystemTimePreciseAsFileTime(LPFILETIME SystemTimeAsFileTime)
 {

@@ -1576,7 +1576,7 @@ namespace os::fs
 
 		bool set_file_encryption(const wchar_t* FileName, bool Encrypt)
 		{
-			return (Encrypt? ::EncryptFile(FileName) : ::DecryptFile(FileName, 0)) != FALSE;
+			return false;//(Encrypt? ::EncryptFile(FileName) : ::DecryptFile(FileName, 0)) != FALSE;
 		}
 
 		security::descriptor get_file_security(const wchar_t* Object, SECURITY_INFORMATION RequestedInformation)
@@ -1627,7 +1627,7 @@ namespace os::fs
 			SHFILEOPSTRUCT fop{};
 			fop.wFunc = FO_DELETE;
 			fop.pFrom = ObjectsArray.c_str();
-			fop.fFlags = FOF_NO_UI | FOF_ALLOWUNDO;
+			fop.fFlags = /*FOF_NO_UI*/ (FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR) | FOF_ALLOWUNDO;
 
 			const auto Result = SHErrorToWinError(SHFileOperation(&fop));
 			SetLastError(Result);
@@ -1816,7 +1816,7 @@ namespace os::fs
 
 		const auto LastError = GetLastError();
 
-		if (STATUS_STOPPED_ON_SYMLINK == get_last_nt_status() && ERROR_STOPPED_ON_SYMLINK != LastError)
+		if (/*STATUS_STOPPED_ON_SYMLINK*/static_cast<NTSTATUS>(0x8000002D) == get_last_nt_status() && ERROR_STOPPED_ON_SYMLINK != LastError)
 		{
 			SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
 			return nullptr;
@@ -1870,7 +1870,7 @@ namespace os::fs
 		if (low::copy_file(strFrom.c_str(), strTo.c_str(), ProgressRoutine, Data, Cancel, CopyFlags))
 			return true;
 
-		if (STATUS_STOPPED_ON_SYMLINK == get_last_nt_status() && ERROR_STOPPED_ON_SYMLINK != GetLastError())
+		if (/*STATUS_STOPPED_ON_SYMLINK*/static_cast<NTSTATUS>(0x8000002D) == get_last_nt_status() && ERROR_STOPPED_ON_SYMLINK != GetLastError())
 		{
 			SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
 			return false;
@@ -1901,7 +1901,7 @@ namespace os::fs
 		if (low::move_file(strFrom.c_str(), strTo.c_str(), Flags))
 			return true;
 
-		if (STATUS_STOPPED_ON_SYMLINK == get_last_nt_status() && ERROR_STOPPED_ON_SYMLINK != GetLastError())
+		if (/*STATUS_STOPPED_ON_SYMLINK*/static_cast<NTSTATUS>(0x8000002D) == get_last_nt_status() && ERROR_STOPPED_ON_SYMLINK != GetLastError())
 		{
 			SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
 			return false;
@@ -2313,7 +2313,7 @@ namespace os::fs
 		if (!imports.CreateSymbolicLinkW)
 			return CreateReparsePoint(Target, Object, Flags & SYMBOLIC_LINK_FLAG_DIRECTORY? RP_SYMLINKDIR : RP_SYMLINKFILE);
 
-		static const DWORD unpriv_flag = version::is_win10_1703_or_later()? SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE : 0;
+		static const DWORD unpriv_flag = version::is_win10_1703_or_later()? /*SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE*/2 : 0;
 
 		return imports.CreateSymbolicLinkW(null_terminated(Object).c_str(), null_terminated(Target).c_str(), Flags | unpriv_flag) != FALSE;
 	}

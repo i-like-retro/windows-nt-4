@@ -1694,6 +1694,91 @@ typedef union _TWO_BYTE {
   (Bit) = _val; \
 }
 
+#define CDB6GENERIC_LENGTH 6
+#define CDB10GENERIC_LENGTH 10
+#define CDB12GENERIC_LENGTH 12
+
+#pragma pack(push, mode_page_capabilities, 1)
+typedef struct _CDVD_CAPABILITIES_PAGE {
+    UCHAR PageCode : 6;
+    UCHAR Reserved : 1;
+    UCHAR PSBit : 1;
+    UCHAR PageLength;
+    UCHAR CDRRead : 1;
+    UCHAR CDERead : 1;
+    UCHAR Method2 : 1;
+    UCHAR DVDROMRead : 1;
+    UCHAR DVDRRead : 1;
+    UCHAR DVDRAMRead : 1;
+    UCHAR Reserved2 : 2;
+    UCHAR CDRWrite : 1;
+    UCHAR CDEWrite : 1;
+    UCHAR TestWrite : 1;
+    UCHAR Reserved3 : 1;
+    UCHAR DVDRWrite : 1;
+    UCHAR DVDRAMWrite : 1;
+    UCHAR Reserved4 : 2;
+    UCHAR AudioPlay : 1;
+    UCHAR Composite : 1;
+    UCHAR DigitalPortOne : 1;
+    UCHAR DigitalPortTwo : 1;
+    UCHAR Mode2Form1 : 1;
+    UCHAR Mode2Form2 : 1;
+    UCHAR MultiSession : 1;
+    UCHAR BufferUnderrunFree : 1;
+    UCHAR CDDA : 1;
+    UCHAR CDDAAccurate : 1;
+    UCHAR RWSupported : 1;
+    UCHAR RWDeinterleaved : 1;
+    UCHAR C2Pointers : 1;
+    UCHAR ISRC : 1;
+    UCHAR UPC : 1;
+    UCHAR ReadBarCodeCapable : 1;
+    UCHAR Lock : 1;
+    UCHAR LockState : 1;
+    UCHAR PreventJumper : 1;
+    UCHAR Eject : 1;
+    UCHAR Reserved6 : 1;
+    UCHAR LoadingMechanismType : 3;
+    UCHAR SeparateVolume : 1;
+    UCHAR SeperateChannelMute : 1;
+    UCHAR SupportsDiskPresent : 1;
+    UCHAR SWSlotSelection : 1;
+    UCHAR SideChangeCapable : 1;
+    UCHAR RWInLeadInReadable : 1;
+    UCHAR Reserved7 : 2;
+    union {
+        UCHAR ReadSpeedMaximum[2];
+        UCHAR ObsoleteReserved[2];
+    };
+    UCHAR NumberVolumeLevels[2];
+    UCHAR BufferSize[2];
+    union {
+        UCHAR ReadSpeedCurrent[2];
+        UCHAR ObsoleteReserved2[2];
+    };
+    UCHAR ObsoleteReserved3;
+    UCHAR Reserved8 : 1;
+    UCHAR BCK : 1;
+    UCHAR RCK : 1;
+    UCHAR LSBF : 1;
+    UCHAR Length : 2;
+    UCHAR Reserved9 : 2;
+    union {
+        UCHAR WriteSpeedMaximum[2];
+        UCHAR ObsoleteReserved4[2];
+    };
+    union {
+        UCHAR WriteSpeedCurrent[2];
+        UCHAR ObsoleteReserved11[2];
+    };
+    union {
+        UCHAR CopyManagementRevision[2];
+        UCHAR Reserved10[2];
+    };
+} CDVD_CAPABILITIES_PAGE, *PCDVD_CAPABILITIES_PAGE;
+#pragma pack(pop, mode_page_capabilities)
+
 #ifdef __cplusplus
 }
 #endif

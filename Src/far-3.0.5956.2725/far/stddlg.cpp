@@ -478,7 +478,7 @@ operation OperationFailed(const error_state_ex& ErrorState, string_view const Ob
 	std::vector<string> Msg;
 
 	std::optional<os::com::initialize> ComInitialiser;
-	os::com::ptr<IFileIsInUse> FileIsInUse;
+	//os::com::ptr<IFileIsInUse> FileIsInUse;
 
 	auto Reason = lng::MObjectLockedReasonOpened;
 	bool SwitchBtn = false, CloseBtn = false;
@@ -493,6 +493,7 @@ operation OperationFailed(const error_state_ex& ErrorState, string_view const Ob
 		const auto FullName = ConvertNameToFull(Object);
 
 		ComInitialiser.emplace();
+		#if 0
 		FileIsInUse = os::com::create_file_is_in_use(FullName);
 		if (FileIsInUse)
 		{
@@ -538,6 +539,7 @@ operation OperationFailed(const error_state_ex& ErrorState, string_view const Ob
 			}
 		}
 		else
+		#endif
 		{
 			const size_t MaxRmProcesses = 5;
 			DWORD Reasons = RmRebootReasonNone;
@@ -637,6 +639,7 @@ operation OperationFailed(const error_state_ex& ErrorState, string_view const Ob
 		{
 			if (MsgResult == message_result::first_button)
 			{
+				#if 0
 				HWND Window = nullptr;
 				if (FileIsInUse)
 				{
@@ -649,6 +652,7 @@ operation OperationFailed(const error_state_ex& ErrorState, string_view const Ob
 						message_manager::instance().notify(Listener->GetEventName(), Window);
 					}
 				}
+				#endif
 				continue;
 			}
 			else if (MsgResult != message_result::cancelled)
@@ -660,10 +664,12 @@ operation OperationFailed(const error_state_ex& ErrorState, string_view const Ob
 		if(CloseBtn && MsgResult == message_result::first_button)
 		{
 			// close & retry
+			/*
 			if (FileIsInUse)
 			{
 				FileIsInUse->CloseFile();
 			}
+			*/
 		}
 		break;
 	}

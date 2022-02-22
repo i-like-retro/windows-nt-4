@@ -575,6 +575,7 @@ namespace console_detail
 		return Result;
 	}
 
+    /*
 	static bool get_current_console_font(HANDLE OutputHandle, CONSOLE_FONT_INFO& FontInfo)
 	{
 		if (!GetCurrentConsoleFont(OutputHandle, FALSE, &FontInfo))
@@ -585,8 +586,10 @@ namespace console_detail
 
 		return FontInfo.dwFontSize.X && FontInfo.dwFontSize.Y;
 	}
+    */
 
 	// Workaround for a bug in the classic console: mouse position is screen-based
+        /*
 	static void fix_wheel_coordinates(MOUSE_EVENT_RECORD& Record)
 	{
 		if (!(Record.dwEventFlags & (MOUSE_WHEELED | MOUSE_HWHEELED)))
@@ -625,6 +628,7 @@ namespace console_detail
 		Set(&COORD::X, &POINT::x, &SMALL_RECT::Left);
 		Set(&COORD::Y, &POINT::y, &SMALL_RECT::Top);
 	}
+        */
 
 	static void AdjustMouseEvents(span<INPUT_RECORD> const Buffer, short Delta)
 	{
@@ -642,7 +646,7 @@ namespace console_detail
 					return;
 			}
 
-			fix_wheel_coordinates(i.Event.MouseEvent);
+			//fix_wheel_coordinates(i.Event.MouseEvent);
 
 			i.Event.MouseEvent.dwMousePosition.Y = std::max(0, i.Event.MouseEvent.dwMousePosition.Y - Delta);
 			i.Event.MouseEvent.dwMousePosition.X = std::min(i.Event.MouseEvent.dwMousePosition.X, static_cast<short>(Size->x - 1));
@@ -1251,11 +1255,11 @@ namespace console_detail
 			if (!DuplicateHandle(GetCurrentProcess(), OutputHandle, GetCurrentProcess(), &OsHandle, 0, FALSE, DUPLICATE_SAME_ACCESS))
 				return false;
 
-			m_FileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(OsHandle), _O_U8TEXT);
+			m_FileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(OsHandle), /*_O_U8TEXT*/0);
 			if (m_FileHandle == -1)
 				return false;
 
-			_setmode(m_FileHandle, _O_U8TEXT);
+			//_setmode(m_FileHandle, _O_U8TEXT);
 		}
 
 		return _write(m_FileHandle, Str.data(), static_cast<unsigned int>(Str.size() * sizeof(wchar_t))) != -1;
@@ -1380,10 +1384,11 @@ namespace console_detail
 
 	console::console_aliases console::GetAllAliases() const
 	{
-		const auto ExeLength = GetConsoleAliasExesLength();
-		if (!ExeLength)
+		//const auto ExeLength = GetConsoleAliasExesLength();
+		//if (!ExeLength)
 			return {};
 
+        /*
 		std::vector<wchar_t> ExeBuffer(ExeLength / sizeof(wchar_t) + 1); // +1 for double \0
 		if (!GetConsoleAliasExes(ExeBuffer.data(), ExeLength))
 			return {};
@@ -1414,10 +1419,12 @@ namespace console_detail
 		Result.m_Data = std::move(Aliases);
 
 		return Result;
+        */
 	}
 
 	void console::SetAllAliases(console_aliases&& Aliases) const
 	{
+        /*
 		if (!Aliases.m_Data)
 			return;
 
@@ -1432,6 +1439,7 @@ namespace console_detail
 				);
 			}
 		}
+        */
 	}
 
 	bool console::GetDisplayMode(DWORD& Mode) const
@@ -1445,11 +1453,13 @@ namespace console_detail
 		CONSOLE_SCREEN_BUFFER_INFO csbi;
 		if (get_console_screen_buffer_info(GetOutputHandle(), &csbi) && csbi.dwSize.Y > Result.y)
 		{
+            /*
 			CONSOLE_FONT_INFO FontInfo;
 			if (get_current_console_font(GetOutputHandle(), FontInfo))
 			{
 				Result.x -= Round(GetSystemMetrics(SM_CXVSCROLL), static_cast<int>(FontInfo.dwFontSize.X));
 			}
+            */
 		}
 		return Result;
 	}
@@ -1578,8 +1588,9 @@ namespace console_detail
 
 	bool console::IsFullscreenSupported() const
 	{
-#ifdef _WIN64
+//#ifdef _WIN64
 		return false;
+/*
 #else
 		CONSOLE_SCREEN_BUFFER_INFOEX csbiex{ sizeof(csbiex) };
 		if (imports.GetConsoleScreenBufferInfoEx && imports.GetConsoleScreenBufferInfoEx(GetOutputHandle(), &csbiex))
@@ -1587,6 +1598,7 @@ namespace console_detail
 
 		return true;
 #endif
+*/
 	}
 
 	void console::ResetPosition() const
@@ -1760,9 +1772,10 @@ namespace console_detail
 
 	bool console::GetPalette(std::array<COLORREF, 16>& Palette) const
 	{
-		if (!imports.GetConsoleScreenBufferInfoEx)
+		//if (!imports.GetConsoleScreenBufferInfoEx)
 			return false;
 
+        /*
 		CONSOLE_SCREEN_BUFFER_INFOEX csbi{ sizeof(csbi) };
 		if (!imports.GetConsoleScreenBufferInfoEx(GetOutputHandle(), &csbi))
 			return false;
@@ -1770,6 +1783,7 @@ namespace console_detail
 		std::copy(ALL_CONST_RANGE(csbi.ColorTable), Palette.begin());
 
 		return true;
+        */
 	}
 
 	void console::EnableWindowMode(bool const Value)

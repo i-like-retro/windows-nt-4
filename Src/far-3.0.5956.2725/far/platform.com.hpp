@@ -84,7 +84,7 @@ namespace os::com
 
 	string get_shell_filetype_description(string_view FileName);
 
-	ptr<IFileIsInUse> create_file_is_in_use(const string& File);
+	//ptr<IFileIsInUse> create_file_is_in_use(const string& File);
 }
 
 #endif // PLATFORM_COM_HPP_4E1C5B1E_3366_45BB_A55B_AD2B1357CA7D

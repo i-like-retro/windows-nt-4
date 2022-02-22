@@ -512,7 +512,7 @@ static bool execute_shell(string const& Command, string const& Parameters, strin
 	Info.lpParameters = EmptyToNull(Parameters);
 	Info.lpDirectory = Directory.c_str();
 	Info.nShow = SW_SHOWNORMAL;
-	Info.fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOASYNC | SEE_MASK_NOCLOSEPROCESS | (Wait? SEE_MASK_NO_CONSOLE : 0);
+	Info.fMask = SEE_MASK_FLAG_NO_UI | /*SEE_MASK_NOASYNC |*/ SEE_MASK_NOCLOSEPROCESS | (Wait? SEE_MASK_NO_CONSOLE : 0);
 	Info.lpVerb = RunAs? L"runas" : nullptr;
 
 	if (any_of(SourceMode, execute_info::source_mode::known, execute_info::source_mode::known_executable))

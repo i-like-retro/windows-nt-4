@@ -5081,6 +5081,7 @@ ExInterlockedPushEntrySList(
 
 #define ExQueryDepthSList(ListHead) QueryDepthSList(ListHead)
 
+#if 0
 static __inline__ PVOID
 ExAllocateFromNPagedLookasideList( /*IN*/ PNPAGED_LOOKASIDE_LIST Lookaside )
 {
@@ -5111,9 +5112,11 @@ ExFreeToNPagedLookasideList(
       );
   }
 }
+#endif
 
 #if (__USE_NTOSKRNL__) && (_WIN32_WINNT >= _WIN32_WINNT_WINXP)
 
+#if 0
 static __inline__ PVOID
 ExAllocateFromPagedLookasideList(
   /*IN*/ PPAGED_LOOKASIDE_LIST  Lookaside)
@@ -5143,6 +5146,7 @@ ExFreeToPagedLookasideList(
   { InterlockedPushEntrySList(&Lookaside->ListHead, (PSLIST_ENTRY)Entry);
   }
 }
+#endif
 
 #else /* (__USE_NTOSKRNL__) && (_WIN32_WINNT >= _WIN32_WINNT_WINXP) */
 

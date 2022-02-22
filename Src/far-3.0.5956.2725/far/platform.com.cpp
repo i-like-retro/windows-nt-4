@@ -96,7 +96,7 @@ namespace os::com
 			return {};
 		}
 
-		memory<PIDLIST_RELATIVE> IdList;
+		memory</*PIDLIST_RELATIVE*/ITEMIDLIST*> IdList;
 		null_terminated const C_Path(Path);
 		if (const auto Result = ShellFolder->ParseDisplayName({}, {}, UNSAFE_CSTR(C_Path), {}, &ptr_setter(IdList), {}); FAILED(Result))
 		{
@@ -132,6 +132,7 @@ namespace os::com
 		if (Ext.empty())
 			Ext = L"."sv;
 
+        /*
 		if (imports.SHCreateAssociationRegistration)
 		{
 			ptr<IApplicationAssociationRegistration> AAR;
@@ -150,6 +151,7 @@ namespace os::com
 
 			return Association.get();
 		}
+        */
 
 		if (const auto UserKey = reg::key::open(reg::key::current_user, concat(L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\"sv, Ext), KEY_QUERY_VALUE))
 		{
@@ -193,6 +195,7 @@ namespace os::com
 		return Description;
 	}
 
+    /*
 	ptr<IFileIsInUse> create_file_is_in_use(const string& File)
 	{
 		ptr<IRunningObjectTable> RunningObjectTable;
@@ -256,4 +259,5 @@ namespace os::com
 			return FileIsInUse;
 		}
 	}
+    */
 }

@@ -56,6 +56,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // External:
 #include "format.hpp"
+#include "encoding.hpp"
 
 //----------------------------------------------------------------------------
 
@@ -192,7 +193,7 @@ static string postprocess_error_string(unsigned const ErrorCode, string&& Str)
 [[nodiscard]]
 string format_errno(int const ErrorCode)
 {
-	return postprocess_error_string(ErrorCode, _wcserror(ErrorCode));
+	return postprocess_error_string(ErrorCode, encoding::ansi::get_chars(strerror(ErrorCode)));
 }
 
 string format_error(DWORD const ErrorCode)
@@ -354,6 +355,7 @@ bool IsWow64Process()
 
 DWORD GetAppPathsRedirectionFlag()
 {
+/*
 	static const auto RedirectionFlag = []
 	{
 		// App Paths key is shared in Windows 7 and above
@@ -371,6 +373,8 @@ DWORD GetAppPathsRedirectionFlag()
 		return 0;
 	}();
 	return RedirectionFlag;
+    */
+    return 0;
 }
 
 bool GetDefaultPrinter(string& Printer)

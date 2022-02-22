@@ -75,6 +75,8 @@ A device is considered a HotPlug device if the following are TRUE:
 - does NOT have Capability CM_DEVCAP_DOCKDEVICE
 */
 
+#if 0
+
 namespace
 {
 	class [[nodiscard]] enum_child_devices: public enumerator<enum_child_devices, DEVINST>
@@ -643,3 +645,5 @@ void ShowHotplugDevices()
 		return KeyProcessed;
 	});
 }
+
+#endif

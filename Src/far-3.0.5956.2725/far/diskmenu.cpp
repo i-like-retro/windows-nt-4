@@ -54,7 +54,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "keys.hpp"
 #include "stddlg.hpp"
 #include "eject.hpp"
-#include "hotplug.hpp"
+//#include "hotplug.hpp"
 #include "setattr.hpp"
 #include "panel.hpp"
 #include "filepanels.hpp"
@@ -615,6 +615,7 @@ static bool DisconnectDrive(panel_ptr Owner, const disk_item& item, VMenu2 &ChDi
 	}
 }
 
+#if 0
 static void RemoveHotplugDevice(panel_ptr Owner, const disk_item& item, VMenu2 &ChDisk)
 {
 	bool Cancelled = false;
@@ -657,6 +658,7 @@ static void RemoveHotplugDevice(panel_ptr Owner, const disk_item& item, VMenu2 &
 			return;
 	}
 }
+#endif
 
 static string GetShellName(string_view const RootDirectory)
 {
@@ -1110,6 +1112,7 @@ static int ChangeDiskMenu(panel_ptr Owner, int Pos, bool FirstCall)
 				[](plugin_item const&){}}, *MenuItem);
 				break;
 
+			/*
 			case KEY_SHIFTNUMDEL:
 			case KEY_SHIFTDECIMAL:
 			case KEY_SHIFTDEL:
@@ -1123,6 +1126,7 @@ static int ChangeDiskMenu(panel_ptr Owner, int Pos, bool FirstCall)
 				},
 				[](plugin_item const&){}}, *MenuItem);
 				break;
+			*/
 
 			case KEY_CTRL1:
 			case KEY_RCTRL1:

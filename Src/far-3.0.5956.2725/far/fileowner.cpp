@@ -250,7 +250,7 @@ bool GetFileOwner(const string& Computer, string_view const Object, string& Owne
 static auto get_sid(const string& Name)
 {
 	os::memory::local::ptr<void> SidFromString;
-	if (ConvertStringSidToSid(Name.c_str(), &ptr_setter(SidFromString)))
+	if (ConvertStringSidToSid(const_cast<wchar_t*>(Name.c_str()), &ptr_setter(SidFromString)))
 	{
 		return sid{ SidFromString.get() };
 	}

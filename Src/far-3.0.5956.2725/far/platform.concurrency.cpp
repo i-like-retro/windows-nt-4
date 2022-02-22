@@ -219,6 +219,7 @@ namespace os::concurrency
 			RTL_RESOURCE m_Lock{};
 		};
 
+        /*
 		class shared_mutex_srw final: public i_shared_mutex
 		{
 		public:
@@ -236,13 +237,14 @@ namespace os::concurrency
 		private:
 			SRWLOCK m_Lock{};
 		};
+        */
 	}
 
 	static std::unique_ptr<detail::i_shared_mutex> make_shared_mutex()
 	{
 		// Windows 7 and above
-		if (imports.TryAcquireSRWLockExclusive)
-			return std::make_unique<detail::shared_mutex_srw>();
+		//if (imports.TryAcquireSRWLockExclusive)
+		//	return std::make_unique<detail::shared_mutex_srw>();
 
 		return std::make_unique<detail::shared_mutex_legacy>();
 	}

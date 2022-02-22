@@ -1113,6 +1113,7 @@ unhandled_exception_filter::~unhandled_exception_filter()
 	SetUnhandledExceptionFilter(m_PreviousFilter);
 }
 
+/*
 [[noreturn]]
 static void purecall_handler_impl()
 {
@@ -1173,6 +1174,7 @@ invalid_parameter_handler::~invalid_parameter_handler()
 {
 	_set_invalid_parameter_handler(m_PreviousHandler);
 }
+*/
 
 namespace detail
 {

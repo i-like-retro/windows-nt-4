@@ -13,6 +13,7 @@ set EXPAT=%BASEDIR%expat-2.4.2
 set PCRE2=%BASEDIR%pcre2-10.39
 set PUTTY=%BASEDIR%putty-0.76
 set GIT=%BASEDIR%git-2.34.1
+set FAR=%BASEDIR%far-3.0.5956.2725
 
 rem ==========================================================================
 
@@ -450,6 +451,17 @@ if exist %BASEDIR%..\CD\SOFTWARE\GNU-NT4.EXE del %BASEDIR%..\CD\SOFTWARE\GNU-NT4
 if errorlevel 1 goto error
 
 makensis setup.nsi
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem ==========================================================================
+:far
+
+cd %FAR%\far
+if errorlevel 1 goto error
+
+call build.bat gcc 32
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

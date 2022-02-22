@@ -47,6 +47,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //----------------------------------------------------------------------------
 
+typedef void* HPOWERNOTIFY;
+
 namespace imports_detail
 {
 
@@ -155,16 +157,16 @@ public: const unique_function_pointer<name_##NAME, stub_##NAME> NAME{m_##MODULE}
 	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOL, GetNamedPipeServerProcessId, HANDLE Pipe, PULONG ServerProcessId);
 	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOL, CancelSynchronousIo, HANDLE Thread);
 	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOL, SetConsoleKeyShortcuts, BOOL Set, BYTE ReserveKeys, LPVOID AppKeys, DWORD NumAppKeys);
-	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOL, GetConsoleScreenBufferInfoEx, HANDLE ConsoleOutput, PCONSOLE_SCREEN_BUFFER_INFOEX ConsoleScreenBufferInfoEx);
+	//DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOL, GetConsoleScreenBufferInfoEx, HANDLE ConsoleOutput, PCONSOLE_SCREEN_BUFFER_INFOEX ConsoleScreenBufferInfoEx);
 	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOL, QueryFullProcessImageNameW, HANDLE Process, DWORD Flags, LPWSTR ExeName, PDWORD Size);
 	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOL, TzSpecificLocalTimeToSystemTime, const TIME_ZONE_INFORMATION* TimeZoneInformation, const SYSTEMTIME* LocalTime, LPSYSTEMTIME UniversalTime);
-	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, InitializeSRWLock, PSRWLOCK SRWLock);
-	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, AcquireSRWLockExclusive, PSRWLOCK SRWLock);
-	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, AcquireSRWLockShared, PSRWLOCK SRWLock);
-	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, ReleaseSRWLockExclusive, PSRWLOCK SRWLock);
-	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, ReleaseSRWLockShared, PSRWLOCK SRWLock);
-	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOLEAN, TryAcquireSRWLockExclusive, PSRWLOCK SRWLock);
-	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOLEAN, TryAcquireSRWLockShared, PSRWLOCK SRWLock);
+	//DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, InitializeSRWLock, PSRWLOCK SRWLock);
+	//DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, AcquireSRWLockExclusive, PSRWLOCK SRWLock);
+	//DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, AcquireSRWLockShared, PSRWLOCK SRWLock);
+	//DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, ReleaseSRWLockExclusive, PSRWLOCK SRWLock);
+	//DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, ReleaseSRWLockShared, PSRWLOCK SRWLock);
+	//DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOLEAN, TryAcquireSRWLockExclusive, PSRWLOCK SRWLock);
+	//DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, BOOLEAN, TryAcquireSRWLockShared, PSRWLOCK SRWLock);
 	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, void, GetSystemTimePreciseAsFileTime, LPFILETIME SystemTimeAsFileTime);
 	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, int, CompareStringOrdinal, LPCWCH String1, int Count1, LPCWCH String2, int Count2, BOOL IgnoreCase);
 	DECLARE_IMPORT_FUNCTION(kernel32, WINAPI, HRESULT, SetThreadDescription, HANDLE Thread, PCWSTR ThreadDescription);

@@ -160,12 +160,12 @@ void ESetFileTime(
 
 static bool set_file_sparse(string_view const Name, bool const State)
 {
-	const os::fs::file File(Name, FILE_WRITE_DATA, os::fs::file_share_all, nullptr, OPEN_EXISTING);
-	if (!File)
+	//const os::fs::file File(Name, FILE_WRITE_DATA, os::fs::file_share_all, nullptr, OPEN_EXISTING);
+	//if (!File)
 		return false;
 
-	FILE_SET_SPARSE_BUFFER Buffer{ State };
-	return File.IoControl(FSCTL_SET_SPARSE, &Buffer, sizeof(Buffer), nullptr, 0);
+	//FILE_SET_SPARSE_BUFFER Buffer{ State };
+	//return File.IoControl(FSCTL_SET_SPARSE, &Buffer, sizeof(Buffer), nullptr, 0);
 }
 
 void ESetFileSparse(string_view const Name, bool const State, os::fs::attributes const CurrentAttributes, bool& SkipErrors)

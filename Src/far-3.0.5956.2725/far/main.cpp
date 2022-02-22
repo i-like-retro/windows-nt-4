@@ -488,6 +488,7 @@ static void handle_exception(function_ref<bool()> const Handler)
 }
 
 #ifndef _WIN64
+/*
 std::pair<string_view, DWORD> get_hook_wow64_error();
 
 static void log_hook_wow64_status()
@@ -512,6 +513,7 @@ static void log_hook_wow64_status()
 		}
 	}
 }
+*/
 #endif
 
 static int mainImpl(span<const wchar_t* const> const Args)
@@ -529,7 +531,7 @@ static int mainImpl(span<const wchar_t* const> const Args)
 	os::memory::enable_low_fragmentation_heap();
 
 #ifndef _WIN64
-	log_hook_wow64_status();
+	//log_hook_wow64_status();
 #endif
 
 	if(!console.IsFullscreenSupported() && imports.SetConsoleKeyShortcuts)
@@ -863,8 +865,8 @@ static int wmain_seh()
 
 	SCOPED_ACTION(unhandled_exception_filter);
 	SCOPED_ACTION(seh_terminate_handler);
-	SCOPED_ACTION(purecall_handler);
-	SCOPED_ACTION(invalid_parameter_handler);
+	//SCOPED_ACTION(purecall_handler);
+	//SCOPED_ACTION(invalid_parameter_handler);
 	SCOPED_ACTION(new_handler);
 
 	const auto CurrentFunctionName = CURRENT_FUNCTION_NAME;

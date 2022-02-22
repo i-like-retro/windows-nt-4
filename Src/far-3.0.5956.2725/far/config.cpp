@@ -67,7 +67,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "filetype.hpp"
 #include "shortcuts.hpp"
 #include "plist.hpp"
-#include "hotplug.hpp"
+//#include "hotplug.hpp"
 #include "setcolor.hpp"
 #include "lang.hpp"
 #include "language.hpp"
@@ -405,8 +405,8 @@ void Options::InfoPanelSettings()
 		{ lng::MConfigInfoPanelUNUserPrincipal,     NameUserPrincipal },
 		{ lng::MConfigInfoPanelUNServicePrincipal,  NameServicePrincipal },
 		{ lng::MConfigInfoPanelUNDnsDomain,         NameDnsDomain },
-		{ lng::MConfigInfoPanelUNGivenName,         NameGivenName },
-		{ lng::MConfigInfoPanelUNSurname,           NameSurname },
+		{ lng::MConfigInfoPanelUNGivenName,         /*NameGivenName*/ NameDnsDomain + 1 },
+		{ lng::MConfigInfoPanelUNSurname,           /*NameSurname*/   NameDnsDomain + 2 },
 	};
 
 	static const DialogBuilderListItem CNListItems[]
@@ -721,7 +721,7 @@ void Options::SetConfirmations()
 	Builder.AddCheckbox(lng::MSetConfirmRemoveConnection, Confirm.RemoveConnection);
 	Builder.AddCheckbox(lng::MSetConfirmRemoveSUBST, Confirm.RemoveSUBST);
 	Builder.AddCheckbox(lng::MSetConfirmDetachVHD, Confirm.DetachVHD);
-	Builder.AddCheckbox(lng::MSetConfirmRemoveHotPlug, Confirm.RemoveHotPlug);
+	//Builder.AddCheckbox(lng::MSetConfirmRemoveHotPlug, Confirm.RemoveHotPlug);
 	Builder.AddCheckbox(lng::MSetConfirmAllowReedit, Confirm.AllowReedit);
 	Builder.AddCheckbox(lng::MSetConfirmHistoryClear, Confirm.HistoryClear);
 	Builder.AddCheckbox(lng::MSetConfirmExit, Confirm.Exit);
@@ -1816,7 +1816,7 @@ void Options::InitConfigsData()
 		{FSSF_CONFIRMATIONS,     NKeyConfirmations,          L"HistoryClear"sv,                  Confirm.HistoryClear, true},
 		{FSSF_CONFIRMATIONS,     NKeyConfirmations,          L"Move"sv,                          Confirm.Move, true},
 		{FSSF_CONFIRMATIONS,     NKeyConfirmations,          L"RemoveConnection"sv,              Confirm.RemoveConnection, true},
-		{FSSF_PRIVATE,           NKeyConfirmations,          L"RemoveHotPlug"sv,                 Confirm.RemoveHotPlug, true},
+		//{FSSF_PRIVATE,           NKeyConfirmations,          L"RemoveHotPlug"sv,                 Confirm.RemoveHotPlug, true},
 		{FSSF_PRIVATE,           NKeyConfirmations,          L"RemoveSUBST"sv,                   Confirm.RemoveSUBST, true},
 		{FSSF_CONFIRMATIONS,     NKeyConfirmations,          L"RO"sv,                            Confirm.RO, true},
 		{FSSF_PRIVATE,           NKeyDescriptions,           L"AnsiByDefault"sv,                 Diz.AnsiByDefault, false},
@@ -2871,7 +2871,7 @@ enum enumCommandsMenu
 	MENU_COMMANDS_PLUGINCOMMANDS,
 	MENU_COMMANDS_WINDOWSLIST,
 	MENU_COMMANDS_PROCESSLIST,
-	MENU_COMMANDS_HOTPLUGLIST
+	//MENU_COMMANDS_HOTPLUGLIST
 };
 
 enum enumOptionsMenu
@@ -3017,7 +3017,7 @@ void Options::ShellOptions(bool LastCommand, const MOUSE_EVENT_RECORD *MouseEven
 		{ msg(lng::MMenuPluginCommands), 0, KEY_F11 },
 		{ msg(lng::MMenuWindowsList), 0, KEY_F12 },
 		{ msg(lng::MMenuProcessList), 0, KEY_CTRLW },
-		{ msg(lng::MMenuHotPlugList), 0, 0 },
+		//{ msg(lng::MMenuHotPlugList), 0, 0 },
 	};
 	const auto CmdMenuStrings = VMenu::AddHotkeys(CmdMenu);
 
@@ -3299,9 +3299,9 @@ void Options::ShellOptions(bool LastCommand, const MOUSE_EVENT_RECORD *MouseEven
 			case MENU_COMMANDS_PROCESSLIST: // Task list
 				ShowProcessList();
 				break;
-			case MENU_COMMANDS_HOTPLUGLIST: // HotPlug list
-				ShowHotplugDevices();
-				break;
+			//case MENU_COMMANDS_HOTPLUGLIST: // HotPlug list
+				//ShowHotplugDevices();
+				//break;
 			}
 
 			break;
