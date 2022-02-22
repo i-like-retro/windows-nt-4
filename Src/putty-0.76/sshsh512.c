@@ -15,6 +15,7 @@
 #define HW_SHA512_NONE 0
 #define HW_SHA512_NEON 1
 
+#if 0
 #ifdef _FORCE_SHA512_NEON
 #   define HW_SHA512 HW_SHA512_NEON
 #elif defined __BYTE_ORDER__ && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
@@ -34,8 +35,9 @@
 #       define USE_CLANG_ATTR_TARGET_AARCH64
 #   endif
 #endif
+#endif
 
-#if defined _FORCE_SOFTWARE_SHA || !defined HW_SHA512
+#if 1//defined _FORCE_SOFTWARE_SHA || !defined HW_SHA512
 #   undef HW_SHA512
 #   define HW_SHA512 HW_SHA512_NONE
 #endif

@@ -14,6 +14,7 @@
 #define HW_SHA256_NI 1
 #define HW_SHA256_NEON 2
 
+#if 0
 #ifdef _FORCE_SHA_NI
 #   define HW_SHA256 HW_SHA256_NI
 #elif defined(__clang__)
@@ -62,8 +63,9 @@
 #       endif
 #   endif
 #endif
+#endif
 
-#if defined _FORCE_SOFTWARE_SHA || !defined HW_SHA256
+#if 1//defined _FORCE_SOFTWARE_SHA || !defined HW_SHA256
 #   undef HW_SHA256
 #   define HW_SHA256 HW_SHA256_NONE
 #endif

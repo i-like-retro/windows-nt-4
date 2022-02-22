@@ -14,6 +14,7 @@
 #define HW_SHA1_NI 1
 #define HW_SHA1_NEON 2
 
+#if 0
 #ifdef _FORCE_SHA_NI
 #   define HW_SHA1 HW_SHA1_NI
 #elif defined(__clang__)
@@ -62,8 +63,9 @@
 #       endif
 #   endif
 #endif
+#endif
 
-#if defined _FORCE_SOFTWARE_SHA || !defined HW_SHA1
+#if 1//defined _FORCE_SOFTWARE_SHA || !defined HW_SHA1
 #   undef HW_SHA1
 #   define HW_SHA1 HW_SHA1_NONE
 #endif

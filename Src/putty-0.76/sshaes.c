@@ -15,6 +15,7 @@
 #define HW_AES_NI 1
 #define HW_AES_NEON 2
 
+#if 0
 #ifdef _FORCE_AES_NI
 #   define HW_AES HW_AES_NI
 #elif defined(__clang__)
@@ -65,8 +66,9 @@
 #       define _ARM_USE_NEW_NEON_INTRINSICS
 #   endif
 #endif
+#endif
 
-#if defined _FORCE_SOFTWARE_AES || !defined HW_AES
+#if 1//defined _FORCE_SOFTWARE_AES || !defined HW_AES
 #   undef HW_AES
 #   define HW_AES HW_AES_NONE
 #endif
