@@ -220,9 +220,10 @@ static int copymem(HANDLE hproc, void *p1, void *p2)
  * -amol 11/10/97
  */
 
+extern char** my_environ;
 void fork_init(char ***cargvp)
 {
-	dbgprintf(PR_FORK, "%s(): environment 0x%p\n", __FUNCTION__, environ);
+	dbgprintf(PR_FORK, "%s(): environment 0x%p\n", __FUNCTION__, my_environ);
 	if (__forked) {
 		/* save child &argv, argv */
 		childargvp = cargvp;

@@ -106,13 +106,13 @@ createparamtable(void)
 
 	/* Copy the environment variables we are inheriting to dynamic *
 	 * memory, so we can do mallocs and frees on it.               */
-	num_env = arrlen(environ);
+	num_env = arrlen(my_environ);
 	new_environ = (char **) zalloc(sizeof(char *) * (num_env + 1));
 	*new_environ = NULL;
 
 	/* Now incorporate environment variables we are inheriting *
 	 * into the parameter hash table.                          */
-	for (envp = new_environ, envp2 = environ; *envp2; envp2++) {
+	for (envp = new_environ, envp2 = my_environ; *envp2; envp2++) {
 	    for (str = *envp2; *str && *str != '='; str++);
 	    if (*str == '=') {
 		iname = ztrdup(*envp2);
@@ -134,7 +134,7 @@ createparamtable(void)
 		    zsfree(iname);
 	    }
 	}
-	environ = new_environ;
+	my_environ = new_environ;
 
 	pm = (Param) paramtab->getnode(paramtab, "HOME");
 	if (!(pm->flags & PM_EXPORTED)) {
@@ -1823,7 +1823,7 @@ arrfixenv(char *s, char **t)
     if (isset(ALLEXPORT))
 	pm->flags |= PM_EXPORTED;
     if (pm->flags & PM_EXPORTED) {
-	for (ep = environ; *ep; ep++)
+	for (ep = my_environ; *ep; ep++)
 	    if (!strncmp(*ep, s, len_s) && (*ep)[len_s] == '=') {
 		pm->env = replenv(*ep, u);
 		return;
@@ -1841,7 +1841,7 @@ zgetenv(char *name)
 {
     char **ep, *s, *t;
  
-    for (ep = environ; *ep; ep++) {
+    for (ep = my_environ; *ep; ep++) {
 	for (s = *ep, t = name; *s && *s == *t; s++, t++);
 	if (*s == '=' && !*t)
 	    return s + 1;
@@ -1861,7 +1861,7 @@ replenv(char *e, char *value)
     char *p1, p2[256];
 #endif
 
-    for (ep = environ; *ep; ep++)
+    for (ep = my_environ; *ep; ep++)
 	if (*ep == e) {
 	    for (len_value = 0, s = value;
 		 *s && (*s++ != Meta || *s++ != 32); len_value++);
@@ -1929,7 +1929,7 @@ addenv(char *name, char *value)
 
     /* First check if there is already an environment *
      * variable matching string `name'.               */
-    for (ep = environ; *ep; ep++) {
+    for (ep = my_environ; *ep; ep++) {
 	for (s = *ep, t = name; *s && *s == *t; s++, t++);
 	if (*s == '=' && !*t) {
 	    zsfree(*ep);
@@ -1941,11 +1941,11 @@ addenv(char *name, char *value)
     }
 
     /* Else we have to make room and add it */
-    num_env = arrlen(environ);
-    environ = (char **) zrealloc(environ, (sizeof(char *)) * (num_env + 2));
+    num_env = arrlen(my_environ);
+    my_environ = (char **) zrealloc(my_environ, (sizeof(char *)) * (num_env + 2));
 
     /* Now add it at the end */
-    ep = environ + num_env;
+    ep = my_environ + num_env;
 #if defined(_WIN32)
     setenv(name, value, 1);
 #endif 
@@ -1963,7 +1963,7 @@ delenv(char *x)
 {
     char **ep;
 
-    for (ep = environ; *ep; ep++) {
+    for (ep = my_environ; *ep; ep++) {
 	if (*ep == x)
 	    break;
     }

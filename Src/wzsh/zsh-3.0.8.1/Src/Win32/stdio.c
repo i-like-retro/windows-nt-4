@@ -341,15 +341,12 @@ int fseek(FILE *stream, long offset, int how)
 
 long ftell(FILE* stream)
 {
-	LARGE_INTEGER where;
-	LARGE_INTEGER zloffset;
-
-	zloffset.QuadPart = 0;
-	if (!SetFilePointerEx(GET_FILEHANDLE(stream), zloffset, &where, SEEK_CUR)) {
-		dbgprintf(PR_ERROR, "!!! SetFilePointerEx(0x%p, ..) error %ld in %s\n", GET_FILEHANDLE(stream), GetLastError(), __FUNCTION__);
+	DWORD dwNewPos = SetFilePointer(GET_FILEHANDLE(stream), 0, NULL, SEEK_CUR);
+	if (dwNewPos == INVALID_SET_FILE_POINTER) {
+		dbgprintf(PR_ERROR, "!!! SetFilePointer(0x%p, ..) error %ld in %s\n", GET_FILEHANDLE(stream), GetLastError(), __FUNCTION__);
 		return (-1L);
 	}
-	return (long)where.u.LowPart;
+	return (long)dwNewPos;
 }
 
 
@@ -388,10 +385,9 @@ size_t fwrite(const void *buffer, size_t size, size_t count, FILE *stream)
 		return (0);
 	}
 	if (fd_isset(GET_FD(stream), FILE_O_APPEND)) {
-		LARGE_INTEGER zloffset;
-		zloffset.QuadPart = 0;
-		if (!SetFilePointerEx(hfile, zloffset, NULL, FILE_END)) {
-			dbgprintf(PR_ERROR, "!!! SetFilePointerEx(0x%p, ..) error %ld in %s\n", hfile, GetLastError(), __FUNCTION__);
+		DWORD dwNewPos = SetFilePointer(hfile, 0, NULL, FILE_END);
+		if (dwNewPos == INVALID_SET_FILE_POINTER) {
+			dbgprintf(PR_ERROR, "!!! SetFilePointer(0x%p, ..) error %ld in %s\n", hfile, GetLastError(), __FUNCTION__);
 			return (0);
 		}
 	}
@@ -428,7 +424,6 @@ char *fgets(char *string, int num, FILE* stream)
 	DWORD bread = 0;
 	HANDLE hfile;
 	int i,j;
-	LARGE_INTEGER lloffset;
 
 	hfile = GET_FILEHANDLE(stream);
 	if (!ReadFile(hfile, string, num-1, &bread, NULL)) {
@@ -448,9 +443,8 @@ char *fgets(char *string, int num, FILE* stream)
 	}
 	j = bread - i; // - 1; // leftover characters
 
-	lloffset.QuadPart = (LONGLONG)(-j);
-	if (!SetFilePointerEx(hfile, lloffset, NULL, SEEK_CUR)) {
-		dbgprintf(PR_ERROR, "!!! SetFilePointerEx(0x%p, ..) error %ld in %s\n", hfile, GetLastError(), __FUNCTION__);
+	if (SetFilePointer(hfile, -j, NULL, SEEK_CUR) == INVALID_SET_FILE_POINTER) {
+		dbgprintf(PR_ERROR, "!!! SetFilePointer(0x%p, ..) error %ld in %s\n", hfile, GetLastError(), __FUNCTION__);
 		return NULL;
 	}
 	dbgprintf(PR_IOR, "%s(): handle 0x%p read %ld\n", __FUNCTION__, hfile, bread);

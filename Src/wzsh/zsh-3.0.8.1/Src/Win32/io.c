@@ -311,7 +311,6 @@ int close(int fd)
 int nt_seek(HANDLE h1, long offset, int how)
 {
 	DWORD dwmove;
-	LARGE_INTEGER lloffset;
 
 	switch (how) {
 		case SEEK_CUR:
@@ -327,8 +326,7 @@ int nt_seek(HANDLE h1, long offset, int how)
 			errno = EINVAL;
 			return (-1);
 	}
-	lloffset.QuadPart = (LONGLONG)offset;
-	if (!SetFilePointerEx(h1, lloffset, NULL, dwmove)) {
+	if (SetFilePointer(h1, offset, NULL, dwmove) == INVALID_SET_FILE_POINTER) {
 		errno = EBADF;
 		return (-1);
 	}
@@ -623,9 +621,8 @@ int open(const char *filename, int perms, ...)
 		return (-1);
 	}
 	if (perms & _O_APPEND) {
-		LARGE_INTEGER zloffset; zloffset.QuadPart = 0;
-		if (!SetFilePointerEx(hfile, zloffset, NULL, FILE_END))
-			dbgprintf(PR_ERROR, "!!! SetFilePointerEx(0x%p, ..) error %ld in %s\n", hfile, GetLastError(), __FUNCTION__);
+		if (SetFilePointer(hfile, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER)
+			dbgprintf(PR_ERROR, "!!! SetFilePointer(0x%p, ..) error %ld in %s\n", hfile, GetLastError(), __FUNCTION__);
 	}
 get_fd:
 	fd = _nt_open_osfhandle((intptr_t)hfile, 0);
@@ -941,9 +938,8 @@ int write(int fd, const void *buffer, unsigned int howmany)
 		return (-1);
 	}
 	if (fd_isset(fd, FILE_O_APPEND)) {
-		LARGE_INTEGER loffset; loffset.QuadPart = 0;
-		if (!SetFilePointerEx(hout, loffset, NULL, FILE_END))
-			dbgprintf(PR_ERROR, "!!! SetFilePointerEx(0x%p, ..) error %ld in %s\n", hout, GetLastError(), __FUNCTION__);
+		if (SetFilePointer(hout, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER)
+			dbgprintf(PR_ERROR, "!!! SetFilePointer(0x%p, ..) error %ld in %s\n", hout, GetLastError(), __FUNCTION__);
 	}
 	if (!winwrite(hout, buffer, howmany, &written)) {
 		DWORD err = GetLastError();

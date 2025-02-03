@@ -394,6 +394,22 @@ static void setup_program_name(char *name)
         zsh-specific program initialization.
 */
 
+char** my_environ;
+static void init_environ()
+{
+    int num_env = arrlen(environ);
+    char** p, **dst;
+    my_environ = (char **) zrealloc(NULL, (sizeof(char *)) * (num_env + 1));
+    dst = my_environ;
+    for (p = environ; *p; ++p) {
+        size_t len = strlen(p) + 1;
+        char* s = (char *) zalloc(len);
+        memcpy(s, p, len);
+        *dst++ = s;
+    }
+    *dst = NULL;
+}
+
 void shell_init(void)
 {
 	char **ep;
@@ -401,6 +417,7 @@ void shell_init(void)
 	int hasPATH = 0;
 
 	dbgprintf(PR_VERBOSE, "%s(): argc=%d argv[0]=[%s]\n", __FUNCTION__, __argc, __argv[0]);
+    init_environ();
 	setup_program_name(__argv[0]);
 	if (GetEnvironmentVariable("TERM", NULL, 0) == 0) {
 		SetEnvironmentVariable("TERM", "vt100");
@@ -408,7 +425,7 @@ void shell_init(void)
 	}
 	/* if the program uses the CRTDLL the PATH setting in main_entry is
 	   not available in environ, set it now */
-	for (ep = environ; *ep != NULL; ep++)
+	for (ep = my_environ; *ep != NULL; ep++)
 		if (strncmp(*ep, "PATH=", 5) == 0)
 			hasPATH = 1;
 	if (!hasPATH) {

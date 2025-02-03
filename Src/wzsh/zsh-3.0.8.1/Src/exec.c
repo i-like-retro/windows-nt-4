@@ -222,7 +222,7 @@ zexecve(char *pth, char **argv)
     for (eep = argv; *eep; eep++)
 	if (*eep != pth)
 	    unmetafy(*eep, NULL);
-    for (eep = environ; *eep; eep++)
+    for (eep = my_environ; *eep; eep++)
 	if (**eep == '_' && (*eep)[1] == '=')
 	    break;
     buf[0] = '_';
@@ -234,7 +234,7 @@ zexecve(char *pth, char **argv)
     if (!*eep)
 	eep[1] = NULL;
     *eep = buf;
-    execve(pth, argv, environ);
+    execve(pth, argv, my_environ);
 
     /* If the execve returns (which in general shouldn't happen),   *
      * then check for an errno equal to ENOEXEC.  This errno is set *
@@ -264,14 +264,14 @@ zexecve(char *pth, char **argv)
 			    *ptr = '\0';
 			    argv[-2] = ptr2;
 			    argv[-1] = ptr + 1;
-			    execve(ptr2, argv - 2, environ);
+			    execve(ptr2, argv - 2, my_environ);
 			} else {
 			    argv[-1] = ptr2;
-			    execve(ptr2, argv - 1, environ);
+			    execve(ptr2, argv - 1, my_environ);
 			}
 		    } else {
 			argv[-1] = "sh";
-			execve("/bin/sh", argv - 1, environ);
+			execve("/bin/sh", argv - 1, my_environ);
 		    }
 		} else {
 		    for (t0 = 0; t0 != ct; t0++)
@@ -279,7 +279,7 @@ zexecve(char *pth, char **argv)
 			    break;
 		    if (t0 == ct) {
 			argv[-1] = "sh";
-			execve("/bin/sh", argv - 1, environ);
+			execve("/bin/sh", argv - 1, my_environ);
 		    }
 		}
 	    } else
