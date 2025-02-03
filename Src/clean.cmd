@@ -7,6 +7,7 @@ set OPENSSL=openssl-1.1.1m
 set GIT=git-2.34.1
 set ICONV=libiconv-1.16
 set PUTTY=putty-0.76
+set ZSH=wzsh\zsh-3.0.8.1
 
 cd %~dp0
 if errorlevel 1 goto error
@@ -1997,6 +1998,95 @@ if not "%1" == "" goto next
 del %GIT%\GIT-VERSION-FILE
 del %~dp0..\CD\SOFTWARE\DEVEL\GIT2341.EXE
 rmdir /S/Q %BUILD%\git
+
+if not "%1" == "" goto next
+
+:zsh
+
+del %ZSH%\Src\00_entry.o
+del %ZSH%\Src\access.o
+del %ZSH%\Src\builtin.o
+del %ZSH%\Src\builtin.pro
+del %ZSH%\Src\compat.o
+del %ZSH%\Src\compat.pro
+del %ZSH%\Src\cond.o
+del %ZSH%\Src\cond.pro
+del %ZSH%\Src\dirent.o
+del %ZSH%\Src\exec.o
+del %ZSH%\Src\exec.pro
+del %ZSH%\Src\fmalloc.o
+del %ZSH%\Src\fork.o
+del %ZSH%\Src\fstat.o
+del %ZSH%\Src\fullclip.o
+del %ZSH%\Src\glob.o
+del %ZSH%\Src\glob.pro
+del %ZSH%\Src\hashtable.o
+del %ZSH%\Src\hashtable.pro
+del %ZSH%\Src\hist.o
+del %ZSH%\Src\hist.pro
+del %ZSH%\Src\init.o
+del %ZSH%\Src\init.pro
+del %ZSH%\Src\input.o
+del %ZSH%\Src\input.pro
+del %ZSH%\Src\io.o
+del %ZSH%\Src\jobs.o
+del %ZSH%\Src\jobs.pro
+del %ZSH%\Src\killnice.o
+del %ZSH%\Src\lex.o
+del %ZSH%\Src\lex.pro
+del %ZSH%\Src\linklist.o
+del %ZSH%\Src\linklist.pro
+del %ZSH%\Src\loop.o
+del %ZSH%\Src\loop.pro
+del %ZSH%\Src\math.o
+del %ZSH%\Src\math.pro
+del %ZSH%\Src\mem.o
+del %ZSH%\Src\mem.pro
+del %ZSH%\Src\nt_execve.o
+del %ZSH%\Src\ntdbg.o
+del %ZSH%\Src\ntermcap.o
+del %ZSH%\Src\params.o
+del %ZSH%\Src\params.pro
+del %ZSH%\Src\parse.o
+del %ZSH%\Src\parse.pro
+del %ZSH%\Src\shell_init.o
+del %ZSH%\Src\signal.o
+del %ZSH%\Src\signals.o
+del %ZSH%\Src\signals.pro
+del %ZSH%\Src\stdio.o
+del %ZSH%\Src\subst.o
+del %ZSH%\Src\subst.pro
+del %ZSH%\Src\tconsole.o
+del %ZSH%\Src\text.o
+del %ZSH%\Src\text.pro
+del %ZSH%\Src\unistd.o
+del %ZSH%\Src\utils.o
+del %ZSH%\Src\utils.pro
+del %ZSH%\Src\watch.o
+del %ZSH%\Src\watch.pro
+del %ZSH%\Src\zle_bindings.o
+del %ZSH%\Src\zle_hist.o
+del %ZSH%\Src\zle_hist.pro
+del %ZSH%\Src\zle_main.o
+del %ZSH%\Src\zle_main.pro
+del %ZSH%\Src\zle_misc.o
+del %ZSH%\Src\zle_misc.pro
+del %ZSH%\Src\zle_move.o
+del %ZSH%\Src\zle_move.pro
+del %ZSH%\Src\zle_refresh.o
+del %ZSH%\Src\zle_refresh.pro
+del %ZSH%\Src\zle_tricky.o
+del %ZSH%\Src\zle_tricky.pro
+del %ZSH%\Src\zle_utils.o
+del %ZSH%\Src\zle_utils.pro
+del %ZSH%\Src\zle_vi.o
+del %ZSH%\Src\zle_vi.pro
+del %ZSH%\Src\zle_word.o
+del %ZSH%\Src\zle_word.pro
+del %ZSH%\Src\zsh.exe
+del %ZSH%\Src\zsh.o
+del %ZSH%\Src\zsh_support.o
+del %ZSH%\Src\zz_ntb2.o
 
 if not "%1" == "" goto next
 

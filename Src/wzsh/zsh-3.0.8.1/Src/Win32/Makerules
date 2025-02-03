@@ -54,7 +54,7 @@ ENTRY    = _main_entry
 else
 ENTRY    = main_entry
 endif
-LDFLAGS  = -static-libgcc -Wl,--entry=$(ENTRY) -Wl,--stack,0x100000 -Wl,-M
+LDFLAGS  = -static-libgcc -Wl,--entry=$(ENTRY) -Wl,--stack,0x100000 -Wl,-s
 CPPFLAGS =
 DEFS     += -D_MT
 ifdef RELEASE

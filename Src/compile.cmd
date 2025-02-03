@@ -441,6 +441,23 @@ if errorlevel 1 goto error
 
 if not "%1" == "" goto next
 
+rem =====
+rem  ZSH
+rem =====
+:zsh
+
+if exist %BASEDIR%..\CD\SOFTWARE\UTILITY\ZSH.EXE del %BASEDIR%..\CD\SOFTWARE\UTILITY\ZSH.EXE
+
+set CC=gcc -D_TIMEVAL_DEFINED -DLOCAL_DIRENT
+set RC=windres
+set C_ENV=MINGW32
+cd %BASEDIR%wzsh\zsh-3.0.8.1\Src
+if errorlevel 1 goto error
+mingw32-make -f Win32/Makefile
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
 rem ==========================================================================
 :installer
 
