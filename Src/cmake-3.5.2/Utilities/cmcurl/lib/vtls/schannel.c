@@ -1365,6 +1365,10 @@ int Curl_schannel_random(unsigned char *entropy, size_t length)
 {
   HCRYPTPROV hCryptProv = 0;
 
+  #ifndef CRYPT_SILENT
+  #define CRYPT_SILENT 0x00000040
+  #endif
+
   if(!CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL,
                           CRYPT_VERIFYCONTEXT | CRYPT_SILENT))
     return 1;

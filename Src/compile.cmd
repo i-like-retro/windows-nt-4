@@ -20,7 +20,7 @@ rem ==========================================================================
 set TOOLCHAIN=%BASEDIR%..\Toolchain
 set BUILD=%BASEDIR%_build
 
-set PATH=%TOOLCHAIN%\TDM-GCC\bin;%TOOLCHAIN%\MSYS64\usr\bin;%TOOLCHAIN%\NSIS;%PATH%
+set PATH=%TOOLCHAIN%\CMAKE\BIN;%TOOLCHAIN%\TDM-GCC\bin;%TOOLCHAIN%\MSYS64\usr\bin;%TOOLCHAIN%\NSIS;%PATH%
 
 rem ==========================================================================
 
@@ -437,6 +437,31 @@ if exist %BASEDIR%..\CD\SOFTWARE\DEVEL\PERL5123.EXE del %BASEDIR%..\CD\SOFTWARE\
 cd %BASEDIR%_setup\perl
 if errorlevel 1 goto error
 makensis setup.nsi
+if errorlevel 1 goto error
+
+if not "%1" == "" goto next
+
+rem =======
+rem  CMake
+rem =======
+:cmake
+
+if exist %BASEDIR%..\CD\SOFTWARE\DEVEL\CMAKE352.EXE del %BASEDIR%..\CD\SOFTWARE\DEVEL\CMAKE352.EXE
+
+if not exist %BUILD%\cmake mkdir %BUILD%\cmake
+if errorlevel 1 goto error
+cd %BUILD%\cmake
+if errorlevel 1 goto error
+
+cmake -G "MinGW Makefiles" ^
+     -DCMAKE_BUILD_TYPE=Release ^
+     %BASEDIR%cmake-3.5.2
+if errorlevel 1 goto error
+cmake --build .
+if errorlevel 1 goto error
+cpack
+if errorlevel 1 goto error
+copy /b cmake-3.5.2-win32-x86.exe %BASEDIR%..\CD\SOFTWARE\DEVEL\CMAKE352.EXE
 if errorlevel 1 goto error
 
 if not "%1" == "" goto next

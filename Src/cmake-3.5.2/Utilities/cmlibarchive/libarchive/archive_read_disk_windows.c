@@ -2218,10 +2218,10 @@ archive_read_disk_entry_from_file(struct archive *_a,
  */
 #if defined(__MINGW32__) && !defined(FSCTL_QUERY_ALLOCATED_RANGES)
 #define FSCTL_QUERY_ALLOCATED_RANGES 0x940CF
-typedef struct {
+/*typedef struct {
 	LARGE_INTEGER FileOffset;
 	LARGE_INTEGER Length;
-} FILE_ALLOCATED_RANGE_BUFFER;
+} FILE_ALLOCATED_RANGE_BUFFER;*/
 #endif
 
 static int
