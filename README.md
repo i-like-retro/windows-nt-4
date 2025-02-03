@@ -204,7 +204,7 @@ to run many classic MS-DOS games completely unmodified.
 Software Development
 --------------------
 
-* [CMake 3.52](CD/SOFTWARE/DEVEL/CMAKE352.EXE) `2018-12-03`: free and open
+* [CMake 3.5.2](CD/SOFTWARE/DEVEL/CMAKE352.EXE) `2018-12-03`: free and open
 source tool for generating project files for C and C++ projects. This is not
 the latest version, but its the latest one to support Visual C++ 6.0 and
 Visual Studio 7 (aka .NET 2002). So there is little benefit in using newer
